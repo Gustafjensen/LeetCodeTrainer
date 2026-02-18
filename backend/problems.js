@@ -468,6 +468,265 @@ const problems = {
             { args: ["a"], expected: "a", inputDisplay: 's = "a"' }
         ],
         compareFunction: 'palindrome_substring'
+    },
+    'majority-element': {
+        title: 'Majority Element',
+        functionName: 'majorityElement',
+        testCases: [
+            { args: [[3, 2, 3]], expected: 3, inputDisplay: 'nums = [3,2,3]' },
+            { args: [[2, 2, 1, 1, 1, 2, 2]], expected: 2, inputDisplay: 'nums = [2,2,1,1,1,2,2]' },
+            { args: [[1]], expected: 1, inputDisplay: 'nums = [1]' }
+        ],
+        compareFunction: 'exact'
+    },
+    'happy-number': {
+        title: 'Happy Number',
+        functionName: 'isHappy',
+        testCases: [
+            { args: [19], expected: true, inputDisplay: 'n = 19' },
+            { args: [2], expected: false, inputDisplay: 'n = 2' },
+            { args: [1], expected: true, inputDisplay: 'n = 1' },
+            { args: [7], expected: true, inputDisplay: 'n = 7' }
+        ],
+        compareFunction: 'exact'
+    },
+    'power-of-three': {
+        title: 'Power of Three',
+        functionName: 'isPowerOfThree',
+        testCases: [
+            { args: [27], expected: true, inputDisplay: 'n = 27' },
+            { args: [0], expected: false, inputDisplay: 'n = 0' },
+            { args: [-1], expected: false, inputDisplay: 'n = -1' },
+            { args: [9], expected: true, inputDisplay: 'n = 9' },
+            { args: [45], expected: false, inputDisplay: 'n = 45' }
+        ],
+        compareFunction: 'exact'
+    },
+    'merge-sorted-array': {
+        title: 'Merge Sorted Array',
+        functionName: 'mergeSortedArray',
+        testCases: [
+            { args: [[1, 2, 3, 0, 0, 0], 3, [2, 5, 6], 3], expected: [1, 2, 2, 3, 5, 6],
+              inputDisplay: 'nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3' },
+            { args: [[1], 1, [], 0], expected: [1],
+              inputDisplay: 'nums1 = [1], m = 1, nums2 = [], n = 0' },
+            { args: [[0], 0, [1], 1], expected: [1],
+              inputDisplay: 'nums1 = [0], m = 0, nums2 = [1], n = 1' }
+        ],
+        compareFunction: 'exact'
+    },
+    'remove-element': {
+        title: 'Remove Element',
+        functionName: 'removeElement',
+        testCases: [
+            { args: [[3, 2, 2, 3], 3], expected: 2, inputDisplay: 'nums = [3,2,2,3], val = 3' },
+            { args: [[0, 1, 2, 2, 3, 0, 4, 2], 2], expected: 5, inputDisplay: 'nums = [0,1,2,2,3,0,4,2], val = 2' }
+        ],
+        compareFunction: 'exact'
+    },
+    'excel-column-number': {
+        title: 'Excel Sheet Column Number',
+        functionName: 'titleToNumber',
+        testCases: [
+            { args: ["A"], expected: 1, inputDisplay: 'columnTitle = "A"' },
+            { args: ["AB"], expected: 28, inputDisplay: 'columnTitle = "AB"' },
+            { args: ["ZY"], expected: 701, inputDisplay: 'columnTitle = "ZY"' },
+            { args: ["Z"], expected: 26, inputDisplay: 'columnTitle = "Z"' }
+        ],
+        compareFunction: 'exact'
+    },
+    'intersection-two-arrays': {
+        title: 'Intersection of Two Arrays II',
+        functionName: 'intersect',
+        testCases: [
+            { args: [[1, 2, 2, 1], [2, 2]], expected: [2, 2], inputDisplay: 'nums1 = [1,2,2,1], nums2 = [2,2]' },
+            { args: [[4, 9, 5], [9, 4, 9, 8, 4]], expected: [4, 9], inputDisplay: 'nums1 = [4,9,5], nums2 = [9,4,9,8,4]' }
+        ],
+        compareFunction: 'sorted'
+    },
+    'add-binary': {
+        title: 'Add Binary',
+        functionName: 'addBinary',
+        testCases: [
+            { args: ["11", "1"], expected: "100", inputDisplay: 'a = "11", b = "1"' },
+            { args: ["1010", "1011"], expected: "10101", inputDisplay: 'a = "1010", b = "1011"' },
+            { args: ["0", "0"], expected: "0", inputDisplay: 'a = "0", b = "0"' }
+        ],
+        compareFunction: 'exact'
+    },
+    'sqrt-x': {
+        title: 'Sqrt(x)',
+        functionName: 'mySqrt',
+        testCases: [
+            { args: [4], expected: 2, inputDisplay: 'x = 4' },
+            { args: [8], expected: 2, inputDisplay: 'x = 8' },
+            { args: [0], expected: 0, inputDisplay: 'x = 0' },
+            { args: [1], expected: 1, inputDisplay: 'x = 1' }
+        ],
+        compareFunction: 'exact'
+    },
+    'top-k-frequent': {
+        title: 'Top K Frequent Elements',
+        functionName: 'topKFrequent',
+        testCases: [
+            { args: [[1, 1, 1, 2, 2, 3], 2], expected: [1, 2], inputDisplay: 'nums = [1,1,1,2,2,3], k = 2' },
+            { args: [[1], 1], expected: [1], inputDisplay: 'nums = [1], k = 1' }
+        ],
+        compareFunction: 'sorted'
+    },
+    'subsets': {
+        title: 'Subsets',
+        functionName: 'subsets',
+        testCases: [
+            { args: [[1, 2, 3]], expected: [[], [1], [2], [1, 2], [3], [1, 3], [2, 3], [1, 2, 3]],
+              inputDisplay: 'nums = [1,2,3]' },
+            { args: [[0]], expected: [[], [0]], inputDisplay: 'nums = [0]' }
+        ],
+        compareFunction: 'unordered_lists'
+    },
+    'permutations': {
+        title: 'Permutations',
+        functionName: 'permute',
+        testCases: [
+            { args: [[1, 2, 3]], expected: [[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 1, 2], [3, 2, 1]],
+              inputDisplay: 'nums = [1,2,3]' },
+            { args: [[0, 1]], expected: [[0, 1], [1, 0]], inputDisplay: 'nums = [0,1]' },
+            { args: [[1]], expected: [[1]], inputDisplay: 'nums = [1]' }
+        ],
+        compareFunction: 'unordered_lists'
+    },
+    'letter-combinations': {
+        title: 'Letter Combinations of a Phone Number',
+        functionName: 'letterCombinations',
+        testCases: [
+            { args: ["23"], expected: ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"],
+              inputDisplay: 'digits = "23"' },
+            { args: [""], expected: [], inputDisplay: 'digits = ""' },
+            { args: ["2"], expected: ["a", "b", "c"], inputDisplay: 'digits = "2"' }
+        ],
+        compareFunction: 'sorted'
+    },
+    'generate-parentheses': {
+        title: 'Generate Parentheses',
+        functionName: 'generateParenthesis',
+        testCases: [
+            { args: [3], expected: ["((()))", "(()())", "(())()", "()(())", "()()()"],
+              inputDisplay: 'n = 3' },
+            { args: [1], expected: ["()"], inputDisplay: 'n = 1' }
+        ],
+        compareFunction: 'sorted'
+    },
+    'set-matrix-zeroes': {
+        title: 'Set Matrix Zeroes',
+        functionName: 'setZeroes',
+        testCases: [
+            { args: [[[1, 1, 1], [1, 0, 1], [1, 1, 1]]], expected: [[1, 0, 1], [0, 0, 0], [1, 0, 1]],
+              inputDisplay: 'matrix = [[1,1,1],[1,0,1],[1,1,1]]' },
+            { args: [[[0, 1, 2, 0], [3, 4, 5, 2], [1, 3, 1, 5]]], expected: [[0, 0, 0, 0], [0, 4, 5, 0], [0, 3, 1, 0]],
+              inputDisplay: 'matrix = [[0,1,2,0],[3,4,5,2],[1,3,1,5]]' }
+        ],
+        compareFunction: 'exact'
+    },
+    'max-product-subarray': {
+        title: 'Maximum Product Subarray',
+        functionName: 'maxProduct',
+        testCases: [
+            { args: [[2, 3, -2, 4]], expected: 6, inputDisplay: 'nums = [2,3,-2,4]' },
+            { args: [[-2, 0, -1]], expected: 0, inputDisplay: 'nums = [-2,0,-1]' },
+            { args: [[-2, 3, -4]], expected: 24, inputDisplay: 'nums = [-2,3,-4]' }
+        ],
+        compareFunction: 'exact'
+    },
+    'find-min-rotated': {
+        title: 'Find Minimum in Rotated Sorted Array',
+        functionName: 'findMin',
+        testCases: [
+            { args: [[3, 4, 5, 1, 2]], expected: 1, inputDisplay: 'nums = [3,4,5,1,2]' },
+            { args: [[4, 5, 6, 7, 0, 1, 2]], expected: 0, inputDisplay: 'nums = [4,5,6,7,0,1,2]' },
+            { args: [[11, 13, 15, 17]], expected: 11, inputDisplay: 'nums = [11,13,15,17]' }
+        ],
+        compareFunction: 'exact'
+    },
+    'longest-increasing-subsequence': {
+        title: 'Longest Increasing Subsequence',
+        functionName: 'lengthOfLIS',
+        testCases: [
+            { args: [[10, 9, 2, 5, 3, 7, 101, 18]], expected: 4, inputDisplay: 'nums = [10,9,2,5,3,7,101,18]' },
+            { args: [[0, 1, 0, 3, 2, 3]], expected: 4, inputDisplay: 'nums = [0,1,0,3,2,3]' },
+            { args: [[7, 7, 7, 7, 7, 7, 7]], expected: 1, inputDisplay: 'nums = [7,7,7,7,7,7,7]' }
+        ],
+        compareFunction: 'exact'
+    },
+    'word-break': {
+        title: 'Word Break',
+        functionName: 'wordBreak',
+        testCases: [
+            { args: ["leetcode", ["leet", "code"]], expected: true, inputDisplay: 's = "leetcode", wordDict = ["leet","code"]' },
+            { args: ["applepenapple", ["apple", "pen"]], expected: true, inputDisplay: 's = "applepenapple", wordDict = ["apple","pen"]' },
+            { args: ["catsandog", ["cats", "dog", "sand", "and", "cat"]], expected: false,
+              inputDisplay: 's = "catsandog", wordDict = ["cats","dog","sand","and","cat"]' }
+        ],
+        compareFunction: 'exact'
+    },
+    'decode-ways': {
+        title: 'Decode Ways',
+        functionName: 'numDecodings',
+        testCases: [
+            { args: ["12"], expected: 2, inputDisplay: 's = "12"' },
+            { args: ["226"], expected: 3, inputDisplay: 's = "226"' },
+            { args: ["06"], expected: 0, inputDisplay: 's = "06"' },
+            { args: ["10"], expected: 1, inputDisplay: 's = "10"' }
+        ],
+        compareFunction: 'exact'
+    },
+    'kth-largest-element': {
+        title: 'Kth Largest Element in an Array',
+        functionName: 'findKthLargest',
+        testCases: [
+            { args: [[3, 2, 1, 5, 6, 4], 2], expected: 5, inputDisplay: 'nums = [3,2,1,5,6,4], k = 2' },
+            { args: [[3, 2, 3, 1, 2, 4, 5, 5, 6], 4], expected: 4, inputDisplay: 'nums = [3,2,3,1,2,4,5,5,6], k = 4' }
+        ],
+        compareFunction: 'exact'
+    },
+    'first-missing-positive': {
+        title: 'First Missing Positive',
+        functionName: 'firstMissingPositive',
+        testCases: [
+            { args: [[1, 2, 0]], expected: 3, inputDisplay: 'nums = [1,2,0]' },
+            { args: [[3, 4, -1, 1]], expected: 2, inputDisplay: 'nums = [3,4,-1,1]' },
+            { args: [[7, 8, 9, 11, 12]], expected: 1, inputDisplay: 'nums = [7,8,9,11,12]' }
+        ],
+        compareFunction: 'exact'
+    },
+    'minimum-window-substring': {
+        title: 'Minimum Window Substring',
+        functionName: 'minWindow',
+        testCases: [
+            { args: ["ADOBECODEBANC", "ABC"], expected: "BANC", inputDisplay: 's = "ADOBECODEBANC", t = "ABC"' },
+            { args: ["a", "a"], expected: "a", inputDisplay: 's = "a", t = "a"' },
+            { args: ["a", "aa"], expected: "", inputDisplay: 's = "a", t = "aa"' }
+        ],
+        compareFunction: 'exact'
+    },
+    'edit-distance': {
+        title: 'Edit Distance',
+        functionName: 'minDistance',
+        testCases: [
+            { args: ["horse", "ros"], expected: 3, inputDisplay: 'word1 = "horse", word2 = "ros"' },
+            { args: ["intention", "execution"], expected: 5, inputDisplay: 'word1 = "intention", word2 = "execution"' },
+            { args: ["", "a"], expected: 1, inputDisplay: 'word1 = "", word2 = "a"' }
+        ],
+        compareFunction: 'exact'
+    },
+    'largest-rectangle-histogram': {
+        title: 'Largest Rectangle in Histogram',
+        functionName: 'largestRectangleArea',
+        testCases: [
+            { args: [[2, 1, 5, 6, 2, 3]], expected: 10, inputDisplay: 'heights = [2,1,5,6,2,3]' },
+            { args: [[2, 4]], expected: 4, inputDisplay: 'heights = [2,4]' },
+            { args: [[1]], expected: 1, inputDisplay: 'heights = [1]' }
+        ],
+        compareFunction: 'exact'
     }
 };
 
