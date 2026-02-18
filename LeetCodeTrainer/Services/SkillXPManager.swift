@@ -6,12 +6,21 @@ class SkillXPManager {
 
     var skillXP: [String: Int] = [:]
     var solvedProblems: Set<String> = []
+    var completedDailyDates: Set<String> = []
 
     /// Cumulative XP thresholds to reach each level.
     static let levelThresholds = [0, 10, 50, 100, 150, 200]
 
     private let storageKey = "skillXP"
     private let solvedKey = "solvedProblems"
+    private let dailyCompletionsKey = "completedDailyDates"
+
+    private static let dailyDateFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "yyyy-MM-dd"
+        f.locale = Locale(identifier: "en_US_POSIX")
+        return f
+    }()
 
     static func xpPerProblem(difficulty: Problem.Difficulty, isSolved: Bool) -> Int {
         if isSolved { return 10 }
@@ -89,6 +98,17 @@ class SkillXPManager {
         solvedProblems.contains(problemId)
     }
 
+    func markDailyCompleted(for date: Date = .now) {
+        let key = Self.dailyDateFormatter.string(from: date)
+        completedDailyDates.insert(key)
+        save()
+    }
+
+    func isDailyCompleted(for date: Date) -> Bool {
+        let key = Self.dailyDateFormatter.string(from: date)
+        return completedDailyDates.contains(key)
+    }
+
     func xp(for skill: String) -> Int {
         skillXP[skill] ?? 0
     }
@@ -108,6 +128,7 @@ class SkillXPManager {
     private func save() {
         UserDefaults.standard.set(skillXP, forKey: storageKey)
         UserDefaults.standard.set(Array(solvedProblems), forKey: solvedKey)
+        UserDefaults.standard.set(Array(completedDailyDates), forKey: dailyCompletionsKey)
     }
 
     private func load() {
@@ -116,6 +137,9 @@ class SkillXPManager {
         }
         if let stored = UserDefaults.standard.stringArray(forKey: solvedKey) {
             solvedProblems = Set(stored)
+        }
+        if let stored = UserDefaults.standard.stringArray(forKey: dailyCompletionsKey) {
+            completedDailyDates = Set(stored)
         }
     }
 }

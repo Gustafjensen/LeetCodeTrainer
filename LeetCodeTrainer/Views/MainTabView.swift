@@ -44,7 +44,7 @@ struct MainTabView: View {
 
     var body: some View {
         TabView(selection: $selectedTab) {
-            Tab("Daily", systemImage: "star.fill", value: 0) {
+            Tab("Daily", systemImage: "calendar", value: 0) {
                 DailyProblemView(viewModel: viewModel)
             }
             Tab("Problems", systemImage: "list.bullet.rectangle.fill", value: 1) {
