@@ -140,5 +140,12 @@ struct ProblemDetailView: View {
                     .lineLimit(1)
             }
         }
+        .navigationDestination(isPresented: $viewModel.showXPReward) {
+            if let gains = viewModel.xpGains {
+                XPRewardView(gains: gains) {
+                    dismiss()
+                }
+            }
+        }
     }
 }

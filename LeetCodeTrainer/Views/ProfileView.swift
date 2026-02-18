@@ -1,6 +1,14 @@
 import SwiftUI
 
 struct ProfileView: View {
+    private var xpManager: SkillXPManager { .shared }
+
+    private var sortedSkills: [(skill: String, xp: Int)] {
+        xpManager.skillXP
+            .sorted { $0.value > $1.value }
+            .map { (skill: $0.key, xp: $0.value) }
+    }
+
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -14,9 +22,11 @@ struct ProfileView: View {
                             .font(.title3)
                             .fontWeight(.semibold)
                             .foregroundStyle(Theme.textPrimary)
-                        Text("LeetCode Trainer")
+
+                        Text("\(xpManager.totalXP()) Total XP")
                             .font(.caption)
-                            .foregroundStyle(Theme.textSecondary)
+                            .fontWeight(.medium)
+                            .foregroundStyle(Theme.accent)
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 28)
@@ -28,28 +38,28 @@ struct ProfileView: View {
                     )
                     .clipShape(RoundedRectangle(cornerRadius: 16))
 
-                    // Stats
-                    LazyVGrid(columns: [
-                        GridItem(.flexible()),
-                        GridItem(.flexible()),
-                        GridItem(.flexible())
-                    ], spacing: 12) {
-                        StatCard(title: "Solved", value: "0", icon: "checkmark.circle.fill", color: .green)
-                        StatCard(title: "Attempted", value: "0", icon: "play.circle.fill", color: Theme.accent)
-                        StatCard(title: "Streak", value: "0", icon: "flame.fill", color: .orange)
-                    }
-
-                    // Progress
+                    // Skills
                     VStack(alignment: .leading, spacing: 14) {
-                        Text("Progress")
+                        Text("Skills")
                             .font(.headline)
                             .foregroundStyle(Theme.textPrimary)
-                        HStack(spacing: 16) {
-                            ProgressRing(label: "Easy", solved: 0, total: 5, color: .green)
-                            ProgressRing(label: "Medium", solved: 0, total: 3, color: .orange)
-                            ProgressRing(label: "Hard", solved: 0, total: 0, color: .red)
+
+                        if sortedSkills.isEmpty {
+                            Text("Solve problems to earn XP!")
+                                .font(.subheadline)
+                                .foregroundStyle(Theme.textSecondary)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 20)
+                        } else {
+                            ForEach(sortedSkills, id: \.skill) { item in
+                                SkillRow(
+                                    skill: item.skill,
+                                    xp: item.xp,
+                                    level: item.xp / 100,
+                                    progress: Double(item.xp % 100) / 100.0
+                                )
+                            }
                         }
-                        .frame(maxWidth: .infinity)
                     }
                     .padding(20)
                     .background(Theme.card)
@@ -72,60 +82,51 @@ struct ProfileView: View {
     }
 }
 
-struct StatCard: View {
-    let title: String
-    let value: String
-    let icon: String
-    let color: Color
+struct SkillRow: View {
+    let skill: String
+    let xp: Int
+    let level: Int
+    let progress: Double
 
     var body: some View {
-        VStack(spacing: 8) {
-            Image(systemName: icon)
-                .font(.title2)
-                .foregroundStyle(color)
-            Text(value)
-                .font(.title2)
-                .fontWeight(.bold)
-                .foregroundStyle(Theme.textPrimary)
-            Text(title)
-                .font(.caption)
-                .foregroundStyle(Theme.textSecondary)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 16)
-        .background(Theme.card)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
-    }
-}
-
-struct ProgressRing: View {
-    let label: String
-    let solved: Int
-    let total: Int
-    let color: Color
-
-    private var progress: Double {
-        total > 0 ? Double(solved) / Double(total) : 0
-    }
-
-    var body: some View {
-        VStack(spacing: 8) {
-            ZStack {
-                Circle()
-                    .stroke(color.opacity(0.15), lineWidth: 6)
-                Circle()
-                    .trim(from: 0, to: progress)
-                    .stroke(color, style: StrokeStyle(lineWidth: 6, lineCap: .round))
-                    .rotationEffect(.degrees(-90))
-                Text("\(solved)/\(total)")
-                    .font(.caption2)
-                    .fontWeight(.semibold)
+        VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Text(skill)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
                     .foregroundStyle(Theme.textPrimary)
+                Spacer()
+                Text("Lvl \(level)")
+                    .font(.caption)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(Theme.accent)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 3)
+                    .background(Theme.accent.opacity(0.15))
+                    .clipShape(Capsule())
             }
-            .frame(width: 56, height: 56)
-            Text(label)
-                .font(.caption)
+
+            GeometryReader { geo in
+                ZStack(alignment: .leading) {
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(Theme.primaryDark)
+                        .frame(height: 6)
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(
+                            LinearGradient(
+                                colors: [Theme.accent, .green],
+                                startPoint: .leading, endPoint: .trailing
+                            )
+                        )
+                        .frame(width: geo.size.width * progress, height: 6)
+                }
+            }
+            .frame(height: 6)
+
+            Text("\(xp % 100)/100 XP to next level")
+                .font(.caption2)
                 .foregroundStyle(Theme.textSecondary)
         }
+        .padding(.vertical, 4)
     }
 }
