@@ -110,6 +110,11 @@ struct SkillXPCard: View {
     let gain: SkillXPGain
     let animate: Bool
 
+    @State private var barProgress: Double = 0
+    @State private var displayLevel: Int = 0
+    @State private var displayXPText: String = ""
+    @State private var hasStarted = false
+
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
@@ -150,20 +155,19 @@ struct SkillXPCard: View {
                                 )
                             )
                             .frame(
-                                width: geo.size.width * (animate ? gain.newProgress : gain.previousProgress),
+                                width: geo.size.width * barProgress,
                                 height: 8
                             )
-                            .animation(.easeOut(duration: 0.8), value: animate)
                     }
                 }
                 .frame(height: 8)
 
                 HStack {
-                    Text("Lvl \(gain.newLevel)")
+                    Text("Lvl \(displayLevel)")
                         .font(.caption2)
                         .foregroundStyle(Theme.textSecondary)
                     Spacer()
-                    Text("\(gain.newXP % SkillXPManager.xpPerLevel)/\(SkillXPManager.xpPerLevel) XP")
+                    Text(displayXPText)
                         .font(.caption2)
                         .foregroundStyle(Theme.textSecondary)
                 }
@@ -172,5 +176,45 @@ struct SkillXPCard: View {
         .padding(14)
         .background(Theme.card)
         .clipShape(RoundedRectangle(cornerRadius: 12))
+        .onAppear {
+            // Set initial state
+            displayLevel = gain.previousLevel
+            barProgress = gain.previousProgress
+            let prevInLevel = SkillXPManager.xpInCurrentLevel(forXP: gain.previousXP)
+            let prevNeeded = SkillXPManager.xpNeededForNextLevel(atLevel: gain.previousLevel)
+            displayXPText = "\(prevInLevel)/\(prevNeeded) XP"
+        }
+        .onChange(of: animate) {
+            guard animate, !hasStarted else { return }
+            hasStarted = true
+
+            if gain.didLevelUp {
+                // Phase 1: fill bar to 100%
+                withAnimation(.easeOut(duration: 0.6)) {
+                    barProgress = 1.0
+                }
+
+                // Phase 2: jump to new level, animate to new progress
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                    barProgress = 0
+                    displayLevel = gain.newLevel
+                    let newInLevel = SkillXPManager.xpInCurrentLevel(forXP: gain.newXP)
+                    let newNeeded = SkillXPManager.xpNeededForNextLevel(atLevel: gain.newLevel)
+                    displayXPText = "\(newInLevel)/\(newNeeded) XP"
+
+                    withAnimation(.easeOut(duration: 0.6)) {
+                        barProgress = gain.newProgress
+                    }
+                }
+            } else {
+                // No level up: simple animation
+                let newInLevel = SkillXPManager.xpInCurrentLevel(forXP: gain.newXP)
+                let newNeeded = SkillXPManager.xpNeededForNextLevel(atLevel: gain.newLevel)
+                withAnimation(.easeOut(duration: 0.8)) {
+                    barProgress = gain.newProgress
+                }
+                displayXPText = "\(newInLevel)/\(newNeeded) XP"
+            }
+        }
     }
 }

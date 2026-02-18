@@ -6,14 +6,54 @@ class SkillXPManager {
 
     var skillXP: [String: Int] = [:]
 
-    static let xpPerLevel = 10
+    /// Cumulative XP thresholds to reach each level.
+    /// Level 0 = 0 XP, Level 1 = 10 XP, Level 2 = 50 XP, etc.
+    /// Beyond defined levels: 200 XP per additional level.
+    static let levelThresholds = [0, 10, 50, 100, 150, 200]
 
     private let storageKey = "skillXP"
-    private let xpPerProblem = 5
+    private let xpPerProblem = 25
 
     private init() {
         load()
     }
+
+    // MARK: - Static level helpers
+
+    static func level(forXP xp: Int) -> Int {
+        for i in stride(from: levelThresholds.count - 1, through: 0, by: -1) {
+            if xp >= levelThresholds[i] {
+                return i
+            }
+        }
+        return 0
+    }
+
+    static func xpForLevel(_ level: Int) -> Int {
+        if level < levelThresholds.count {
+            return levelThresholds[level]
+        }
+        let lastDefined = levelThresholds.last!
+        return lastDefined + (level - levelThresholds.count + 1) * 200
+    }
+
+    static func xpNeededForNextLevel(atLevel level: Int) -> Int {
+        xpForLevel(level + 1) - xpForLevel(level)
+    }
+
+    static func progress(forXP xp: Int) -> Double {
+        let lvl = level(forXP: xp)
+        let currentThreshold = xpForLevel(lvl)
+        let needed = xpNeededForNextLevel(atLevel: lvl)
+        return Double(xp - currentThreshold) / Double(needed)
+    }
+
+    static func xpInCurrentLevel(forXP xp: Int) -> Int {
+        let lvl = level(forXP: xp)
+        return xp - xpForLevel(lvl)
+    }
+
+    // MARK: - Instance methods
 
     func awardXP(for tags: [String]) -> [SkillXPGain] {
         var gains: [SkillXPGain] = []
@@ -41,11 +81,11 @@ class SkillXPManager {
     }
 
     func level(for skill: String) -> Int {
-        xp(for: skill) / Self.xpPerLevel
+        Self.level(forXP: xp(for: skill))
     }
 
     func progress(for skill: String) -> Double {
-        Double(xp(for: skill) % Self.xpPerLevel) / Double(Self.xpPerLevel)
+        Self.progress(forXP: xp(for: skill))
     }
 
     private func save() {
@@ -67,9 +107,9 @@ struct SkillXPGain: Identifiable {
 
     var id: String { skill }
 
-    var previousLevel: Int { previousXP / SkillXPManager.xpPerLevel }
-    var newLevel: Int { newXP / SkillXPManager.xpPerLevel }
+    var previousLevel: Int { SkillXPManager.level(forXP: previousXP) }
+    var newLevel: Int { SkillXPManager.level(forXP: newXP) }
     var didLevelUp: Bool { newLevel > previousLevel }
-    var previousProgress: Double { Double(previousXP % SkillXPManager.xpPerLevel) / Double(SkillXPManager.xpPerLevel) }
-    var newProgress: Double { Double(newXP % SkillXPManager.xpPerLevel) / Double(SkillXPManager.xpPerLevel) }
+    var previousProgress: Double { SkillXPManager.progress(forXP: previousXP) }
+    var newProgress: Double { SkillXPManager.progress(forXP: newXP) }
 }

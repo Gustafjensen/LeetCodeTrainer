@@ -55,8 +55,8 @@ struct ProfileView: View {
                                 SkillRow(
                                     skill: item.skill,
                                     xp: item.xp,
-                                    level: item.xp / SkillXPManager.xpPerLevel,
-                                    progress: Double(item.xp % SkillXPManager.xpPerLevel) / Double(SkillXPManager.xpPerLevel)
+                                    level: SkillXPManager.level(forXP: item.xp),
+                                    progress: SkillXPManager.progress(forXP: item.xp)
                                 )
                             }
                         }
@@ -123,7 +123,7 @@ struct SkillRow: View {
             }
             .frame(height: 6)
 
-            Text("\(xp % SkillXPManager.xpPerLevel)/\(SkillXPManager.xpPerLevel) XP to next level")
+            Text("\(SkillXPManager.xpInCurrentLevel(forXP: xp))/\(SkillXPManager.xpNeededForNextLevel(atLevel: level)) XP to next level")
                 .font(.caption2)
                 .foregroundStyle(Theme.textSecondary)
         }
