@@ -4,6 +4,7 @@ struct XPRewardView: View {
     let gains: [SkillXPGain]
     let onContinue: () -> Void
 
+    @Environment(\.dismiss) private var dismiss
     @State private var showContent = false
     @State private var animateProgress = false
     @State private var showButton = false
@@ -54,7 +55,10 @@ struct XPRewardView: View {
 
                     // Continue button
                     if showButton {
-                        Button(action: onContinue) {
+                        Button {
+                            dismiss()
+                            onContinue()
+                        } label: {
                             Text("Continue")
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 14)
@@ -159,7 +163,7 @@ struct SkillXPCard: View {
                         .font(.caption2)
                         .foregroundStyle(Theme.textSecondary)
                     Spacer()
-                    Text("\(gain.newXP % 100)/100 XP")
+                    Text("\(gain.newXP % SkillXPManager.xpPerLevel)/\(SkillXPManager.xpPerLevel) XP")
                         .font(.caption2)
                         .foregroundStyle(Theme.textSecondary)
                 }

@@ -6,8 +6,10 @@ class SkillXPManager {
 
     var skillXP: [String: Int] = [:]
 
+    static let xpPerLevel = 10
+
     private let storageKey = "skillXP"
-    private let xpPerProblem = 25
+    private let xpPerProblem = 5
 
     private init() {
         load()
@@ -39,11 +41,11 @@ class SkillXPManager {
     }
 
     func level(for skill: String) -> Int {
-        xp(for: skill) / 100
+        xp(for: skill) / Self.xpPerLevel
     }
 
     func progress(for skill: String) -> Double {
-        Double(xp(for: skill) % 100) / 100.0
+        Double(xp(for: skill) % Self.xpPerLevel) / Double(Self.xpPerLevel)
     }
 
     private func save() {
@@ -65,9 +67,9 @@ struct SkillXPGain: Identifiable {
 
     var id: String { skill }
 
-    var previousLevel: Int { previousXP / 100 }
-    var newLevel: Int { newXP / 100 }
+    var previousLevel: Int { previousXP / SkillXPManager.xpPerLevel }
+    var newLevel: Int { newXP / SkillXPManager.xpPerLevel }
     var didLevelUp: Bool { newLevel > previousLevel }
-    var previousProgress: Double { Double(previousXP % 100) / 100.0 }
-    var newProgress: Double { Double(newXP % 100) / 100.0 }
+    var previousProgress: Double { Double(previousXP % SkillXPManager.xpPerLevel) / Double(SkillXPManager.xpPerLevel) }
+    var newProgress: Double { Double(newXP % SkillXPManager.xpPerLevel) / Double(SkillXPManager.xpPerLevel) }
 }
