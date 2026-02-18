@@ -42,6 +42,18 @@ for tc in test_cases:
 
         if compare_mode == 'sorted' and isinstance(actual, list):
             passed = sorted(actual) == sorted(expected)
+        elif compare_mode == 'unordered_lists':
+            # Compare lists of lists regardless of order (e.g. group anagrams, 3sum)
+            def normalize(lst):
+                return sorted([sorted(x) if isinstance(x, list) else x for x in lst])
+            passed = normalize(actual) == normalize(expected)
+        elif compare_mode == 'float':
+            passed = abs(float(actual) - float(expected)) < 0.01
+        elif compare_mode == 'palindrome_substring':
+            # Multiple valid palindrome substrings may exist
+            s = args[0]
+            passed = (isinstance(actual, str) and actual == actual[::-1]
+                      and actual in s and len(actual) == len(expected))
         else:
             passed = actual == expected
 

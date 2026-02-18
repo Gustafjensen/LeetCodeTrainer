@@ -94,6 +94,371 @@
     "tags": ["Strings", "Two Pointers"]
   },
   {
+    "id": "climbing-stairs",
+    "title": "Climbing Stairs",
+    "difficulty": "Easy",
+    "description": "You are climbing a staircase. It takes `n` steps to reach the top.\n\nEach time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?",
+    "examples": [
+      {
+        "input": "n = 2",
+        "output": "2",
+        "explanation": "There are two ways to climb to the top: 1+1 and 2."
+      },
+      {
+        "input": "n = 3",
+        "output": "3",
+        "explanation": "There are three ways to climb to the top: 1+1+1, 1+2, and 2+1."
+      }
+    ],
+    "functionSignature": "def climbStairs(n: int) -> int:",
+    "starterCode": "def climbStairs(n: int) -> int:\n    # Write your solution here\n    pass",
+    "tags": ["Dynamic Programming", "Recursion"]
+  },
+  {
+    "id": "contains-duplicate",
+    "title": "Contains Duplicate",
+    "difficulty": "Easy",
+    "description": "Given an integer array `nums`, return `true` if any value appears at least twice in the array, and return `false` if every element is distinct.",
+    "examples": [
+      {
+        "input": "nums = [1,2,3,1]",
+        "output": "true",
+        "explanation": null
+      },
+      {
+        "input": "nums = [1,2,3,4]",
+        "output": "false",
+        "explanation": null
+      },
+      {
+        "input": "nums = [1,1,1,3,3,4,3,2,4,2]",
+        "output": "true",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def containsDuplicate(nums: list[int]) -> bool:",
+    "starterCode": "def containsDuplicate(nums: list[int]) -> bool:\n    # Write your solution here\n    pass",
+    "tags": ["Arrays", "Hash Map"]
+  },
+  {
+    "id": "valid-anagram",
+    "title": "Valid Anagram",
+    "difficulty": "Easy",
+    "description": "Given two strings `s` and `t`, return `true` if `t` is an anagram of `s`, and `false` otherwise.\n\nAn anagram is a word formed by rearranging the letters of a different word, using all the original letters exactly once.",
+    "examples": [
+      {
+        "input": "s = \"anagram\", t = \"nagaram\"",
+        "output": "true",
+        "explanation": null
+      },
+      {
+        "input": "s = \"rat\", t = \"car\"",
+        "output": "false",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def isAnagram(s: str, t: str) -> bool:",
+    "starterCode": "def isAnagram(s: str, t: str) -> bool:\n    # Write your solution here\n    pass",
+    "tags": ["Strings", "Hash Map"]
+  },
+  {
+    "id": "palindrome-number",
+    "title": "Palindrome Number",
+    "difficulty": "Easy",
+    "description": "Given an integer `x`, return `true` if `x` is a palindrome, and `false` otherwise.\n\nAn integer is a palindrome when it reads the same backward as forward. For example, 121 is a palindrome while 123 is not.",
+    "examples": [
+      {
+        "input": "x = 121",
+        "output": "true",
+        "explanation": "121 reads as 121 from left to right and from right to left."
+      },
+      {
+        "input": "x = -121",
+        "output": "false",
+        "explanation": "From left to right, it reads -121. From right to left it becomes 121-."
+      },
+      {
+        "input": "x = 10",
+        "output": "false",
+        "explanation": "Reads 01 from right to left."
+      }
+    ],
+    "functionSignature": "def isPalindromeNumber(x: int) -> bool:",
+    "starterCode": "def isPalindromeNumber(x: int) -> bool:\n    # Write your solution here\n    pass",
+    "tags": ["Math"]
+  },
+  {
+    "id": "roman-to-integer",
+    "title": "Roman to Integer",
+    "difficulty": "Easy",
+    "description": "Roman numerals are represented by seven symbols: I (1), V (5), X (10), L (50), C (100), D (500), M (1000).\n\nGiven a roman numeral string, convert it to an integer.\n\nSubtraction is used when a smaller value appears before a larger value (e.g. IV = 4, IX = 9).",
+    "examples": [
+      {
+        "input": "s = \"III\"",
+        "output": "3",
+        "explanation": "III = 3"
+      },
+      {
+        "input": "s = \"LVIII\"",
+        "output": "58",
+        "explanation": "L = 50, V = 5, III = 3"
+      },
+      {
+        "input": "s = \"MCMXCIV\"",
+        "output": "1994",
+        "explanation": "M = 1000, CM = 900, XC = 90, IV = 4"
+      }
+    ],
+    "functionSignature": "def romanToInt(s: str) -> int:",
+    "starterCode": "def romanToInt(s: str) -> int:\n    # Write your solution here\n    pass",
+    "tags": ["Math", "Strings"]
+  },
+  {
+    "id": "longest-common-prefix",
+    "title": "Longest Common Prefix",
+    "difficulty": "Easy",
+    "description": "Write a function to find the longest common prefix string amongst an array of strings.\n\nIf there is no common prefix, return an empty string \"\".",
+    "examples": [
+      {
+        "input": "strs = [\"flower\",\"flow\",\"flight\"]",
+        "output": "\"fl\"",
+        "explanation": null
+      },
+      {
+        "input": "strs = [\"dog\",\"racecar\",\"car\"]",
+        "output": "\"\"",
+        "explanation": "There is no common prefix among the input strings."
+      }
+    ],
+    "functionSignature": "def longestCommonPrefix(strs: list[str]) -> str:",
+    "starterCode": "def longestCommonPrefix(strs: list[str]) -> str:\n    # Write your solution here\n    pass",
+    "tags": ["Strings"]
+  },
+  {
+    "id": "length-of-last-word",
+    "title": "Length of Last Word",
+    "difficulty": "Easy",
+    "description": "Given a string `s` consisting of words and spaces, return the length of the last word in the string.\n\nA word is a maximal substring consisting of non-space characters only.",
+    "examples": [
+      {
+        "input": "s = \"Hello World\"",
+        "output": "5",
+        "explanation": "The last word is \"World\" with length 5."
+      },
+      {
+        "input": "s = \"   fly me   to   the moon  \"",
+        "output": "4",
+        "explanation": "The last word is \"moon\" with length 4."
+      },
+      {
+        "input": "s = \"luffy is still joyboy\"",
+        "output": "6",
+        "explanation": "The last word is \"joyboy\" with length 6."
+      }
+    ],
+    "functionSignature": "def lengthOfLastWord(s: str) -> int:",
+    "starterCode": "def lengthOfLastWord(s: str) -> int:\n    # Write your solution here\n    pass",
+    "tags": ["Strings"]
+  },
+  {
+    "id": "search-insert-position",
+    "title": "Search Insert Position",
+    "difficulty": "Easy",
+    "description": "Given a sorted array of distinct integers and a target value, return the index if the target is found. If not, return the index where it would be if it were inserted in order.\n\nYou must write an algorithm with O(log n) runtime complexity.",
+    "examples": [
+      {
+        "input": "nums = [1,3,5,6], target = 5",
+        "output": "2",
+        "explanation": null
+      },
+      {
+        "input": "nums = [1,3,5,6], target = 2",
+        "output": "1",
+        "explanation": null
+      },
+      {
+        "input": "nums = [1,3,5,6], target = 7",
+        "output": "4",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def searchInsert(nums: list[int], target: int) -> int:",
+    "starterCode": "def searchInsert(nums: list[int], target: int) -> int:\n    # Write your solution here\n    pass",
+    "tags": ["Binary Search", "Arrays"]
+  },
+  {
+    "id": "single-number",
+    "title": "Single Number",
+    "difficulty": "Easy",
+    "description": "Given a non-empty array of integers `nums`, every element appears twice except for one. Find that single one.\n\nYou must implement a solution with linear runtime complexity and use only constant extra space.",
+    "examples": [
+      {
+        "input": "nums = [2,2,1]",
+        "output": "1",
+        "explanation": null
+      },
+      {
+        "input": "nums = [4,1,2,1,2]",
+        "output": "4",
+        "explanation": null
+      },
+      {
+        "input": "nums = [1]",
+        "output": "1",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def singleNumber(nums: list[int]) -> int:",
+    "starterCode": "def singleNumber(nums: list[int]) -> int:\n    # Write your solution here\n    pass",
+    "tags": ["Arrays", "Bit Manipulation"]
+  },
+  {
+    "id": "missing-number",
+    "title": "Missing Number",
+    "difficulty": "Easy",
+    "description": "Given an array `nums` containing `n` distinct numbers in the range `[0, n]`, return the only number in the range that is missing from the array.",
+    "examples": [
+      {
+        "input": "nums = [3,0,1]",
+        "output": "2",
+        "explanation": "n = 3 since there are 3 numbers, so all numbers are in the range [0,3]. 2 is missing."
+      },
+      {
+        "input": "nums = [0,1]",
+        "output": "2",
+        "explanation": "n = 2 since there are 2 numbers, so all numbers are in the range [0,2]. 2 is missing."
+      },
+      {
+        "input": "nums = [9,6,4,2,3,5,7,0,1]",
+        "output": "8",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def missingNumber(nums: list[int]) -> int:",
+    "starterCode": "def missingNumber(nums: list[int]) -> int:\n    # Write your solution here\n    pass",
+    "tags": ["Arrays", "Math"]
+  },
+  {
+    "id": "ransom-note",
+    "title": "Ransom Note",
+    "difficulty": "Easy",
+    "description": "Given two strings `ransomNote` and `magazine`, return `true` if `ransomNote` can be constructed by using the letters from `magazine` and `false` otherwise.\n\nEach letter in `magazine` can only be used once in `ransomNote`.",
+    "examples": [
+      {
+        "input": "ransomNote = \"a\", magazine = \"b\"",
+        "output": "false",
+        "explanation": null
+      },
+      {
+        "input": "ransomNote = \"aa\", magazine = \"ab\"",
+        "output": "false",
+        "explanation": null
+      },
+      {
+        "input": "ransomNote = \"aa\", magazine = \"aab\"",
+        "output": "true",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def canConstruct(ransomNote: str, magazine: str) -> bool:",
+    "starterCode": "def canConstruct(ransomNote: str, magazine: str) -> bool:\n    # Write your solution here\n    pass",
+    "tags": ["Hash Map", "Strings"]
+  },
+  {
+    "id": "isomorphic-strings",
+    "title": "Isomorphic Strings",
+    "difficulty": "Easy",
+    "description": "Given two strings `s` and `t`, determine if they are isomorphic.\n\nTwo strings are isomorphic if the characters in `s` can be replaced to get `t`. All occurrences of a character must be replaced with another character while preserving the order. No two characters may map to the same character, but a character may map to itself.",
+    "examples": [
+      {
+        "input": "s = \"egg\", t = \"add\"",
+        "output": "true",
+        "explanation": null
+      },
+      {
+        "input": "s = \"foo\", t = \"bar\"",
+        "output": "false",
+        "explanation": null
+      },
+      {
+        "input": "s = \"paper\", t = \"title\"",
+        "output": "true",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def isIsomorphic(s: str, t: str) -> bool:",
+    "starterCode": "def isIsomorphic(s: str, t: str) -> bool:\n    # Write your solution here\n    pass",
+    "tags": ["Hash Map", "Strings"]
+  },
+  {
+    "id": "best-time-to-buy-sell-stock",
+    "title": "Best Time to Buy and Sell Stock",
+    "difficulty": "Easy",
+    "description": "You are given an array `prices` where `prices[i]` is the price of a given stock on the ith day.\n\nYou want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.\n\nReturn the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.",
+    "examples": [
+      {
+        "input": "prices = [7,1,5,3,6,4]",
+        "output": "5",
+        "explanation": "Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5."
+      },
+      {
+        "input": "prices = [7,6,4,3,1]",
+        "output": "0",
+        "explanation": "No profitable transaction is possible."
+      }
+    ],
+    "functionSignature": "def maxProfit(prices: list[int]) -> int:",
+    "starterCode": "def maxProfit(prices: list[int]) -> int:\n    # Write your solution here\n    pass",
+    "tags": ["Arrays", "Greedy"]
+  },
+  {
+    "id": "move-zeroes",
+    "title": "Move Zeroes",
+    "difficulty": "Easy",
+    "description": "Given an integer array `nums`, move all 0's to the end of it while maintaining the relative order of the non-zero elements.\n\nNote that you must do this in-place without making a copy of the array. Return the modified array.",
+    "examples": [
+      {
+        "input": "nums = [0,1,0,3,12]",
+        "output": "[1,3,12,0,0]",
+        "explanation": null
+      },
+      {
+        "input": "nums = [0]",
+        "output": "[0]",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def moveZeroes(nums: list[int]) -> list[int]:",
+    "starterCode": "def moveZeroes(nums: list[int]) -> list[int]:\n    # Modify nums in-place and return it\n    pass",
+    "tags": ["Arrays", "Two Pointers"]
+  },
+  {
+    "id": "plus-one",
+    "title": "Plus One",
+    "difficulty": "Easy",
+    "description": "You are given a large integer represented as an integer array `digits`, where each `digits[i]` is the ith digit of the integer. The digits are ordered from most significant to least significant.\n\nIncrement the large integer by one and return the resulting array of digits.",
+    "examples": [
+      {
+        "input": "digits = [1,2,3]",
+        "output": "[1,2,4]",
+        "explanation": "The array represents the integer 123. 123 + 1 = 124."
+      },
+      {
+        "input": "digits = [4,3,2,1]",
+        "output": "[4,3,2,2]",
+        "explanation": null
+      },
+      {
+        "input": "digits = [9]",
+        "output": "[1,0]",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def plusOne(digits: list[int]) -> list[int]:",
+    "starterCode": "def plusOne(digits: list[int]) -> list[int]:\n    # Write your solution here\n    pass",
+    "tags": ["Arrays", "Math"]
+  },
+  {
     "id": "max-subarray",
     "title": "Maximum Subarray",
     "difficulty": "Medium",
@@ -172,24 +537,479 @@
     "tags": ["Arrays", "Sorting"]
   },
   {
-    "id": "climbing-stairs",
-    "title": "Climbing Stairs",
-    "difficulty": "Easy",
-    "description": "You are climbing a staircase. It takes `n` steps to reach the top.\n\nEach time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?",
+    "id": "group-anagrams",
+    "title": "Group Anagrams",
+    "difficulty": "Medium",
+    "description": "Given an array of strings `strs`, group the anagrams together. You can return the answer in any order.\n\nAn anagram is a word formed by rearranging the letters of another word, using all the original letters exactly once.",
     "examples": [
       {
-        "input": "n = 2",
-        "output": "2",
-        "explanation": "There are two ways to climb to the top: 1+1 and 2."
+        "input": "strs = [\"eat\",\"tea\",\"tan\",\"ate\",\"nat\",\"bat\"]",
+        "output": "[[\"bat\"],[\"nat\",\"tan\"],[\"ate\",\"eat\",\"tea\"]]",
+        "explanation": null
       },
       {
-        "input": "n = 3",
-        "output": "3",
-        "explanation": "There are three ways to climb to the top: 1+1+1, 1+2, and 2+1."
+        "input": "strs = [\"\"]",
+        "output": "[[\"\"]]",
+        "explanation": null
+      },
+      {
+        "input": "strs = [\"a\"]",
+        "output": "[[\"a\"]]",
+        "explanation": null
       }
     ],
-    "functionSignature": "def climbStairs(n: int) -> int:",
-    "starterCode": "def climbStairs(n: int) -> int:\n    # Write your solution here\n    pass",
-    "tags": ["Dynamic Programming", "Recursion"]
+    "functionSignature": "def groupAnagrams(strs: list[str]) -> list[list[str]]:",
+    "starterCode": "def groupAnagrams(strs: list[str]) -> list[list[str]]:\n    # Write your solution here\n    pass",
+    "tags": ["Hash Map", "Strings", "Sorting"]
+  },
+  {
+    "id": "product-except-self",
+    "title": "Product of Array Except Self",
+    "difficulty": "Medium",
+    "description": "Given an integer array `nums`, return an array `answer` such that `answer[i]` is equal to the product of all the elements of `nums` except `nums[i]`.\n\nYou must write an algorithm that runs in O(n) time and without using the division operation.",
+    "examples": [
+      {
+        "input": "nums = [1,2,3,4]",
+        "output": "[24,12,8,6]",
+        "explanation": null
+      },
+      {
+        "input": "nums = [-1,1,0,-3,3]",
+        "output": "[0,0,9,0,0]",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def productExceptSelf(nums: list[int]) -> list[int]:",
+    "starterCode": "def productExceptSelf(nums: list[int]) -> list[int]:\n    # Write your solution here\n    pass",
+    "tags": ["Arrays"]
+  },
+  {
+    "id": "container-with-most-water",
+    "title": "Container With Most Water",
+    "difficulty": "Medium",
+    "description": "You are given an integer array `height` of length `n`. There are `n` vertical lines drawn such that the two endpoints of the ith line are `(i, 0)` and `(i, height[i])`.\n\nFind two lines that together with the x-axis form a container, such that the container contains the most water.\n\nReturn the maximum amount of water a container can store.",
+    "examples": [
+      {
+        "input": "height = [1,8,6,2,5,4,8,3,7]",
+        "output": "49",
+        "explanation": "Lines at index 1 and 8 form a container with area 49."
+      },
+      {
+        "input": "height = [1,1]",
+        "output": "1",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def maxArea(height: list[int]) -> int:",
+    "starterCode": "def maxArea(height: list[int]) -> int:\n    # Write your solution here\n    pass",
+    "tags": ["Two Pointers", "Greedy"]
+  },
+  {
+    "id": "three-sum",
+    "title": "3Sum",
+    "difficulty": "Medium",
+    "description": "Given an integer array `nums`, return all the triplets `[nums[i], nums[j], nums[k]]` such that `i != j`, `i != k`, and `j != k`, and `nums[i] + nums[j] + nums[k] == 0`.\n\nNotice that the solution set must not contain duplicate triplets.",
+    "examples": [
+      {
+        "input": "nums = [-1,0,1,2,-1,-4]",
+        "output": "[[-1,-1,2],[-1,0,1]]",
+        "explanation": null
+      },
+      {
+        "input": "nums = [0,1,1]",
+        "output": "[]",
+        "explanation": null
+      },
+      {
+        "input": "nums = [0,0,0]",
+        "output": "[[0,0,0]]",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def threeSum(nums: list[int]) -> list[list[int]]:",
+    "starterCode": "def threeSum(nums: list[int]) -> list[list[int]]:\n    # Write your solution here\n    pass",
+    "tags": ["Arrays", "Two Pointers", "Sorting"]
+  },
+  {
+    "id": "house-robber",
+    "title": "House Robber",
+    "difficulty": "Medium",
+    "description": "You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed. Adjacent houses have security systems connected — if two adjacent houses were broken into on the same night, the police will be contacted.\n\nGiven an integer array `nums` representing the amount of money of each house, return the maximum amount of money you can rob tonight without alerting the police.",
+    "examples": [
+      {
+        "input": "nums = [1,2,3,1]",
+        "output": "4",
+        "explanation": "Rob house 1 (money = 1) and then rob house 3 (money = 3). Total = 1 + 3 = 4."
+      },
+      {
+        "input": "nums = [2,7,9,3,1]",
+        "output": "12",
+        "explanation": "Rob house 1 (money = 2), house 3 (money = 9), and house 5 (money = 1). Total = 12."
+      }
+    ],
+    "functionSignature": "def rob(nums: list[int]) -> int:",
+    "starterCode": "def rob(nums: list[int]) -> int:\n    # Write your solution here\n    pass",
+    "tags": ["Dynamic Programming", "Arrays"]
+  },
+  {
+    "id": "coin-change",
+    "title": "Coin Change",
+    "difficulty": "Medium",
+    "description": "You are given an integer array `coins` representing coins of different denominations and an integer `amount` representing a total amount of money.\n\nReturn the fewest number of coins that you need to make up that amount. If that amount of money cannot be made up by any combination of the coins, return -1.\n\nYou may assume that you have an infinite number of each kind of coin.",
+    "examples": [
+      {
+        "input": "coins = [1,5,10], amount = 12",
+        "output": "3",
+        "explanation": "12 = 10 + 1 + 1"
+      },
+      {
+        "input": "coins = [2], amount = 3",
+        "output": "-1",
+        "explanation": null
+      },
+      {
+        "input": "coins = [1], amount = 0",
+        "output": "0",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def coinChange(coins: list[int], amount: int) -> int:",
+    "starterCode": "def coinChange(coins: list[int], amount: int) -> int:\n    # Write your solution here\n    pass",
+    "tags": ["Dynamic Programming"]
+  },
+  {
+    "id": "unique-paths",
+    "title": "Unique Paths",
+    "difficulty": "Medium",
+    "description": "There is a robot on an `m x n` grid. The robot is initially located at the top-left corner. The robot tries to move to the bottom-right corner. The robot can only move either down or right at any point in time.\n\nGiven the two integers `m` and `n`, return the number of possible unique paths that the robot can take to reach the bottom-right corner.",
+    "examples": [
+      {
+        "input": "m = 3, n = 7",
+        "output": "28",
+        "explanation": null
+      },
+      {
+        "input": "m = 3, n = 2",
+        "output": "3",
+        "explanation": "Right+Down+Down, Down+Right+Down, Down+Down+Right."
+      }
+    ],
+    "functionSignature": "def uniquePaths(m: int, n: int) -> int:",
+    "starterCode": "def uniquePaths(m: int, n: int) -> int:\n    # Write your solution here\n    pass",
+    "tags": ["Dynamic Programming", "Math"]
+  },
+  {
+    "id": "jump-game",
+    "title": "Jump Game",
+    "difficulty": "Medium",
+    "description": "You are given an integer array `nums`. You are initially positioned at the array's first index, and each element in the array represents your maximum jump length at that position.\n\nReturn `true` if you can reach the last index, or `false` otherwise.",
+    "examples": [
+      {
+        "input": "nums = [2,3,1,1,4]",
+        "output": "true",
+        "explanation": "Jump 1 step from index 0 to 1, then 3 steps to the last index."
+      },
+      {
+        "input": "nums = [3,2,1,0,4]",
+        "output": "false",
+        "explanation": "You will always arrive at index 3 no matter what. Its maximum jump length is 0."
+      }
+    ],
+    "functionSignature": "def canJump(nums: list[int]) -> bool:",
+    "starterCode": "def canJump(nums: list[int]) -> bool:\n    # Write your solution here\n    pass",
+    "tags": ["Greedy", "Arrays"]
+  },
+  {
+    "id": "sort-colors",
+    "title": "Sort Colors",
+    "difficulty": "Medium",
+    "description": "Given an array `nums` with `n` objects colored red (0), white (1), or blue (2), sort them in-place so that objects of the same color are adjacent, in the order red, white, and blue.\n\nYou must solve this problem without using the library's sort function. Return the sorted array.",
+    "examples": [
+      {
+        "input": "nums = [2,0,2,1,1,0]",
+        "output": "[0,0,1,1,2,2]",
+        "explanation": null
+      },
+      {
+        "input": "nums = [2,0,1]",
+        "output": "[0,1,2]",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def sortColors(nums: list[int]) -> list[int]:",
+    "starterCode": "def sortColors(nums: list[int]) -> list[int]:\n    # Sort in-place and return nums\n    pass",
+    "tags": ["Arrays", "Two Pointers", "Sorting"]
+  },
+  {
+    "id": "min-stack",
+    "title": "Min Stack",
+    "difficulty": "Medium",
+    "description": "Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.\n\nImplement the `MinStack` class:\n- `push(val)` pushes the element val onto the stack.\n- `pop()` removes the element on the top of the stack.\n- `top()` gets the top element of the stack.\n- `getMin()` retrieves the minimum element in the stack.\n\nThe function receives a list of operations and a list of arguments, and should return a list of results (None for push/pop).",
+    "examples": [
+      {
+        "input": "ops = [\"push\",\"push\",\"push\",\"getMin\",\"pop\",\"top\",\"getMin\"], args = [[-2],[0],[-3],[],[],[],[]]",
+        "output": "[None,None,None,-3,None,0,-2]",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def minStack(operations: list[str], arguments: list[list]) -> list:",
+    "starterCode": "def minStack(operations: list, arguments: list) -> list:\n    # Implement MinStack and process operations\n    pass",
+    "tags": ["Stack", "Design"]
+  },
+  {
+    "id": "search-rotated-array",
+    "title": "Search in Rotated Sorted Array",
+    "difficulty": "Medium",
+    "description": "There is an integer array `nums` sorted in ascending order (with distinct values). Prior to being passed to your function, `nums` is possibly rotated at an unknown pivot index.\n\nGiven the array `nums` after the possible rotation and an integer `target`, return the index of `target` if it is in `nums`, or -1 if it is not.\n\nYou must write an algorithm with O(log n) runtime complexity.",
+    "examples": [
+      {
+        "input": "nums = [4,5,6,7,0,1,2], target = 0",
+        "output": "4",
+        "explanation": null
+      },
+      {
+        "input": "nums = [4,5,6,7,0,1,2], target = 3",
+        "output": "-1",
+        "explanation": null
+      },
+      {
+        "input": "nums = [1], target = 0",
+        "output": "-1",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def search(nums: list[int], target: int) -> int:",
+    "starterCode": "def search(nums: list[int], target: int) -> int:\n    # Write your solution here\n    pass",
+    "tags": ["Binary Search", "Arrays"]
+  },
+  {
+    "id": "merge-intervals",
+    "title": "Merge Intervals",
+    "difficulty": "Medium",
+    "description": "Given an array of `intervals` where `intervals[i] = [start_i, end_i]`, merge all overlapping intervals, and return an array of the non-overlapping intervals that cover all the intervals in the input.",
+    "examples": [
+      {
+        "input": "intervals = [[1,3],[2,6],[8,10],[15,18]]",
+        "output": "[[1,6],[8,10],[15,18]]",
+        "explanation": "Since intervals [1,3] and [2,6] overlap, merge them into [1,6]."
+      },
+      {
+        "input": "intervals = [[1,4],[4,5]]",
+        "output": "[[1,5]]",
+        "explanation": "Intervals [1,4] and [4,5] are considered overlapping."
+      }
+    ],
+    "functionSignature": "def merge(intervals: list[list[int]]) -> list[list[int]]:",
+    "starterCode": "def merge(intervals: list[list[int]]) -> list[list[int]]:\n    # Write your solution here\n    pass",
+    "tags": ["Arrays", "Sorting"]
+  },
+  {
+    "id": "remove-duplicates-sorted",
+    "title": "Remove Duplicates from Sorted Array",
+    "difficulty": "Medium",
+    "description": "Given an integer array `nums` sorted in non-decreasing order, remove the duplicates in-place such that each unique element appears only once. The relative order of the elements should be kept the same.\n\nReturn the number of unique elements in `nums`.",
+    "examples": [
+      {
+        "input": "nums = [1,1,2]",
+        "output": "2",
+        "explanation": "Your function should return k = 2, with the first two elements of nums being 1 and 2."
+      },
+      {
+        "input": "nums = [0,0,1,1,1,2,2,3,3,4]",
+        "output": "5",
+        "explanation": "Your function should return k = 5, with the first five elements being 0, 1, 2, 3, and 4."
+      }
+    ],
+    "functionSignature": "def removeDuplicates(nums: list[int]) -> int:",
+    "starterCode": "def removeDuplicates(nums: list[int]) -> int:\n    # Write your solution here\n    pass",
+    "tags": ["Arrays", "Two Pointers"]
+  },
+  {
+    "id": "longest-substring-no-repeat",
+    "title": "Longest Substring Without Repeating Characters",
+    "difficulty": "Medium",
+    "description": "Given a string `s`, find the length of the longest substring without repeating characters.",
+    "examples": [
+      {
+        "input": "s = \"abcabcbb\"",
+        "output": "3",
+        "explanation": "The answer is \"abc\", with the length of 3."
+      },
+      {
+        "input": "s = \"bbbbb\"",
+        "output": "1",
+        "explanation": "The answer is \"b\", with the length of 1."
+      },
+      {
+        "input": "s = \"pwwkew\"",
+        "output": "3",
+        "explanation": "The answer is \"wke\", with the length of 3."
+      }
+    ],
+    "functionSignature": "def lengthOfLongestSubstring(s: str) -> int:",
+    "starterCode": "def lengthOfLongestSubstring(s: str) -> int:\n    # Write your solution here\n    pass",
+    "tags": ["Strings", "Sliding Window", "Hash Map"]
+  },
+  {
+    "id": "best-time-buy-sell-stock-ii",
+    "title": "Best Time to Buy and Sell Stock II",
+    "difficulty": "Medium",
+    "description": "You are given an integer array `prices` where `prices[i]` is the price of a given stock on the ith day.\n\nOn each day, you may decide to buy and/or sell the stock. You can only hold at most one share of the stock at any time. However, you can buy it then immediately sell it on the same day.\n\nFind and return the maximum profit you can achieve.",
+    "examples": [
+      {
+        "input": "prices = [7,1,5,3,6,4]",
+        "output": "7",
+        "explanation": "Buy on day 2 (price=1), sell day 3 (price=5), profit=4. Then buy day 4 (price=3), sell day 5 (price=6), profit=3. Total=7."
+      },
+      {
+        "input": "prices = [1,2,3,4,5]",
+        "output": "4",
+        "explanation": "Buy on day 1 (price=1), sell on day 5 (price=5), profit=4."
+      },
+      {
+        "input": "prices = [7,6,4,3,1]",
+        "output": "0",
+        "explanation": "No profitable transaction possible."
+      }
+    ],
+    "functionSignature": "def maxProfitII(prices: list[int]) -> int:",
+    "starterCode": "def maxProfitII(prices: list[int]) -> int:\n    # Write your solution here\n    pass",
+    "tags": ["Greedy", "Arrays"]
+  },
+  {
+    "id": "rotate-array",
+    "title": "Rotate Array",
+    "difficulty": "Medium",
+    "description": "Given an integer array `nums`, rotate the array to the right by `k` steps, where `k` is non-negative. Return the rotated array.",
+    "examples": [
+      {
+        "input": "nums = [1,2,3,4,5,6,7], k = 3",
+        "output": "[5,6,7,1,2,3,4]",
+        "explanation": "Rotate 1 step: [7,1,2,3,4,5,6]. Rotate 2 steps: [6,7,1,2,3,4,5]. Rotate 3 steps: [5,6,7,1,2,3,4]."
+      },
+      {
+        "input": "nums = [-1,-100,3,99], k = 2",
+        "output": "[3,99,-1,-100]",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def rotate(nums: list[int], k: int) -> list[int]:",
+    "starterCode": "def rotate(nums: list[int], k: int) -> list[int]:\n    # Rotate in-place and return nums\n    pass",
+    "tags": ["Arrays", "Math"]
+  },
+  {
+    "id": "pow-x-n",
+    "title": "Pow(x, n)",
+    "difficulty": "Medium",
+    "description": "Implement `pow(x, n)`, which calculates `x` raised to the power `n` (i.e., x^n).",
+    "examples": [
+      {
+        "input": "x = 2.0, n = 10",
+        "output": "1024.0",
+        "explanation": null
+      },
+      {
+        "input": "x = 2.1, n = 3",
+        "output": "9.261",
+        "explanation": null
+      },
+      {
+        "input": "x = 2.0, n = -2",
+        "output": "0.25",
+        "explanation": "2^-2 = 1/(2^2) = 1/4 = 0.25"
+      }
+    ],
+    "functionSignature": "def myPow(x: float, n: int) -> float:",
+    "starterCode": "def myPow(x: float, n: int) -> float:\n    # Write your solution here\n    pass",
+    "tags": ["Math", "Recursion"]
+  },
+  {
+    "id": "spiral-matrix",
+    "title": "Spiral Matrix",
+    "difficulty": "Hard",
+    "description": "Given an `m x n` matrix, return all elements of the matrix in spiral order.",
+    "examples": [
+      {
+        "input": "matrix = [[1,2,3],[4,5,6],[7,8,9]]",
+        "output": "[1,2,3,6,9,8,7,4,5]",
+        "explanation": null
+      },
+      {
+        "input": "matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]]",
+        "output": "[1,2,3,4,8,12,11,10,9,5,6,7]",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def spiralOrder(matrix: list[list[int]]) -> list[int]:",
+    "starterCode": "def spiralOrder(matrix: list[list[int]]) -> list[int]:\n    # Write your solution here\n    pass",
+    "tags": ["Arrays", "Matrix"]
+  },
+  {
+    "id": "word-search",
+    "title": "Word Search",
+    "difficulty": "Hard",
+    "description": "Given an `m x n` grid of characters `board` and a string `word`, return `true` if `word` exists in the grid.\n\nThe word can be constructed from letters of sequentially adjacent cells, where adjacent cells are horizontally or vertically neighboring. The same letter cell may not be used more than once.",
+    "examples": [
+      {
+        "input": "board = [[\"A\",\"B\",\"C\",\"E\"],[\"S\",\"F\",\"C\",\"S\"],[\"A\",\"D\",\"E\",\"E\"]], word = \"ABCCED\"",
+        "output": "true",
+        "explanation": null
+      },
+      {
+        "input": "board = [[\"A\",\"B\",\"C\",\"E\"],[\"S\",\"F\",\"C\",\"S\"],[\"A\",\"D\",\"E\",\"E\"]], word = \"SEE\"",
+        "output": "true",
+        "explanation": null
+      },
+      {
+        "input": "board = [[\"A\",\"B\",\"C\",\"E\"],[\"S\",\"F\",\"C\",\"S\"],[\"A\",\"D\",\"E\",\"E\"]], word = \"ABCB\"",
+        "output": "false",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def exist(board: list[list[str]], word: str) -> bool:",
+    "starterCode": "def exist(board: list[list[str]], word: str) -> bool:\n    # Write your solution here\n    pass",
+    "tags": ["Arrays", "Backtracking", "Matrix"]
+  },
+  {
+    "id": "trapping-rain-water",
+    "title": "Trapping Rain Water",
+    "difficulty": "Hard",
+    "description": "Given `n` non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.",
+    "examples": [
+      {
+        "input": "height = [0,1,0,2,1,0,1,3,2,1,2,1]",
+        "output": "6",
+        "explanation": "6 units of rain water are trapped."
+      },
+      {
+        "input": "height = [4,2,0,3,2,5]",
+        "output": "9",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def trap(height: list[int]) -> int:",
+    "starterCode": "def trap(height: list[int]) -> int:\n    # Write your solution here\n    pass",
+    "tags": ["Arrays", "Two Pointers", "Dynamic Programming"]
+  },
+  {
+    "id": "longest-palindromic-substring",
+    "title": "Longest Palindromic Substring",
+    "difficulty": "Hard",
+    "description": "Given a string `s`, return the longest palindromic substring in `s`.",
+    "examples": [
+      {
+        "input": "s = \"babad\"",
+        "output": "\"bab\"",
+        "explanation": "\"aba\" is also a valid answer."
+      },
+      {
+        "input": "s = \"cbbd\"",
+        "output": "\"bb\"",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def longestPalindrome(s: str) -> str:",
+    "starterCode": "def longestPalindrome(s: str) -> str:\n    # Write your solution here\n    pass",
+    "tags": ["Strings", "Dynamic Programming"]
   }
 ]
