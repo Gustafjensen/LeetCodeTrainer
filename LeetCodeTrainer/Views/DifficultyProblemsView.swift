@@ -45,11 +45,6 @@ struct DifficultyProblemsView: View {
                     .foregroundStyle(.white)
             }
         }
-        .navigationDestination(for: String.self) { problemId in
-            if let problem = problems.first(where: { $0.id == problemId }) {
-                ProblemDetailView(viewModel: ProblemDetailViewModel(problem: problem))
-            }
-        }
         .sheet(item: $selectedProblem) { problem in
             ProblemInfoSheet(problem: problem, color: difficultyColor)
         }
@@ -60,6 +55,7 @@ struct ProblemCard: View {
     let problem: Problem
     let color: Color
     let onInfoTap: () -> Void
+    private var isSolved: Bool { SkillXPManager.shared.isSolved(problem.id) }
 
     var body: some View {
         NavigationLink(value: problem.id) {
@@ -67,7 +63,7 @@ struct ProblemCard: View {
                 // Top bar with info button
                 HStack {
                     Circle()
-                        .fill(color.opacity(0.3))
+                        .fill(isSolved ? Color.green : color.opacity(0.3))
                         .frame(width: 8, height: 8)
                     Spacer()
                     Button {

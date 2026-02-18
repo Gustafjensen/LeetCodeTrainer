@@ -2,13 +2,14 @@ import SwiftUI
 
 struct ProblemListView: View {
     var viewModel: ProblemListViewModel
+    @State private var path = NavigationPath()
 
     private var easyCount: Int { viewModel.problems.filter { $0.difficulty == .easy }.count }
     private var mediumCount: Int { viewModel.problems.filter { $0.difficulty == .medium }.count }
     private var hardCount: Int { viewModel.problems.filter { $0.difficulty == .hard }.count }
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             ScrollView {
                 VStack(spacing: 14) {
                     DifficultyCategoryCard(
@@ -54,7 +55,10 @@ struct ProblemListView: View {
             }
             .navigationDestination(for: String.self) { problemId in
                 if let problem = viewModel.problems.first(where: { $0.id == problemId }) {
-                    ProblemDetailView(viewModel: ProblemDetailViewModel(problem: problem))
+                    ProblemDetailView(
+                        viewModel: ProblemDetailViewModel(problem: problem),
+                        popToRoot: { path = NavigationPath() }
+                    )
                 }
             }
         }

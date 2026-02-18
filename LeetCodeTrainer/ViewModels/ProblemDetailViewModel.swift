@@ -36,7 +36,7 @@ class ProblemDetailViewModel {
             executionResult = result
 
             if result.overallStatus == .pass {
-                let gains = xpManager.awardXP(for: problem.tags)
+                let gains = xpManager.awardXP(for: problem)
                 xpGains = gains
                 showXPReward = true
             }

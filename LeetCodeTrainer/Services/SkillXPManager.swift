@@ -5,14 +5,22 @@ class SkillXPManager {
     static let shared = SkillXPManager()
 
     var skillXP: [String: Int] = [:]
+    var solvedProblems: Set<String> = []
 
     /// Cumulative XP thresholds to reach each level.
-    /// Level 0 = 0 XP, Level 1 = 10 XP, Level 2 = 50 XP, etc.
-    /// Beyond defined levels: 200 XP per additional level.
     static let levelThresholds = [0, 10, 50, 100, 150, 200]
 
     private let storageKey = "skillXP"
-    private let xpPerProblem = 25
+    private let solvedKey = "solvedProblems"
+
+    static func xpPerProblem(difficulty: Problem.Difficulty, isSolved: Bool) -> Int {
+        if isSolved { return 10 }
+        switch difficulty {
+        case .easy: return 25
+        case .medium: return 40
+        case .hard: return 60
+        }
+    }
 
     private init() {
         load()
@@ -55,21 +63,30 @@ class SkillXPManager {
 
     // MARK: - Instance methods
 
-    func awardXP(for tags: [String]) -> [SkillXPGain] {
+    func awardXP(for problem: Problem) -> [SkillXPGain] {
+        let alreadySolved = solvedProblems.contains(problem.id)
+        let xp = Self.xpPerProblem(difficulty: problem.difficulty, isSolved: alreadySolved)
+
         var gains: [SkillXPGain] = []
-        for tag in tags {
+        for tag in problem.tags {
             let before = skillXP[tag] ?? 0
-            let after = before + xpPerProblem
+            let after = before + xp
             skillXP[tag] = after
             gains.append(SkillXPGain(
                 skill: tag,
                 previousXP: before,
                 newXP: after,
-                gained: xpPerProblem
+                gained: xp
             ))
         }
+
+        solvedProblems.insert(problem.id)
         save()
         return gains
+    }
+
+    func isSolved(_ problemId: String) -> Bool {
+        solvedProblems.contains(problemId)
     }
 
     func xp(for skill: String) -> Int {
@@ -90,11 +107,15 @@ class SkillXPManager {
 
     private func save() {
         UserDefaults.standard.set(skillXP, forKey: storageKey)
+        UserDefaults.standard.set(Array(solvedProblems), forKey: solvedKey)
     }
 
     private func load() {
         if let stored = UserDefaults.standard.dictionary(forKey: storageKey) as? [String: Int] {
             skillXP = stored
+        }
+        if let stored = UserDefaults.standard.stringArray(forKey: solvedKey) {
+            solvedProblems = Set(stored)
         }
     }
 }

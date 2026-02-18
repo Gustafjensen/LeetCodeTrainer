@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ProblemDetailView: View {
     @State var viewModel: ProblemDetailViewModel
+    var popToRoot: () -> Void = {}
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -140,11 +141,9 @@ struct ProblemDetailView: View {
                     .lineLimit(1)
             }
         }
-        .navigationDestination(isPresented: $viewModel.showXPReward) {
+        .fullScreenCover(isPresented: $viewModel.showXPReward) {
             if let gains = viewModel.xpGains {
-                XPRewardView(gains: gains) {
-                    dismiss()
-                }
+                XPRewardView(gains: gains, sourceCode: viewModel.sourceCode, popToRoot: popToRoot)
             }
         }
     }
