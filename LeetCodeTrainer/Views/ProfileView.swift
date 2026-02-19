@@ -89,6 +89,9 @@ struct ProfileView: View {
                         )
                     }
 
+                    // Achievements
+                    AchievementsSection(problems: problems)
+
                     // Difficulty breakdown
                     VStack(alignment: .leading, spacing: 12) {
                         Text("Progress")
@@ -274,5 +277,71 @@ struct SkillRow: View {
                 .foregroundStyle(Theme.textSecondary)
         }
         .padding(.vertical, 4)
+    }
+}
+
+struct AchievementsSection: View {
+    let problems: [Problem]
+    private var xpManager: SkillXPManager { .shared }
+    private let columns = [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)]
+
+    private var unlockedCount: Int {
+        Achievement.all.filter { $0.isUnlocked(manager: xpManager, problems: problems) }.count
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack {
+                Text("Achievements")
+                    .font(.headline)
+                    .foregroundStyle(Theme.textPrimary)
+                Spacer()
+                Text("\(unlockedCount)/\(Achievement.all.count)")
+                    .font(.caption)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(Theme.accent)
+            }
+
+            LazyVGrid(columns: columns, spacing: 10) {
+                ForEach(Achievement.all) { achievement in
+                    AchievementCard(
+                        achievement: achievement,
+                        isUnlocked: achievement.isUnlocked(manager: xpManager, problems: problems)
+                    )
+                }
+            }
+        }
+        .padding(20)
+        .background(Theme.card)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+    }
+}
+
+struct AchievementCard: View {
+    let achievement: Achievement
+    let isUnlocked: Bool
+
+    var body: some View {
+        VStack(spacing: 6) {
+            Image(systemName: achievement.icon)
+                .font(.title2)
+                .foregroundStyle(isUnlocked ? achievement.color : Theme.textSecondary.opacity(0.3))
+
+            Text(achievement.title)
+                .font(.caption)
+                .fontWeight(.semibold)
+                .foregroundStyle(isUnlocked ? Theme.textPrimary : Theme.textSecondary.opacity(0.4))
+
+            Text(achievement.description)
+                .font(.caption2)
+                .foregroundStyle(isUnlocked ? Theme.textSecondary : Theme.textSecondary.opacity(0.3))
+                .multilineTextAlignment(.center)
+                .lineLimit(2)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 12)
+        .padding(.horizontal, 6)
+        .background(isUnlocked ? Theme.cardLight : Theme.primaryDark.opacity(0.5))
+        .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 }

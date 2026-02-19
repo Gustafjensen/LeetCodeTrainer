@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 
 @Observable
 class SkillXPManager {
@@ -197,4 +198,43 @@ struct SkillXPGain: Identifiable {
     var didLevelUp: Bool { newLevel > previousLevel }
     var previousProgress: Double { SkillXPManager.progress(forXP: previousXP) }
     var newProgress: Double { SkillXPManager.progress(forXP: newXP) }
+}
+
+struct Achievement: Identifiable {
+    let id: String
+    let title: String
+    let description: String
+    let icon: String
+    let color: Color
+
+    func isUnlocked(manager: SkillXPManager, problems: [Problem]) -> Bool {
+        switch id {
+        case "first-solve": return manager.solvedProblems.count >= 1
+        case "five-solved": return manager.solvedProblems.count >= 5
+        case "twenty-solved": return manager.solvedProblems.count >= 20
+        case "streak-3": return manager.longestStreak() >= 3
+        case "streak-7": return manager.longestStreak() >= 7
+        case "streak-30": return manager.longestStreak() >= 30
+        case "first-medium":
+            return problems.contains { $0.difficulty == .medium && manager.isSolved($0.id) }
+        case "first-hard":
+            return problems.contains { $0.difficulty == .hard && manager.isSolved($0.id) }
+        case "xp-100": return manager.totalXP() >= 100
+        case "xp-500": return manager.totalXP() >= 500
+        default: return false
+        }
+    }
+
+    static let all: [Achievement] = [
+        Achievement(id: "first-solve", title: "First Steps", description: "Solve your first problem", icon: "star.fill", color: .yellow),
+        Achievement(id: "five-solved", title: "Problem Solver", description: "Solve 5 problems", icon: "checkmark.circle.fill", color: .green),
+        Achievement(id: "twenty-solved", title: "Veteran", description: "Solve 20 problems", icon: "trophy.fill", color: .purple),
+        Achievement(id: "streak-3", title: "On Fire", description: "Reach a 3-day streak", icon: "flame.fill", color: .orange),
+        Achievement(id: "streak-7", title: "Week Warrior", description: "Reach a 7-day streak", icon: "flame.fill", color: .orange),
+        Achievement(id: "streak-30", title: "Unstoppable", description: "Reach a 30-day streak", icon: "flame.fill", color: .red),
+        Achievement(id: "first-medium", title: "Stepping Up", description: "Solve a medium problem", icon: "arrow.up.circle.fill", color: .orange),
+        Achievement(id: "first-hard", title: "Fearless", description: "Solve a hard problem", icon: "bolt.fill", color: .red),
+        Achievement(id: "xp-100", title: "XP Hunter", description: "Earn 100 total XP", icon: "star.circle.fill", color: .blue),
+        Achievement(id: "xp-500", title: "XP Master", description: "Earn 500 total XP", icon: "star.circle.fill", color: .purple),
+    ]
 }

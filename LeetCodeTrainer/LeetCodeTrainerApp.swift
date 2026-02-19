@@ -9,9 +9,19 @@ import SwiftUI
 
 @main
 struct LeetCodeTrainerApp: App {
+    @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
+
     var body: some Scene {
         WindowGroup {
-            MainTabView()
+            if hasSeenOnboarding {
+                MainTabView()
+            } else {
+                OnboardingView {
+                    withAnimation {
+                        hasSeenOnboarding = true
+                    }
+                }
+            }
         }
     }
 }
