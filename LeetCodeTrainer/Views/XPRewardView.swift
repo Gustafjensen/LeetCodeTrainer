@@ -11,11 +11,16 @@ struct XPRewardView: View {
     @State private var animateProgress = false
     @State private var showAchievements = false
     @State private var showButton = false
+    @State private var showConfetti = false
 
     var body: some View {
         NavigationStack {
             ZStack {
                 Theme.surface.ignoresSafeArea()
+
+                ConfettiView(isActive: $showConfetti)
+                    .ignoresSafeArea()
+                    .zIndex(10)
 
                 ScrollView {
                     VStack(spacing: 24) {
@@ -165,6 +170,10 @@ struct XPRewardView: View {
             withAnimation(.spring(duration: 0.6)) {
                 showContent = true
             }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                showConfetti = true
+                Haptics.notification(.success)
+            }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 withAnimation(.easeOut(duration: 0.8)) {
                     animateProgress = true
@@ -173,6 +182,9 @@ struct XPRewardView: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 withAnimation(.spring(duration: 0.5, bounce: 0.3)) {
                     showAchievements = true
+                }
+                if !newAchievements.isEmpty {
+                    Haptics.impact(.heavy)
                 }
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + (newAchievements.isEmpty ? 1.2 : 1.8)) {

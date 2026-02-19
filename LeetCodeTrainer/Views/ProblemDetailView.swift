@@ -86,6 +86,7 @@ struct ProblemDetailView: View {
 
                 // Run button
                 Button {
+                    Haptics.impact(.medium)
                     Task { await viewModel.executeCode() }
                 } label: {
                     HStack {
@@ -145,6 +146,14 @@ struct ProblemDetailView: View {
                     .font(.title3.bold())
                     .foregroundStyle(.white)
                     .lineLimit(1)
+            }
+        }
+        .onChange(of: viewModel.executionResult?.overallStatus) {
+            guard let status = viewModel.executionResult?.overallStatus else { return }
+            if status == .pass {
+                Haptics.notification(.success)
+            } else {
+                Haptics.notification(.error)
             }
         }
         .fullScreenCover(isPresented: $viewModel.showXPReward) {
