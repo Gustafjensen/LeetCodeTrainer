@@ -54,7 +54,7 @@ struct MainTabView: View {
                 SettingsView()
             }
             Tab("Profile", systemImage: "person.fill", value: 3) {
-                ProfileView()
+                ProfileView(problems: viewModel.problems)
             }
         }
         .tint(Theme.accent)

@@ -1,12 +1,35 @@
 import SwiftUI
 
 struct ProfileView: View {
+    var problems: [Problem] = []
     private var xpManager: SkillXPManager { .shared }
 
     private var sortedSkills: [(skill: String, xp: Int)] {
         xpManager.skillXP
             .sorted { $0.value > $1.value }
             .map { (skill: $0.key, xp: $0.value) }
+    }
+
+    private var solvedCount: Int { xpManager.solvedProblems.count }
+    private var totalCount: Int { problems.count }
+
+    private var easySolved: Int {
+        problems.filter { $0.difficulty == .easy && xpManager.isSolved($0.id) }.count
+    }
+    private var easyTotal: Int {
+        problems.filter { $0.difficulty == .easy }.count
+    }
+    private var mediumSolved: Int {
+        problems.filter { $0.difficulty == .medium && xpManager.isSolved($0.id) }.count
+    }
+    private var mediumTotal: Int {
+        problems.filter { $0.difficulty == .medium }.count
+    }
+    private var hardSolved: Int {
+        problems.filter { $0.difficulty == .hard && xpManager.isSolved($0.id) }.count
+    }
+    private var hardTotal: Int {
+        problems.filter { $0.difficulty == .hard }.count
     }
 
     var body: some View {
@@ -36,6 +59,85 @@ struct ProfileView: View {
                             startPoint: .topLeading, endPoint: .bottomTrailing
                         )
                     )
+                    .clipShape(RoundedRectangle(cornerRadius: 16))
+
+                    // Stats cards
+                    LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)], spacing: 12) {
+                        StatCard(
+                            icon: "checkmark.circle.fill",
+                            iconColor: .green,
+                            title: "Solved",
+                            value: "\(solvedCount)/\(totalCount)"
+                        )
+                        StatCard(
+                            icon: "flame.fill",
+                            iconColor: .orange,
+                            title: "Streak",
+                            value: "\(xpManager.currentStreak()) days"
+                        )
+                        StatCard(
+                            icon: "star.fill",
+                            iconColor: Theme.accent,
+                            title: "Total XP",
+                            value: "\(xpManager.totalXP())"
+                        )
+                        StatCard(
+                            icon: "trophy.fill",
+                            iconColor: .yellow,
+                            title: "Best Streak",
+                            value: "\(xpManager.longestStreak()) days"
+                        )
+                    }
+
+                    // Difficulty breakdown
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Progress")
+                            .font(.headline)
+                            .foregroundStyle(Theme.textPrimary)
+
+                        // Stacked bar
+                        GeometryReader { geo in
+                            let total = max(totalCount, 1)
+                            let easyWidth = geo.size.width * Double(easySolved) / Double(total)
+                            let mediumWidth = geo.size.width * Double(mediumSolved) / Double(total)
+                            let hardWidth = geo.size.width * Double(hardSolved) / Double(total)
+
+                            HStack(spacing: 2) {
+                                if easySolved > 0 {
+                                    RoundedRectangle(cornerRadius: 4)
+                                        .fill(Color.green)
+                                        .frame(width: easyWidth, height: 12)
+                                }
+                                if mediumSolved > 0 {
+                                    RoundedRectangle(cornerRadius: 4)
+                                        .fill(Color.orange)
+                                        .frame(width: mediumWidth, height: 12)
+                                }
+                                if hardSolved > 0 {
+                                    RoundedRectangle(cornerRadius: 4)
+                                        .fill(Color.red)
+                                        .frame(width: hardWidth, height: 12)
+                                }
+                                Spacer(minLength: 0)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .background(
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(Theme.primaryDark)
+                                    .frame(height: 12)
+                            )
+                        }
+                        .frame(height: 12)
+
+                        HStack(spacing: 16) {
+                            DifficultyStatLabel(color: .green, label: "Easy", count: easySolved, total: easyTotal)
+                            DifficultyStatLabel(color: .orange, label: "Medium", count: mediumSolved, total: mediumTotal)
+                            DifficultyStatLabel(color: .red, label: "Hard", count: hardSolved, total: hardTotal)
+                            Spacer()
+                        }
+                    }
+                    .padding(20)
+                    .background(Theme.card)
                     .clipShape(RoundedRectangle(cornerRadius: 16))
 
                     // Skills
@@ -78,6 +180,50 @@ struct ProfileView: View {
                         .foregroundStyle(.white)
                 }
             }
+        }
+    }
+}
+
+struct StatCard: View {
+    let icon: String
+    let iconColor: Color
+    let title: String
+    let value: String
+
+    var body: some View {
+        VStack(spacing: 8) {
+            Image(systemName: icon)
+                .font(.title2)
+                .foregroundStyle(iconColor)
+            Text(value)
+                .font(.headline)
+                .fontWeight(.bold)
+                .foregroundStyle(Theme.textPrimary)
+            Text(title)
+                .font(.caption)
+                .foregroundStyle(Theme.textSecondary)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 16)
+        .background(Theme.card)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+    }
+}
+
+struct DifficultyStatLabel: View {
+    let color: Color
+    let label: String
+    let count: Int
+    let total: Int
+
+    var body: some View {
+        HStack(spacing: 4) {
+            Circle()
+                .fill(color)
+                .frame(width: 8, height: 8)
+            Text("\(count)/\(total) \(label)")
+                .font(.caption)
+                .foregroundStyle(Theme.textSecondary)
         }
     }
 }

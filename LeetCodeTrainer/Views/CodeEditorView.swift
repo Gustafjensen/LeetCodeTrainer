@@ -3,6 +3,7 @@ import UIKit
 
 struct CodeEditorView: UIViewRepresentable {
     @Binding var text: String
+    var onFocusChange: (Bool) -> Void = { _ in }
 
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
@@ -11,9 +12,9 @@ struct CodeEditorView: UIViewRepresentable {
     func makeUIView(context: Context) -> UITextView {
         let textView = UITextView()
         textView.delegate = context.coordinator
-        textView.font = UIFont.monospacedSystemFont(ofSize: 14, weight: .regular)
-        textView.backgroundColor = UIColor.systemGray6
-        textView.textColor = UIColor.label
+        textView.font = UIFont.monospacedSystemFont(ofSize: 12, weight: .regular)
+        textView.backgroundColor = UIColor(red: 0.06, green: 0.09, blue: 0.25, alpha: 1)
+        textView.textColor = UIColor.white
         textView.autocapitalizationType = .none
         textView.autocorrectionType = .no
         textView.smartDashesType = .no
@@ -73,6 +74,14 @@ struct CodeEditorView: UIViewRepresentable {
             self.parent = parent
         }
 
+        func textViewDidBeginEditing(_ textView: UITextView) {
+            parent.onFocusChange(true)
+        }
+
+        func textViewDidEndEditing(_ textView: UITextView) {
+            parent.onFocusChange(false)
+        }
+
         func textViewDidChange(_ textView: UITextView) {
             parent.text = textView.text
             applySyntaxHighlighting()
@@ -109,9 +118,9 @@ struct CodeEditorView: UIViewRepresentable {
             let fullRange = NSRange(location: 0, length: text.utf16.count)
 
             attributed.addAttribute(.font,
-                value: UIFont.monospacedSystemFont(ofSize: 14, weight: .regular), range: fullRange)
+                value: UIFont.monospacedSystemFont(ofSize: 12, weight: .regular), range: fullRange)
             attributed.addAttribute(.foregroundColor,
-                value: UIColor.label, range: fullRange)
+                value: UIColor.white, range: fullRange)
 
             for keyword in keywords {
                 if let regex = try? NSRegularExpression(pattern: "\\b\(keyword)\\b") {

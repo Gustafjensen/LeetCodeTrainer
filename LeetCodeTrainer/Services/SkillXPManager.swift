@@ -109,6 +109,46 @@ class SkillXPManager {
         return completedDailyDates.contains(key)
     }
 
+    func currentStreak() -> Int {
+        let cal = Calendar.current
+        var date = cal.startOfDay(for: .now)
+
+        // If today isn't completed yet, start checking from yesterday
+        if !completedDailyDates.contains(Self.dailyDateFormatter.string(from: date)) {
+            guard let yesterday = cal.date(byAdding: .day, value: -1, to: date) else { return 0 }
+            date = yesterday
+        }
+
+        var streak = 0
+        while completedDailyDates.contains(Self.dailyDateFormatter.string(from: date)) {
+            streak += 1
+            guard let prev = cal.date(byAdding: .day, value: -1, to: date) else { break }
+            date = prev
+        }
+        return streak
+    }
+
+    func longestStreak() -> Int {
+        guard !completedDailyDates.isEmpty else { return 0 }
+        let sorted = completedDailyDates.sorted()
+        let cal = Calendar.current
+        var longest = 1
+        var current = 1
+
+        for i in 1..<sorted.count {
+            if let prev = Self.dailyDateFormatter.date(from: sorted[i - 1]),
+               let curr = Self.dailyDateFormatter.date(from: sorted[i]),
+               let next = cal.date(byAdding: .day, value: 1, to: prev),
+               cal.isDate(curr, inSameDayAs: next) {
+                current += 1
+                longest = max(longest, current)
+            } else {
+                current = 1
+            }
+        }
+        return longest
+    }
+
     func xp(for skill: String) -> Int {
         skillXP[skill] ?? 0
     }

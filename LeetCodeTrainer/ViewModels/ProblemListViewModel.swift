@@ -4,6 +4,27 @@ import Foundation
 class ProblemListViewModel {
     var problems: [Problem] = []
     var errorMessage: String?
+    var searchText: String = ""
+    var selectedTags: Set<String> = []
+
+    var allTags: [String] {
+        let tags = Set(problems.flatMap { $0.tags })
+        return tags.sorted()
+    }
+
+    var isFiltering: Bool {
+        !searchText.isEmpty || !selectedTags.isEmpty
+    }
+
+    var filteredProblems: [Problem] {
+        problems.filter { problem in
+            let matchesSearch = searchText.isEmpty ||
+                problem.title.localizedCaseInsensitiveContains(searchText)
+            let matchesTags = selectedTags.isEmpty ||
+                !selectedTags.isDisjoint(with: problem.tags)
+            return matchesSearch && matchesTags
+        }
+    }
 
     init() {
         loadProblems()

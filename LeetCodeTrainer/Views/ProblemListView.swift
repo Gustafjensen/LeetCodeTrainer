@@ -1,40 +1,95 @@
 import SwiftUI
 
 struct ProblemListView: View {
-    var viewModel: ProblemListViewModel
+    @Bindable var viewModel: ProblemListViewModel
     @State private var path = NavigationPath()
 
     private var easyCount: Int { viewModel.problems.filter { $0.difficulty == .easy }.count }
     private var mediumCount: Int { viewModel.problems.filter { $0.difficulty == .medium }.count }
     private var hardCount: Int { viewModel.problems.filter { $0.difficulty == .hard }.count }
 
+    private let columns = [
+        GridItem(.flexible(), spacing: 12),
+        GridItem(.flexible(), spacing: 12)
+    ]
+
     var body: some View {
         NavigationStack(path: $path) {
             ScrollView {
                 VStack(spacing: 14) {
-                    DifficultyCategoryCard(
-                        title: "Easy",
-                        subtitle: "\(easyCount) problems",
-                        icon: "leaf.fill",
-                        color: .green,
-                        difficulty: .easy
-                    )
-                    DifficultyCategoryCard(
-                        title: "Medium",
-                        subtitle: "\(mediumCount) problems",
-                        icon: "flame.fill",
-                        color: .orange,
-                        difficulty: .medium
-                    )
-                    DifficultyCategoryCard(
-                        title: "Hard",
-                        subtitle: "\(hardCount) problems",
-                        icon: "bolt.fill",
-                        color: .red,
-                        difficulty: .hard
-                    )
+                    // Tag filter chips
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 8) {
+                            ForEach(viewModel.allTags, id: \.self) { tag in
+                                TagChip(
+                                    tag: tag,
+                                    isSelected: viewModel.selectedTags.contains(tag)
+                                ) {
+                                    if viewModel.selectedTags.contains(tag) {
+                                        viewModel.selectedTags.remove(tag)
+                                    } else {
+                                        viewModel.selectedTags.insert(tag)
+                                    }
+                                }
+                            }
+                        }
+                        .padding(.horizontal)
+                    }
+
+                    if viewModel.isFiltering {
+                        // Filtered results grid
+                        let filtered = viewModel.filteredProblems
+                        if filtered.isEmpty {
+                            VStack(spacing: 8) {
+                                Image(systemName: "magnifyingglass")
+                                    .font(.title)
+                                    .foregroundStyle(Theme.textSecondary)
+                                Text("No problems found")
+                                    .font(.subheadline)
+                                    .foregroundStyle(Theme.textSecondary)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(.top, 40)
+                        } else {
+                            LazyVGrid(columns: columns, spacing: 12) {
+                                ForEach(filtered) { problem in
+                                    NavigationLink(value: problem.id) {
+                                        FilteredProblemCard(problem: problem)
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                            }
+                            .padding(.horizontal)
+                        }
+                    } else {
+                        // Default difficulty cards
+                        VStack(spacing: 14) {
+                            DifficultyCategoryCard(
+                                title: "Easy",
+                                subtitle: "\(easyCount) problems",
+                                icon: "leaf.fill",
+                                color: .green,
+                                difficulty: .easy
+                            )
+                            DifficultyCategoryCard(
+                                title: "Medium",
+                                subtitle: "\(mediumCount) problems",
+                                icon: "flame.fill",
+                                color: .orange,
+                                difficulty: .medium
+                            )
+                            DifficultyCategoryCard(
+                                title: "Hard",
+                                subtitle: "\(hardCount) problems",
+                                icon: "bolt.fill",
+                                color: .red,
+                                difficulty: .hard
+                            )
+                        }
+                        .padding(.horizontal)
+                    }
                 }
-                .padding()
+                .padding(.vertical)
             }
             .background(Theme.surface)
             .navigationBarTitleDisplayMode(.inline)
@@ -47,6 +102,7 @@ struct ProblemListView: View {
                         .foregroundStyle(.white)
                 }
             }
+            .searchable(text: $viewModel.searchText, prompt: "Search problems")
             .navigationDestination(for: Problem.Difficulty.self) { difficulty in
                 DifficultyProblemsView(
                     difficulty: difficulty,
@@ -106,6 +162,68 @@ struct DifficultyCategoryCard: View {
             .clipShape(RoundedRectangle(cornerRadius: 16))
         }
         .buttonStyle(.plain)
+    }
+}
+
+struct TagChip: View {
+    let tag: String
+    let isSelected: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Text(tag)
+                .font(.caption)
+                .fontWeight(.medium)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .background(isSelected ? Theme.accent : Theme.card)
+                .foregroundStyle(isSelected ? .white : Theme.textSecondary)
+                .clipShape(Capsule())
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+struct FilteredProblemCard: View {
+    let problem: Problem
+
+    private var isSolved: Bool {
+        SkillXPManager.shared.isSolved(problem.id)
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Circle()
+                    .fill(isSolved ? Color.green : difficultyColor)
+                    .frame(width: 8, height: 8)
+                Spacer()
+                DifficultyBadge(difficulty: problem.difficulty)
+            }
+
+            Text(problem.title)
+                .font(.subheadline)
+                .fontWeight(.semibold)
+                .foregroundStyle(Theme.textPrimary)
+                .lineLimit(2)
+                .multilineTextAlignment(.leading)
+
+            Spacer(minLength: 0)
+        }
+        .padding(12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(minHeight: 90)
+        .background(Theme.card)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+    }
+
+    private var difficultyColor: Color {
+        switch problem.difficulty {
+        case .easy: return .green.opacity(0.4)
+        case .medium: return .orange.opacity(0.4)
+        case .hard: return .red.opacity(0.4)
+        }
     }
 }
 

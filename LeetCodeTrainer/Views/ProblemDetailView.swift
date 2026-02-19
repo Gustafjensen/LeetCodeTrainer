@@ -4,6 +4,7 @@ struct ProblemDetailView: View {
     @State var viewModel: ProblemDetailViewModel
     var popToRoot: () -> Void = {}
     @Environment(\.dismiss) private var dismiss
+    @State private var isEditorFocused = false
 
     var body: some View {
         ScrollView {
@@ -70,9 +71,14 @@ struct ProblemDetailView: View {
                         .fontWeight(.semibold)
                         .foregroundStyle(Theme.textPrimary)
 
-                    CodeEditorView(text: $viewModel.sourceCode)
-                        .frame(minHeight: 200, maxHeight: 400)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                    CodeEditorView(text: $viewModel.sourceCode) { focused in
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            isEditorFocused = focused
+                        }
+                    }
+                    .frame(minHeight: isEditorFocused ? 350 : 150,
+                           maxHeight: isEditorFocused ? 500 : 200)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
                 .padding(16)
                 .background(Theme.card)

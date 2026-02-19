@@ -18,6 +18,11 @@ struct DailyProblemView: View {
         NavigationStack(path: $path) {
             ScrollView {
                 VStack(spacing: 16) {
+                    StreakBannerView(
+                        currentStreak: xpManager.currentStreak(),
+                        longestStreak: xpManager.longestStreak()
+                    )
+
                     CalendarMonthView(
                         displayedMonth: $displayedMonth,
                         completedDates: xpManager.completedDailyDates
@@ -300,6 +305,49 @@ struct DailyChallengeCard: View {
         }
         .padding(20)
         .background(Theme.card)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+    }
+}
+
+// MARK: - Streak Banner
+
+struct StreakBannerView: View {
+    let currentStreak: Int
+    let longestStreak: Int
+
+    var body: some View {
+        HStack(spacing: 14) {
+            Image(systemName: "flame.fill")
+                .font(.system(size: 32))
+                .foregroundStyle(currentStreak > 0 ? .orange : Theme.textSecondary)
+
+            VStack(alignment: .leading, spacing: 2) {
+                if currentStreak > 0 {
+                    Text("\(currentStreak) day streak")
+                        .font(.headline)
+                        .foregroundStyle(Theme.textPrimary)
+                    Text("Longest: \(longestStreak) days")
+                        .font(.caption)
+                        .foregroundStyle(Theme.textSecondary)
+                } else {
+                    Text("Start your streak today!")
+                        .font(.headline)
+                        .foregroundStyle(Theme.textPrimary)
+                    Text("Complete the daily challenge")
+                        .font(.caption)
+                        .foregroundStyle(Theme.textSecondary)
+                }
+            }
+
+            Spacer()
+        }
+        .padding(16)
+        .background(
+            LinearGradient(
+                colors: [Theme.card, Theme.cardLight],
+                startPoint: .leading, endPoint: .trailing
+            )
+        )
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 }
