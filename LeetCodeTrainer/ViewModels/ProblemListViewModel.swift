@@ -21,7 +21,7 @@ class ProblemListViewModel {
             let matchesSearch = searchText.isEmpty ||
                 problem.title.localizedCaseInsensitiveContains(searchText)
             let matchesTags = selectedTags.isEmpty ||
-                !selectedTags.isDisjoint(with: problem.tags)
+                selectedTags.isSubset(of: Set(problem.tags))
             return matchesSearch && matchesTags
         }
     }

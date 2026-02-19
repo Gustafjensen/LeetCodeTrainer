@@ -3,6 +3,8 @@ import SwiftUI
 struct ProblemListView: View {
     @Bindable var viewModel: ProblemListViewModel
     @State private var path = NavigationPath()
+    @State private var showSearch = false
+    @FocusState private var isSearchFocused: Bool
 
     private var easyCount: Int { viewModel.problems.filter { $0.difficulty == .easy }.count }
     private var mediumCount: Int { viewModel.problems.filter { $0.difficulty == .medium }.count }
@@ -17,6 +19,23 @@ struct ProblemListView: View {
         NavigationStack(path: $path) {
             ScrollView {
                 VStack(spacing: 14) {
+                    // Search field
+                    if showSearch {
+                        HStack(spacing: 8) {
+                            Image(systemName: "magnifyingglass")
+                                .foregroundStyle(Theme.textSecondary)
+                            TextField("Search problems", text: $viewModel.searchText)
+                                .focused($isSearchFocused)
+                                .foregroundStyle(Theme.textPrimary)
+                                .autocorrectionDisabled()
+                                .textInputAutocapitalization(.never)
+                        }
+                        .padding(10)
+                        .background(Theme.card)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .padding(.horizontal)
+                    }
+
                     // Tag filter chips
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 8) {
@@ -101,8 +120,23 @@ struct ProblemListView: View {
                         .font(.title3.bold())
                         .foregroundStyle(.white)
                 }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            showSearch.toggle()
+                            if showSearch {
+                                isSearchFocused = true
+                            } else {
+                                viewModel.searchText = ""
+                                isSearchFocused = false
+                            }
+                        }
+                    } label: {
+                        Image(systemName: showSearch ? "xmark" : "magnifyingglass")
+                            .foregroundStyle(.white)
+                    }
+                }
             }
-            .searchable(text: $viewModel.searchText, prompt: "Search problems")
             .navigationDestination(for: Problem.Difficulty.self) { difficulty in
                 DifficultyProblemsView(
                     difficulty: difficulty,

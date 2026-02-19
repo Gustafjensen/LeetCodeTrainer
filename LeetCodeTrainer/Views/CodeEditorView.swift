@@ -15,6 +15,8 @@ struct CodeEditorView: UIViewRepresentable {
         textView.font = UIFont.monospacedSystemFont(ofSize: 12, weight: .regular)
         textView.backgroundColor = UIColor(red: 0.06, green: 0.09, blue: 0.25, alpha: 1)
         textView.textColor = UIColor.white
+        textView.tintColor = UIColor.white
+        textView.keyboardAppearance = .dark
         textView.autocapitalizationType = .none
         textView.autocorrectionType = .no
         textView.smartDashesType = .no
@@ -168,6 +170,10 @@ struct CodeEditorView: UIViewRepresentable {
             let selectedRange = textView.selectedRange
             textView.attributedText = attributed
             textView.selectedRange = selectedRange
+            textView.typingAttributes = [
+                .font: UIFont.monospacedSystemFont(ofSize: 12, weight: .regular),
+                .foregroundColor: UIColor.white
+            ]
         }
 
         @objc func insertTab() {
