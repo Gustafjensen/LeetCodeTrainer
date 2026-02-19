@@ -149,7 +149,12 @@ struct ProblemDetailView: View {
         }
         .fullScreenCover(isPresented: $viewModel.showXPReward) {
             if let gains = viewModel.xpGains {
-                XPRewardView(gains: gains, sourceCode: viewModel.sourceCode, popToRoot: popToRoot)
+                XPRewardView(
+                    gains: gains,
+                    sourceCode: viewModel.sourceCode,
+                    newAchievements: viewModel.newAchievements,
+                    popToRoot: popToRoot
+                )
             }
         }
     }

@@ -8,6 +8,7 @@ class SkillXPManager {
     var skillXP: [String: Int] = [:]
     var solvedProblems: Set<String> = []
     var completedDailyDates: Set<String> = []
+    var unlockedAchievements: Set<String> = []
 
     /// Cumulative XP thresholds to reach each level.
     static let levelThresholds = [0, 10, 50, 100, 150, 200]
@@ -15,6 +16,7 @@ class SkillXPManager {
     private let storageKey = "skillXP"
     private let solvedKey = "solvedProblems"
     private let dailyCompletionsKey = "completedDailyDates"
+    private let achievementsKey = "unlockedAchievements"
 
     private static let dailyDateFormatter: DateFormatter = {
         let f = DateFormatter()
@@ -166,10 +168,26 @@ class SkillXPManager {
         Self.progress(forXP: xp(for: skill))
     }
 
+    func checkAchievements(problems: [Problem]) -> [Achievement] {
+        var newlyUnlocked: [Achievement] = []
+        for achievement in Achievement.all {
+            if !unlockedAchievements.contains(achievement.id),
+               achievement.isUnlocked(manager: self, problems: problems) {
+                unlockedAchievements.insert(achievement.id)
+                newlyUnlocked.append(achievement)
+            }
+        }
+        if !newlyUnlocked.isEmpty {
+            save()
+        }
+        return newlyUnlocked
+    }
+
     private func save() {
         UserDefaults.standard.set(skillXP, forKey: storageKey)
         UserDefaults.standard.set(Array(solvedProblems), forKey: solvedKey)
         UserDefaults.standard.set(Array(completedDailyDates), forKey: dailyCompletionsKey)
+        UserDefaults.standard.set(Array(unlockedAchievements), forKey: achievementsKey)
     }
 
     private func load() {
@@ -181,6 +199,9 @@ class SkillXPManager {
         }
         if let stored = UserDefaults.standard.stringArray(forKey: dailyCompletionsKey) {
             completedDailyDates = Set(stored)
+        }
+        if let stored = UserDefaults.standard.stringArray(forKey: achievementsKey) {
+            unlockedAchievements = Set(stored)
         }
     }
 }
@@ -211,30 +232,51 @@ struct Achievement: Identifiable {
         switch id {
         case "first-solve": return manager.solvedProblems.count >= 1
         case "five-solved": return manager.solvedProblems.count >= 5
+        case "ten-solved": return manager.solvedProblems.count >= 10
         case "twenty-solved": return manager.solvedProblems.count >= 20
+        case "fifty-solved": return manager.solvedProblems.count >= 50
         case "streak-3": return manager.longestStreak() >= 3
         case "streak-7": return manager.longestStreak() >= 7
+        case "streak-14": return manager.longestStreak() >= 14
         case "streak-30": return manager.longestStreak() >= 30
         case "first-medium":
             return problems.contains { $0.difficulty == .medium && manager.isSolved($0.id) }
         case "first-hard":
             return problems.contains { $0.difficulty == .hard && manager.isSolved($0.id) }
+        case "all-easy":
+            let easy = problems.filter { $0.difficulty == .easy }
+            return !easy.isEmpty && easy.allSatisfy { manager.isSolved($0.id) }
+        case "five-medium":
+            return problems.filter { $0.difficulty == .medium && manager.isSolved($0.id) }.count >= 5
+        case "three-hard":
+            return problems.filter { $0.difficulty == .hard && manager.isSolved($0.id) }.count >= 3
         case "xp-100": return manager.totalXP() >= 100
         case "xp-500": return manager.totalXP() >= 500
+        case "xp-1000": return manager.totalXP() >= 1000
+        case "skill-lvl3":
+            return manager.skillXP.values.contains { SkillXPManager.level(forXP: $0) >= 3 }
         default: return false
         }
     }
 
     static let all: [Achievement] = [
         Achievement(id: "first-solve", title: "First Steps", description: "Solve your first problem", icon: "star.fill", color: .yellow),
-        Achievement(id: "five-solved", title: "Problem Solver", description: "Solve 5 problems", icon: "checkmark.circle.fill", color: .green),
+        Achievement(id: "five-solved", title: "Getting Going", description: "Solve 5 problems", icon: "checkmark.circle.fill", color: .green),
+        Achievement(id: "ten-solved", title: "Problem Solver", description: "Solve 10 problems", icon: "checkmark.seal.fill", color: .green),
         Achievement(id: "twenty-solved", title: "Veteran", description: "Solve 20 problems", icon: "trophy.fill", color: .purple),
+        Achievement(id: "fifty-solved", title: "Grandmaster", description: "Solve 50 problems", icon: "crown.fill", color: .yellow),
         Achievement(id: "streak-3", title: "On Fire", description: "Reach a 3-day streak", icon: "flame.fill", color: .orange),
         Achievement(id: "streak-7", title: "Week Warrior", description: "Reach a 7-day streak", icon: "flame.fill", color: .orange),
+        Achievement(id: "streak-14", title: "Dedicated", description: "Reach a 14-day streak", icon: "flame.fill", color: .red),
         Achievement(id: "streak-30", title: "Unstoppable", description: "Reach a 30-day streak", icon: "flame.fill", color: .red),
         Achievement(id: "first-medium", title: "Stepping Up", description: "Solve a medium problem", icon: "arrow.up.circle.fill", color: .orange),
         Achievement(id: "first-hard", title: "Fearless", description: "Solve a hard problem", icon: "bolt.fill", color: .red),
+        Achievement(id: "all-easy", title: "Easy Sweep", description: "Solve all easy problems", icon: "leaf.fill", color: .green),
+        Achievement(id: "five-medium", title: "Rising Star", description: "Solve 5 medium problems", icon: "star.leadinghalf.filled", color: .orange),
+        Achievement(id: "three-hard", title: "Elite Coder", description: "Solve 3 hard problems", icon: "bolt.shield.fill", color: .red),
         Achievement(id: "xp-100", title: "XP Hunter", description: "Earn 100 total XP", icon: "star.circle.fill", color: .blue),
         Achievement(id: "xp-500", title: "XP Master", description: "Earn 500 total XP", icon: "star.circle.fill", color: .purple),
+        Achievement(id: "xp-1000", title: "XP Legend", description: "Earn 1000 total XP", icon: "star.circle.fill", color: .yellow),
+        Achievement(id: "skill-lvl3", title: "Specialist", description: "Reach level 3 in any skill", icon: "brain.fill", color: .pink),
     ]
 }

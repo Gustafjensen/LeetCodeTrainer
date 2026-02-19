@@ -145,8 +145,10 @@ struct ProblemListView: View {
             }
             .navigationDestination(for: String.self) { problemId in
                 if let problem = viewModel.problems.first(where: { $0.id == problemId }) {
+                    let vm = ProblemDetailViewModel(problem: problem)
+                    let _ = vm.allProblems = viewModel.problems
                     ProblemDetailView(
-                        viewModel: ProblemDetailViewModel(problem: problem),
+                        viewModel: vm,
                         popToRoot: { path = NavigationPath() }
                     )
                 }

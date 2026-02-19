@@ -3,11 +3,13 @@ import SwiftUI
 struct XPRewardView: View {
     let gains: [SkillXPGain]
     let sourceCode: String
+    var newAchievements: [Achievement] = []
     var popToRoot: () -> Void = {}
 
     @Environment(\.dismiss) private var dismiss
     @State private var showContent = false
     @State private var animateProgress = false
+    @State private var showAchievements = false
     @State private var showButton = false
 
     var body: some View {
@@ -52,6 +54,53 @@ struct XPRewardView: View {
                                         value: showContent
                                     )
                             }
+                        }
+
+                        // New achievements
+                        if !newAchievements.isEmpty && showAchievements {
+                            VStack(spacing: 12) {
+                                Text("Achievement Unlocked!")
+                                    .font(.headline)
+                                    .fontWeight(.bold)
+                                    .foregroundStyle(.yellow)
+
+                                ForEach(newAchievements) { achievement in
+                                    HStack(spacing: 14) {
+                                        Image(systemName: achievement.icon)
+                                            .font(.title2)
+                                            .foregroundStyle(achievement.color)
+                                            .frame(width: 40)
+
+                                        VStack(alignment: .leading, spacing: 2) {
+                                            Text(achievement.title)
+                                                .font(.subheadline)
+                                                .fontWeight(.bold)
+                                                .foregroundStyle(Theme.textPrimary)
+                                            Text(achievement.description)
+                                                .font(.caption)
+                                                .foregroundStyle(Theme.textSecondary)
+                                        }
+
+                                        Spacer()
+
+                                        Image(systemName: "checkmark.seal.fill")
+                                            .foregroundStyle(.yellow)
+                                    }
+                                    .padding(14)
+                                    .background(Theme.cardLight)
+                                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                                }
+                            }
+                            .padding(16)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(Theme.card)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .stroke(Color.yellow.opacity(0.3), lineWidth: 1)
+                                    )
+                            )
+                            .transition(.scale.combined(with: .opacity))
                         }
 
                         // Your Solution
@@ -121,7 +170,12 @@ struct XPRewardView: View {
                     animateProgress = true
                 }
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                withAnimation(.spring(duration: 0.5, bounce: 0.3)) {
+                    showAchievements = true
+                }
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + (newAchievements.isEmpty ? 1.2 : 1.8)) {
                 withAnimation(.spring(duration: 0.4)) {
                     showButton = true
                 }

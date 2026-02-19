@@ -89,9 +89,6 @@ struct ProfileView: View {
                         )
                     }
 
-                    // Achievements
-                    AchievementsSection(problems: problems)
-
                     // Difficulty breakdown
                     VStack(alignment: .leading, spacing: 12) {
                         Text("Progress")
@@ -169,6 +166,9 @@ struct ProfileView: View {
                     .padding(20)
                     .background(Theme.card)
                     .clipShape(RoundedRectangle(cornerRadius: 16))
+
+                    // Achievements
+                    AchievementsSection(problems: problems)
                 }
                 .padding()
             }
@@ -285,8 +285,8 @@ struct AchievementsSection: View {
     private var xpManager: SkillXPManager { .shared }
     private let columns = [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)]
 
-    private var unlockedCount: Int {
-        Achievement.all.filter { $0.isUnlocked(manager: xpManager, problems: problems) }.count
+    private var unlocked: [Achievement] {
+        Achievement.all.filter { xpManager.unlockedAchievements.contains($0.id) }
     }
 
     var body: some View {
@@ -296,18 +296,23 @@ struct AchievementsSection: View {
                     .font(.headline)
                     .foregroundStyle(Theme.textPrimary)
                 Spacer()
-                Text("\(unlockedCount)/\(Achievement.all.count)")
+                Text("\(unlocked.count)/\(Achievement.all.count)")
                     .font(.caption)
                     .fontWeight(.semibold)
                     .foregroundStyle(Theme.accent)
             }
 
-            LazyVGrid(columns: columns, spacing: 10) {
-                ForEach(Achievement.all) { achievement in
-                    AchievementCard(
-                        achievement: achievement,
-                        isUnlocked: achievement.isUnlocked(manager: xpManager, problems: problems)
-                    )
+            if unlocked.isEmpty {
+                Text("Solve problems to unlock achievements!")
+                    .font(.subheadline)
+                    .foregroundStyle(Theme.textSecondary)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 20)
+            } else {
+                LazyVGrid(columns: columns, spacing: 10) {
+                    ForEach(unlocked) { achievement in
+                        AchievementCard(achievement: achievement)
+                    }
                 }
             }
         }
@@ -319,29 +324,28 @@ struct AchievementsSection: View {
 
 struct AchievementCard: View {
     let achievement: Achievement
-    let isUnlocked: Bool
 
     var body: some View {
         VStack(spacing: 6) {
             Image(systemName: achievement.icon)
                 .font(.title2)
-                .foregroundStyle(isUnlocked ? achievement.color : Theme.textSecondary.opacity(0.3))
+                .foregroundStyle(achievement.color)
 
             Text(achievement.title)
                 .font(.caption)
                 .fontWeight(.semibold)
-                .foregroundStyle(isUnlocked ? Theme.textPrimary : Theme.textSecondary.opacity(0.4))
+                .foregroundStyle(Theme.textPrimary)
 
             Text(achievement.description)
                 .font(.caption2)
-                .foregroundStyle(isUnlocked ? Theme.textSecondary : Theme.textSecondary.opacity(0.3))
+                .foregroundStyle(Theme.textSecondary)
                 .multilineTextAlignment(.center)
                 .lineLimit(2)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 12)
         .padding(.horizontal, 6)
-        .background(isUnlocked ? Theme.cardLight : Theme.primaryDark.opacity(0.5))
+        .background(Theme.cardLight)
         .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 }

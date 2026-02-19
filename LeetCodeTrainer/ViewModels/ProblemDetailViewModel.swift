@@ -8,10 +8,12 @@ class ProblemDetailViewModel {
     var isExecuting: Bool = false
     var errorMessage: String?
     var xpGains: [SkillXPGain]?
+    var newAchievements: [Achievement] = []
     var showXPReward: Bool = false
 
     private let executionService: ExecutionService
     private let xpManager: SkillXPManager
+    var allProblems: [Problem] = []
 
     init(problem: Problem, executionService: ExecutionService = ExecutionService(), xpManager: SkillXPManager = .shared) {
         self.problem = problem
@@ -25,6 +27,7 @@ class ProblemDetailViewModel {
         errorMessage = nil
         executionResult = nil
         xpGains = nil
+        newAchievements = []
         showXPReward = false
 
         do {
@@ -38,6 +41,7 @@ class ProblemDetailViewModel {
             if result.overallStatus == .pass {
                 let gains = xpManager.awardXP(for: problem)
                 xpGains = gains
+                newAchievements = xpManager.checkAchievements(problems: allProblems)
                 showXPReward = true
             }
         } catch let error as ExecutionService.ExecutionError {
