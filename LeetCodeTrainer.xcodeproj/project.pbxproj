@@ -6,7 +6,22 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		18C962B33ED6C420D89FFCFC /* LeetCodeTrainerWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 294F6CAC198C91E3CE07E270 /* LeetCodeTrainerWidget.swift */; };
+		24674E75C5119311BEE4B96A /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CE64C559B993804947122F1 /* SwiftUI.framework */; };
+		288F51A6FFE59D7CA9959994 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4E15095E04732B24B901719 /* WidgetKit.framework */; };
+		5D41ED6F77D943A4093ADD28 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D527365EC4B87AE6007A4C6 /* Foundation.framework */; };
+		8922F582110953D1BA153CAB /* LeetCodeTrainerWidget.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 5632EF60C7527821FE5BC820 /* LeetCodeTrainerWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
+		C43D90CC0CAAEDE1E14E2B64 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F4A790052F45A26900F745FA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 861FAA6EF1B80C1C57120AA9;
+			remoteInfo = LeetCodeTrainerWidget;
+		};
 		F4A7901E2F45A26B00F745FA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F4A790052F45A26900F745FA /* Project object */;
@@ -23,7 +38,26 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		8A6B8CF2B414D88940ED2AAD /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				8922F582110953D1BA153CAB /* LeetCodeTrainerWidget.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		1CE64C559B993804947122F1 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/SwiftUI.framework; sourceTree = DEVELOPER_DIR; };
+		294F6CAC198C91E3CE07E270 /* LeetCodeTrainerWidget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LeetCodeTrainerWidget.swift; path = LeetCodeTrainerWidget.swift; sourceTree = "<group>"; };
+		4D527365EC4B87AE6007A4C6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		5632EF60C7527821FE5BC820 /* LeetCodeTrainerWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; name = LeetCodeTrainerWidget.appex; path = LeetCodeTrainerWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		A4E15095E04732B24B901719 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/WidgetKit.framework; sourceTree = DEVELOPER_DIR; };
 		F4A7900D2F45A26900F745FA /* LeetCodeTrainer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LeetCodeTrainer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4A7901D2F45A26B00F745FA /* LeetCodeTrainerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LeetCodeTrainerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4A790272F45A26B00F745FA /* LeetCodeTrainerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LeetCodeTrainerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -32,22 +66,38 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		F4A7900F2F45A26900F745FA /* LeetCodeTrainer */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = LeetCodeTrainer;
 			sourceTree = "<group>";
 		};
 		F4A790202F45A26B00F745FA /* LeetCodeTrainerTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = LeetCodeTrainerTests;
 			sourceTree = "<group>";
 		};
 		F4A7902A2F45A26B00F745FA /* LeetCodeTrainerUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = LeetCodeTrainerUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		A33E8046AA0335F91615907E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5D41ED6F77D943A4093ADD28 /* Foundation.framework in Frameworks */,
+				288F51A6FFE59D7CA9959994 /* WidgetKit.framework in Frameworks */,
+				24674E75C5119311BEE4B96A /* SwiftUI.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F4A7900A2F45A26900F745FA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -72,6 +122,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		621BC36E6FF2907FD32BB904 /* LeetCodeTrainerWidget */ = {
+			isa = PBXGroup;
+			children = (
+				294F6CAC198C91E3CE07E270 /* LeetCodeTrainerWidget.swift */,
+			);
+			name = LeetCodeTrainerWidget;
+			path = LeetCodeTrainerWidget;
+			sourceTree = "<group>";
+		};
+		A24969D42AD57BB679C15FFD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B446F83183F59913D47BA8D5 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B446F83183F59913D47BA8D5 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				4D527365EC4B87AE6007A4C6 /* Foundation.framework */,
+				A4E15095E04732B24B901719 /* WidgetKit.framework */,
+				1CE64C559B993804947122F1 /* SwiftUI.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
 		F4A790042F45A26900F745FA = {
 			isa = PBXGroup;
 			children = (
@@ -79,6 +156,8 @@
 				F4A790202F45A26B00F745FA /* LeetCodeTrainerTests */,
 				F4A7902A2F45A26B00F745FA /* LeetCodeTrainerUITests */,
 				F4A7900E2F45A26900F745FA /* Products */,
+				A24969D42AD57BB679C15FFD /* Frameworks */,
+				621BC36E6FF2907FD32BB904 /* LeetCodeTrainerWidget */,
 			);
 			sourceTree = "<group>";
 		};
@@ -88,6 +167,7 @@
 				F4A7900D2F45A26900F745FA /* LeetCodeTrainer.app */,
 				F4A7901D2F45A26B00F745FA /* LeetCodeTrainerTests.xctest */,
 				F4A790272F45A26B00F745FA /* LeetCodeTrainerUITests.xctest */,
+				5632EF60C7527821FE5BC820 /* LeetCodeTrainerWidget.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,6 +175,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		861FAA6EF1B80C1C57120AA9 /* LeetCodeTrainerWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6EFDC521F1D20F69C2AE206E /* Build configuration list for PBXNativeTarget "LeetCodeTrainerWidget" */;
+			buildPhases = (
+				CEA8A1B6367034B906815B5A /* Sources */,
+				A33E8046AA0335F91615907E /* Frameworks */,
+				4D1396D2A92D41511E702FEF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LeetCodeTrainerWidget;
+			productName = LeetCodeTrainerWidget;
+			productReference = 5632EF60C7527821FE5BC820 /* LeetCodeTrainerWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		F4A7900C2F45A26900F745FA /* LeetCodeTrainer */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = F4A790312F45A26B00F745FA /* Build configuration list for PBXNativeTarget "LeetCodeTrainer" */;
@@ -102,17 +199,17 @@
 				F4A790092F45A26900F745FA /* Sources */,
 				F4A7900A2F45A26900F745FA /* Frameworks */,
 				F4A7900B2F45A26900F745FA /* Resources */,
+				8A6B8CF2B414D88940ED2AAD /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				36FABCD5B506EF27D35AA792 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				F4A7900F2F45A26900F745FA /* LeetCodeTrainer */,
 			);
 			name = LeetCodeTrainer;
-			packageProductDependencies = (
-			);
 			productName = LeetCodeTrainer;
 			productReference = F4A7900D2F45A26900F745FA /* LeetCodeTrainer.app */;
 			productType = "com.apple.product-type.application";
@@ -134,8 +231,6 @@
 				F4A790202F45A26B00F745FA /* LeetCodeTrainerTests */,
 			);
 			name = LeetCodeTrainerTests;
-			packageProductDependencies = (
-			);
 			productName = LeetCodeTrainerTests;
 			productReference = F4A7901D2F45A26B00F745FA /* LeetCodeTrainerTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -157,8 +252,6 @@
 				F4A7902A2F45A26B00F745FA /* LeetCodeTrainerUITests */,
 			);
 			name = LeetCodeTrainerUITests;
-			packageProductDependencies = (
-			);
 			productName = LeetCodeTrainerUITests;
 			productReference = F4A790272F45A26B00F745FA /* LeetCodeTrainerUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -203,11 +296,19 @@
 				F4A7900C2F45A26900F745FA /* LeetCodeTrainer */,
 				F4A7901C2F45A26B00F745FA /* LeetCodeTrainerTests */,
 				F4A790262F45A26B00F745FA /* LeetCodeTrainerUITests */,
+				861FAA6EF1B80C1C57120AA9 /* LeetCodeTrainerWidget */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		4D1396D2A92D41511E702FEF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F4A7900B2F45A26900F745FA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -232,6 +333,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		CEA8A1B6367034B906815B5A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				18C962B33ED6C420D89FFCFC /* LeetCodeTrainerWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F4A790092F45A26900F745FA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -256,6 +365,12 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		36FABCD5B506EF27D35AA792 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = LeetCodeTrainerWidget;
+			target = 861FAA6EF1B80C1C57120AA9 /* LeetCodeTrainerWidget */;
+			targetProxy = C43D90CC0CAAEDE1E14E2B64 /* PBXContainerItemProxy */;
+		};
 		F4A7901F2F45A26B00F745FA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = F4A7900C2F45A26900F745FA /* LeetCodeTrainer */;
@@ -269,6 +384,37 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		67DF38221CE50AB36B3269E0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = LeetCodeTrainerWidget/LeetCodeTrainerWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5QWX246F7X;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LeetCodeTrainerWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Streak;
+				INFOPLIST_KEY_NSWidgetWantsLocation = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = GustafJensen.LeetCodeTrainer.Widget;
+				PRODUCT_NAME = LeetCodeTrainerWidget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = appex;
+			};
+			name = Release;
+		};
 		F4A7902F2F45A26B00F745FA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -393,6 +539,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = LeetCodeTrainer/LeetCodeTrainer.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"LeetCodeTrainer/Preview Content\"";
@@ -422,6 +569,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = LeetCodeTrainer/LeetCodeTrainer.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"LeetCodeTrainer/Preview Content\"";
@@ -518,9 +666,48 @@
 			};
 			name = Release;
 		};
+		F6066C9FCEF97F4FD99B9E63 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = LeetCodeTrainerWidget/LeetCodeTrainerWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5QWX246F7X;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LeetCodeTrainerWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Streak;
+				INFOPLIST_KEY_NSWidgetWantsLocation = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = GustafJensen.LeetCodeTrainer.Widget;
+				PRODUCT_NAME = LeetCodeTrainerWidget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = appex;
+			};
+			name = Debug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		6EFDC521F1D20F69C2AE206E /* Build configuration list for PBXNativeTarget "LeetCodeTrainerWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				67DF38221CE50AB36B3269E0 /* Release */,
+				F6066C9FCEF97F4FD99B9E63 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		F4A790082F45A26900F745FA /* Build configuration list for PBXProject "LeetCodeTrainer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

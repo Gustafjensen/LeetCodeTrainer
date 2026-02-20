@@ -18,6 +18,11 @@ class SkillXPManager {
     private let dailyCompletionsKey = "completedDailyDates"
     private let achievementsKey = "unlockedAchievements"
 
+    static let appGroupID = "group.GustafJensen.LeetCodeTrainer"
+    private var sharedDefaults: UserDefaults {
+        UserDefaults(suiteName: Self.appGroupID) ?? .standard
+    }
+
     private static let dailyDateFormatter: DateFormatter = {
         let f = DateFormatter()
         f.dateFormat = "yyyy-MM-dd"
@@ -35,6 +40,7 @@ class SkillXPManager {
     }
 
     private init() {
+        migrateToAppGroup()
         load()
     }
 
@@ -184,24 +190,46 @@ class SkillXPManager {
     }
 
     private func save() {
-        UserDefaults.standard.set(skillXP, forKey: storageKey)
-        UserDefaults.standard.set(Array(solvedProblems), forKey: solvedKey)
-        UserDefaults.standard.set(Array(completedDailyDates), forKey: dailyCompletionsKey)
-        UserDefaults.standard.set(Array(unlockedAchievements), forKey: achievementsKey)
+        let defaults = sharedDefaults
+        defaults.set(skillXP, forKey: storageKey)
+        defaults.set(Array(solvedProblems), forKey: solvedKey)
+        defaults.set(Array(completedDailyDates), forKey: dailyCompletionsKey)
+        defaults.set(Array(unlockedAchievements), forKey: achievementsKey)
     }
 
     private func load() {
-        if let stored = UserDefaults.standard.dictionary(forKey: storageKey) as? [String: Int] {
+        let defaults = sharedDefaults
+        if let stored = defaults.dictionary(forKey: storageKey) as? [String: Int] {
             skillXP = stored
         }
-        if let stored = UserDefaults.standard.stringArray(forKey: solvedKey) {
+        if let stored = defaults.stringArray(forKey: solvedKey) {
             solvedProblems = Set(stored)
         }
-        if let stored = UserDefaults.standard.stringArray(forKey: dailyCompletionsKey) {
+        if let stored = defaults.stringArray(forKey: dailyCompletionsKey) {
             completedDailyDates = Set(stored)
         }
-        if let stored = UserDefaults.standard.stringArray(forKey: achievementsKey) {
+        if let stored = defaults.stringArray(forKey: achievementsKey) {
             unlockedAchievements = Set(stored)
+        }
+    }
+
+    private func migrateToAppGroup() {
+        let shared = sharedDefaults
+        // If shared already has data, skip migration
+        if shared.dictionary(forKey: storageKey) != nil { return }
+        // Copy from standard defaults to shared
+        let standard = UserDefaults.standard
+        if let xp = standard.dictionary(forKey: storageKey) {
+            shared.set(xp, forKey: storageKey)
+        }
+        if let solved = standard.stringArray(forKey: solvedKey) {
+            shared.set(solved, forKey: solvedKey)
+        }
+        if let daily = standard.stringArray(forKey: dailyCompletionsKey) {
+            shared.set(daily, forKey: dailyCompletionsKey)
+        }
+        if let achievements = standard.stringArray(forKey: achievementsKey) {
+            shared.set(achievements, forKey: achievementsKey)
         }
     }
 }

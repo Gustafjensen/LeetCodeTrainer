@@ -3,6 +3,7 @@ import SwiftUI
 struct XPRewardView: View {
     let gains: [SkillXPGain]
     let sourceCode: String
+    var solutionExplanation: String?
     var newAchievements: [Achievement] = []
     var popToRoot: () -> Void = {}
 
@@ -129,6 +130,35 @@ struct XPRewardView: View {
                         .background(Theme.card)
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                         .opacity(showContent ? 1 : 0)
+
+                        // Optimal approach
+                        if let explanation = solutionExplanation {
+                            VStack(alignment: .leading, spacing: 10) {
+                                HStack(spacing: 6) {
+                                    Image(systemName: "lightbulb.fill")
+                                        .foregroundStyle(.yellow)
+                                    Text("Optimal Approach")
+                                        .font(.subheadline)
+                                        .fontWeight(.semibold)
+                                        .foregroundStyle(Theme.textPrimary)
+                                }
+
+                                Text(explanation)
+                                    .font(.subheadline)
+                                    .foregroundStyle(Theme.textSecondary)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+                            .padding(16)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(Theme.card)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 12)
+                                            .stroke(Color.yellow.opacity(0.2), lineWidth: 1)
+                                    )
+                            )
+                            .opacity(showContent ? 1 : 0)
+                        }
 
                         // Continue button
                         if showButton {

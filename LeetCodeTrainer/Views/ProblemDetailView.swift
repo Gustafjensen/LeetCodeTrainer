@@ -161,6 +161,7 @@ struct ProblemDetailView: View {
                 XPRewardView(
                     gains: gains,
                     sourceCode: viewModel.sourceCode,
+                    solutionExplanation: viewModel.problem.solutionExplanation,
                     newAchievements: viewModel.newAchievements,
                     popToRoot: popToRoot
                 )

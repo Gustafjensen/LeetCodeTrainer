@@ -18,7 +18,11 @@
     ],
     "functionSignature": "def twoSum(nums: list[int], target: int) -> list[int]:",
     "starterCode": "def twoSum(nums: list[int], target: int) -> list[int]:\n    # Write your solution here\n    pass",
-    "tags": ["Arrays", "Hash Map"]
+    "tags": [
+      "Arrays",
+      "Hash Map"
+    ],
+    "solutionExplanation": "Use a hash map to store each number's index as you iterate. For each element, check if target - current exists in the map. Time: O(n), Space: O(n)."
   },
   {
     "id": "reverse-string",
@@ -39,7 +43,11 @@
     ],
     "functionSignature": "def reverseString(s: list[str]) -> list[str]:",
     "starterCode": "def reverseString(s: list[str]) -> list[str]:\n    # Modify s in-place and return it\n    pass",
-    "tags": ["Two Pointers", "Strings"]
+    "tags": [
+      "Two Pointers",
+      "Strings"
+    ],
+    "solutionExplanation": "Use two pointers starting at the beginning and end, swapping characters and moving inward. This reverses in-place with no extra space. Time: O(n), Space: O(1)."
   },
   {
     "id": "fizz-buzz",
@@ -65,7 +73,11 @@
     ],
     "functionSignature": "def fizzBuzz(n: int) -> list[str]:",
     "starterCode": "def fizzBuzz(n: int) -> list[str]:\n    # Write your solution here\n    pass",
-    "tags": ["Math", "Simulation"]
+    "tags": [
+      "Math",
+      "Simulation"
+    ],
+    "solutionExplanation": "Iterate from 1 to n, checking divisibility by 15 first, then 3, then 5, appending the appropriate string. Time: O(n), Space: O(n)."
   },
   {
     "id": "valid-palindrome",
@@ -91,7 +103,11 @@
     ],
     "functionSignature": "def isPalindrome(s: str) -> bool:",
     "starterCode": "def isPalindrome(s: str) -> bool:\n    # Write your solution here\n    pass",
-    "tags": ["Strings", "Two Pointers"]
+    "tags": [
+      "Strings",
+      "Two Pointers"
+    ],
+    "solutionExplanation": "Use two pointers from both ends, skipping non-alphanumeric characters and comparing lowercase versions. Time: O(n), Space: O(1)."
   },
   {
     "id": "climbing-stairs",
@@ -112,7 +128,11 @@
     ],
     "functionSignature": "def climbStairs(n: int) -> int:",
     "starterCode": "def climbStairs(n: int) -> int:\n    # Write your solution here\n    pass",
-    "tags": ["Dynamic Programming", "Recursion"]
+    "tags": [
+      "Dynamic Programming",
+      "Recursion"
+    ],
+    "solutionExplanation": "This is a Fibonacci-like dynamic programming problem. Each step can be reached from one or two steps below, so dp[i] = dp[i-1] + dp[i-2]. Time: O(n), Space: O(1)."
   },
   {
     "id": "contains-duplicate",
@@ -138,7 +158,11 @@
     ],
     "functionSignature": "def containsDuplicate(nums: list[int]) -> bool:",
     "starterCode": "def containsDuplicate(nums: list[int]) -> bool:\n    # Write your solution here\n    pass",
-    "tags": ["Arrays", "Hash Map"]
+    "tags": [
+      "Arrays",
+      "Hash Map"
+    ],
+    "solutionExplanation": "Add each element to a set while iterating. If an element is already in the set, return true. Time: O(n), Space: O(n)."
   },
   {
     "id": "valid-anagram",
@@ -159,7 +183,11 @@
     ],
     "functionSignature": "def isAnagram(s: str, t: str) -> bool:",
     "starterCode": "def isAnagram(s: str, t: str) -> bool:\n    # Write your solution here\n    pass",
-    "tags": ["Strings", "Hash Map"]
+    "tags": [
+      "Strings",
+      "Hash Map"
+    ],
+    "solutionExplanation": "Count character frequencies using a hash map or Counter for both strings and compare. Alternatively, sort both strings and check equality. Time: O(n), Space: O(1) since alphabet is fixed."
   },
   {
     "id": "palindrome-number",
@@ -185,7 +213,10 @@
     ],
     "functionSignature": "def isPalindromeNumber(x: int) -> bool:",
     "starterCode": "def isPalindromeNumber(x: int) -> bool:\n    # Write your solution here\n    pass",
-    "tags": ["Math"]
+    "tags": [
+      "Math"
+    ],
+    "solutionExplanation": "Reverse the second half of the number and compare with the first half. Negative numbers and numbers ending in 0 (except 0 itself) are not palindromes. Time: O(log n), Space: O(1)."
   },
   {
     "id": "roman-to-integer",
@@ -211,7 +242,11 @@
     ],
     "functionSignature": "def romanToInt(s: str) -> int:",
     "starterCode": "def romanToInt(s: str) -> int:\n    # Write your solution here\n    pass",
-    "tags": ["Math", "Strings"]
+    "tags": [
+      "Math",
+      "Strings"
+    ],
+    "solutionExplanation": "Iterate through the string, adding the value of each symbol. If a smaller value precedes a larger one, subtract it instead. Time: O(n), Space: O(1)."
   },
   {
     "id": "longest-common-prefix",
@@ -232,7 +267,10 @@
     ],
     "functionSignature": "def longestCommonPrefix(strs: list[str]) -> str:",
     "starterCode": "def longestCommonPrefix(strs: list[str]) -> str:\n    # Write your solution here\n    pass",
-    "tags": ["Strings"]
+    "tags": [
+      "Strings"
+    ],
+    "solutionExplanation": "Compare characters at each position across all strings. Stop when characters differ or the shortest string ends. Time: O(n * m) where m is prefix length, Space: O(1)."
   },
   {
     "id": "length-of-last-word",
@@ -258,7 +296,10 @@
     ],
     "functionSignature": "def lengthOfLastWord(s: str) -> int:",
     "starterCode": "def lengthOfLastWord(s: str) -> int:\n    # Write your solution here\n    pass",
-    "tags": ["Strings"]
+    "tags": [
+      "Strings"
+    ],
+    "solutionExplanation": "Strip trailing spaces, then count backwards from the end until hitting a space or the start. Time: O(n), Space: O(1)."
   },
   {
     "id": "search-insert-position",
@@ -284,7 +325,11 @@
     ],
     "functionSignature": "def searchInsert(nums: list[int], target: int) -> int:",
     "starterCode": "def searchInsert(nums: list[int], target: int) -> int:\n    # Write your solution here\n    pass",
-    "tags": ["Binary Search", "Arrays"]
+    "tags": [
+      "Binary Search",
+      "Arrays"
+    ],
+    "solutionExplanation": "Use binary search to find the target or its insertion point. Maintain left and right bounds, returning left when the loop ends. Time: O(log n), Space: O(1)."
   },
   {
     "id": "single-number",
@@ -310,7 +355,11 @@
     ],
     "functionSignature": "def singleNumber(nums: list[int]) -> int:",
     "starterCode": "def singleNumber(nums: list[int]) -> int:\n    # Write your solution here\n    pass",
-    "tags": ["Arrays", "Bit Manipulation"]
+    "tags": [
+      "Arrays",
+      "Bit Manipulation"
+    ],
+    "solutionExplanation": "XOR all elements together. Since a ^ a = 0 and a ^ 0 = a, all pairs cancel out leaving the single number. Time: O(n), Space: O(1)."
   },
   {
     "id": "missing-number",
@@ -336,7 +385,11 @@
     ],
     "functionSignature": "def missingNumber(nums: list[int]) -> int:",
     "starterCode": "def missingNumber(nums: list[int]) -> int:\n    # Write your solution here\n    pass",
-    "tags": ["Arrays", "Math"]
+    "tags": [
+      "Arrays",
+      "Math"
+    ],
+    "solutionExplanation": "Use the sum formula n*(n+1)/2 and subtract the array sum to find the missing number. Alternatively, use XOR. Time: O(n), Space: O(1)."
   },
   {
     "id": "ransom-note",
@@ -362,7 +415,11 @@
     ],
     "functionSignature": "def canConstruct(ransomNote: str, magazine: str) -> bool:",
     "starterCode": "def canConstruct(ransomNote: str, magazine: str) -> bool:\n    # Write your solution here\n    pass",
-    "tags": ["Hash Map", "Strings"]
+    "tags": [
+      "Hash Map",
+      "Strings"
+    ],
+    "solutionExplanation": "Count character frequencies in magazine using a hash map, then verify each character in ransomNote has sufficient count. Time: O(n + m), Space: O(1)."
   },
   {
     "id": "isomorphic-strings",
@@ -388,7 +445,11 @@
     ],
     "functionSignature": "def isIsomorphic(s: str, t: str) -> bool:",
     "starterCode": "def isIsomorphic(s: str, t: str) -> bool:\n    # Write your solution here\n    pass",
-    "tags": ["Hash Map", "Strings"]
+    "tags": [
+      "Hash Map",
+      "Strings"
+    ],
+    "solutionExplanation": "Use two hash maps to track character mappings in both directions (s->t and t->s). If any mapping conflicts, return false. Time: O(n), Space: O(1)."
   },
   {
     "id": "best-time-to-buy-sell-stock",
@@ -409,7 +470,11 @@
     ],
     "functionSignature": "def maxProfit(prices: list[int]) -> int:",
     "starterCode": "def maxProfit(prices: list[int]) -> int:\n    # Write your solution here\n    pass",
-    "tags": ["Arrays", "Greedy"]
+    "tags": [
+      "Arrays",
+      "Greedy"
+    ],
+    "solutionExplanation": "Track the minimum price seen so far while iterating. At each step, calculate profit if selling today and update the maximum profit. Time: O(n), Space: O(1)."
   },
   {
     "id": "move-zeroes",
@@ -430,7 +495,11 @@
     ],
     "functionSignature": "def moveZeroes(nums: list[int]) -> list[int]:",
     "starterCode": "def moveZeroes(nums: list[int]) -> list[int]:\n    # Modify nums in-place and return it\n    pass",
-    "tags": ["Arrays", "Two Pointers"]
+    "tags": [
+      "Arrays",
+      "Two Pointers"
+    ],
+    "solutionExplanation": "Use a two-pointer approach: one pointer tracks the position for the next non-zero element. Move non-zero elements forward and fill remaining positions with zeros. Time: O(n), Space: O(1)."
   },
   {
     "id": "plus-one",
@@ -456,7 +525,11 @@
     ],
     "functionSignature": "def plusOne(digits: list[int]) -> list[int]:",
     "starterCode": "def plusOne(digits: list[int]) -> list[int]:\n    # Write your solution here\n    pass",
-    "tags": ["Arrays", "Math"]
+    "tags": [
+      "Arrays",
+      "Math"
+    ],
+    "solutionExplanation": "Iterate from the last digit backward, adding carry. If a digit becomes 10, set to 0 and carry 1. If carry remains after the loop, prepend 1. Time: O(n), Space: O(1)."
   },
   {
     "id": "max-subarray",
@@ -482,7 +555,11 @@
     ],
     "functionSignature": "def maxSubArray(nums: list[int]) -> int:",
     "starterCode": "def maxSubArray(nums: list[int]) -> int:\n    # Write your solution here\n    pass",
-    "tags": ["Arrays", "Dynamic Programming"]
+    "tags": [
+      "Arrays",
+      "Dynamic Programming"
+    ],
+    "solutionExplanation": "Use Kadane's algorithm: maintain a running sum, resetting to the current element when the sum becomes negative. Track the maximum sum seen. Time: O(n), Space: O(1)."
   },
   {
     "id": "valid-parentheses",
@@ -508,7 +585,11 @@
     ],
     "functionSignature": "def isValid(s: str) -> bool:",
     "starterCode": "def isValid(s: str) -> bool:\n    # Write your solution here\n    pass",
-    "tags": ["Stack", "Strings"]
+    "tags": [
+      "Stack",
+      "Strings"
+    ],
+    "solutionExplanation": "Use a stack: push opening brackets, and for closing brackets, check if the top of the stack matches. The string is valid if the stack is empty at the end. Time: O(n), Space: O(n)."
   },
   {
     "id": "merge-sorted-lists",
@@ -534,7 +615,11 @@
     ],
     "functionSignature": "def mergeTwoLists(list1: list[int], list2: list[int]) -> list[int]:",
     "starterCode": "def mergeTwoLists(list1: list[int], list2: list[int]) -> list[int]:\n    # Write your solution here\n    pass",
-    "tags": ["Arrays", "Sorting"]
+    "tags": [
+      "Arrays",
+      "Sorting"
+    ],
+    "solutionExplanation": "Use two pointers to compare elements from both lists, appending the smaller one to the result. Append any remaining elements. Time: O(n + m), Space: O(n + m)."
   },
   {
     "id": "group-anagrams",
@@ -560,7 +645,12 @@
     ],
     "functionSignature": "def groupAnagrams(strs: list[str]) -> list[list[str]]:",
     "starterCode": "def groupAnagrams(strs: list[str]) -> list[list[str]]:\n    # Write your solution here\n    pass",
-    "tags": ["Hash Map", "Strings", "Sorting"]
+    "tags": [
+      "Hash Map",
+      "Strings",
+      "Sorting"
+    ],
+    "solutionExplanation": "Sort each string to create a key, and group strings with the same sorted key using a hash map. Time: O(n * k log k) where k is max string length, Space: O(n * k)."
   },
   {
     "id": "product-except-self",
@@ -581,7 +671,10 @@
     ],
     "functionSignature": "def productExceptSelf(nums: list[int]) -> list[int]:",
     "starterCode": "def productExceptSelf(nums: list[int]) -> list[int]:\n    # Write your solution here\n    pass",
-    "tags": ["Arrays"]
+    "tags": [
+      "Arrays"
+    ],
+    "solutionExplanation": "Make two passes: first compute prefix products from the left, then multiply with suffix products from the right. This avoids division. Time: O(n), Space: O(1) excluding output."
   },
   {
     "id": "container-with-most-water",
@@ -602,7 +695,11 @@
     ],
     "functionSignature": "def maxArea(height: list[int]) -> int:",
     "starterCode": "def maxArea(height: list[int]) -> int:\n    # Write your solution here\n    pass",
-    "tags": ["Two Pointers", "Greedy"]
+    "tags": [
+      "Two Pointers",
+      "Greedy"
+    ],
+    "solutionExplanation": "Use two pointers at both ends. Calculate the area, then move the pointer with the shorter line inward. The shorter line limits the area, so moving it might find a taller one. Time: O(n), Space: O(1)."
   },
   {
     "id": "three-sum",
@@ -628,7 +725,12 @@
     ],
     "functionSignature": "def threeSum(nums: list[int]) -> list[list[int]]:",
     "starterCode": "def threeSum(nums: list[int]) -> list[list[int]]:\n    # Write your solution here\n    pass",
-    "tags": ["Arrays", "Two Pointers", "Sorting"]
+    "tags": [
+      "Arrays",
+      "Two Pointers",
+      "Sorting"
+    ],
+    "solutionExplanation": "Sort the array, then for each element use two pointers on the remaining elements to find pairs that sum to the negative of the current element. Skip duplicates. Time: O(n²), Space: O(1)."
   },
   {
     "id": "house-robber",
@@ -649,7 +751,11 @@
     ],
     "functionSignature": "def rob(nums: list[int]) -> int:",
     "starterCode": "def rob(nums: list[int]) -> int:\n    # Write your solution here\n    pass",
-    "tags": ["Dynamic Programming", "Arrays"]
+    "tags": [
+      "Dynamic Programming",
+      "Arrays"
+    ],
+    "solutionExplanation": "Dynamic programming where dp[i] = max(dp[i-1], dp[i-2] + nums[i]). At each house, choose to rob it (adding to two houses ago) or skip it. Time: O(n), Space: O(1)."
   },
   {
     "id": "coin-change",
@@ -675,7 +781,10 @@
     ],
     "functionSignature": "def coinChange(coins: list[int], amount: int) -> int:",
     "starterCode": "def coinChange(coins: list[int], amount: int) -> int:\n    # Write your solution here\n    pass",
-    "tags": ["Dynamic Programming"]
+    "tags": [
+      "Dynamic Programming"
+    ],
+    "solutionExplanation": "Use bottom-up dynamic programming. dp[amount] = min coins needed. For each amount, try each coin: dp[i] = min(dp[i], dp[i-coin] + 1). Time: O(amount * coins), Space: O(amount)."
   },
   {
     "id": "unique-paths",
@@ -696,7 +805,11 @@
     ],
     "functionSignature": "def uniquePaths(m: int, n: int) -> int:",
     "starterCode": "def uniquePaths(m: int, n: int) -> int:\n    # Write your solution here\n    pass",
-    "tags": ["Dynamic Programming", "Math"]
+    "tags": [
+      "Dynamic Programming",
+      "Math"
+    ],
+    "solutionExplanation": "Dynamic programming on a grid where dp[i][j] = dp[i-1][j] + dp[i][j-1]. Each cell can only be reached from above or the left. Can optimize to a single row. Time: O(m*n), Space: O(n)."
   },
   {
     "id": "jump-game",
@@ -717,7 +830,11 @@
     ],
     "functionSignature": "def canJump(nums: list[int]) -> bool:",
     "starterCode": "def canJump(nums: list[int]) -> bool:\n    # Write your solution here\n    pass",
-    "tags": ["Greedy", "Arrays"]
+    "tags": [
+      "Greedy",
+      "Arrays"
+    ],
+    "solutionExplanation": "Greedy approach: track the farthest reachable index. Iterate through the array updating the max reach. If current index exceeds max reach, return false. Time: O(n), Space: O(1)."
   },
   {
     "id": "sort-colors",
@@ -738,7 +855,12 @@
     ],
     "functionSignature": "def sortColors(nums: list[int]) -> list[int]:",
     "starterCode": "def sortColors(nums: list[int]) -> list[int]:\n    # Sort in-place and return nums\n    pass",
-    "tags": ["Arrays", "Two Pointers", "Sorting"]
+    "tags": [
+      "Arrays",
+      "Two Pointers",
+      "Sorting"
+    ],
+    "solutionExplanation": "Use the Dutch National Flag algorithm with three pointers (low, mid, high). Swap 0s to the front, 2s to the back, leaving 1s in the middle. Time: O(n), Space: O(1)."
   },
   {
     "id": "min-stack",
@@ -754,7 +876,11 @@
     ],
     "functionSignature": "def minStack(operations: list[str], arguments: list[list]) -> list:",
     "starterCode": "def minStack(operations: list, arguments: list) -> list:\n    # Implement MinStack and process operations\n    pass",
-    "tags": ["Stack", "Design"]
+    "tags": [
+      "Stack",
+      "Design"
+    ],
+    "solutionExplanation": "Use two stacks: one for values and one for tracking minimums. Push to the min stack only when the value is <= current minimum. Time: O(1) per operation, Space: O(n)."
   },
   {
     "id": "search-rotated-array",
@@ -780,7 +906,11 @@
     ],
     "functionSignature": "def search(nums: list[int], target: int) -> int:",
     "starterCode": "def search(nums: list[int], target: int) -> int:\n    # Write your solution here\n    pass",
-    "tags": ["Binary Search", "Arrays"]
+    "tags": [
+      "Binary Search",
+      "Arrays"
+    ],
+    "solutionExplanation": "Modified binary search: determine which half is sorted, then check if the target lies in that sorted half. Narrow the search accordingly. Time: O(log n), Space: O(1)."
   },
   {
     "id": "merge-intervals",
@@ -801,7 +931,11 @@
     ],
     "functionSignature": "def merge(intervals: list[list[int]]) -> list[list[int]]:",
     "starterCode": "def merge(intervals: list[list[int]]) -> list[list[int]]:\n    # Write your solution here\n    pass",
-    "tags": ["Arrays", "Sorting"]
+    "tags": [
+      "Arrays",
+      "Sorting"
+    ],
+    "solutionExplanation": "Sort intervals by start time. Iterate and merge overlapping intervals by comparing the current start with the previous end. Time: O(n log n), Space: O(n)."
   },
   {
     "id": "remove-duplicates-sorted",
@@ -822,7 +956,11 @@
     ],
     "functionSignature": "def removeDuplicates(nums: list[int]) -> int:",
     "starterCode": "def removeDuplicates(nums: list[int]) -> int:\n    # Write your solution here\n    pass",
-    "tags": ["Arrays", "Two Pointers"]
+    "tags": [
+      "Arrays",
+      "Two Pointers"
+    ],
+    "solutionExplanation": "Use a slow pointer for the write position and a fast pointer to scan. Write unique elements at the slow pointer position. Time: O(n), Space: O(1)."
   },
   {
     "id": "longest-substring-no-repeat",
@@ -848,7 +986,12 @@
     ],
     "functionSignature": "def lengthOfLongestSubstring(s: str) -> int:",
     "starterCode": "def lengthOfLongestSubstring(s: str) -> int:\n    # Write your solution here\n    pass",
-    "tags": ["Strings", "Sliding Window", "Hash Map"]
+    "tags": [
+      "Strings",
+      "Sliding Window",
+      "Hash Map"
+    ],
+    "solutionExplanation": "Use a sliding window with a hash set. Expand the right boundary, and shrink from the left when a duplicate is found. Track the maximum window size. Time: O(n), Space: O(min(n, alphabet))."
   },
   {
     "id": "best-time-buy-sell-stock-ii",
@@ -874,7 +1017,11 @@
     ],
     "functionSignature": "def maxProfitII(prices: list[int]) -> int:",
     "starterCode": "def maxProfitII(prices: list[int]) -> int:\n    # Write your solution here\n    pass",
-    "tags": ["Greedy", "Arrays"]
+    "tags": [
+      "Greedy",
+      "Arrays"
+    ],
+    "solutionExplanation": "Greedy approach: add up all positive price differences between consecutive days. Every profitable day-to-day increase contributes to the total. Time: O(n), Space: O(1)."
   },
   {
     "id": "rotate-array",
@@ -895,7 +1042,11 @@
     ],
     "functionSignature": "def rotate(nums: list[int], k: int) -> list[int]:",
     "starterCode": "def rotate(nums: list[int], k: int) -> list[int]:\n    # Rotate in-place and return nums\n    pass",
-    "tags": ["Arrays", "Math"]
+    "tags": [
+      "Arrays",
+      "Math"
+    ],
+    "solutionExplanation": "Reverse the entire array, then reverse the first k elements, then reverse the remaining. Use k % n to handle k larger than array length. Time: O(n), Space: O(1)."
   },
   {
     "id": "pow-x-n",
@@ -921,7 +1072,11 @@
     ],
     "functionSignature": "def myPow(x: float, n: int) -> float:",
     "starterCode": "def myPow(x: float, n: int) -> float:\n    # Write your solution here\n    pass",
-    "tags": ["Math", "Recursion"]
+    "tags": [
+      "Math",
+      "Recursion"
+    ],
+    "solutionExplanation": "Use fast exponentiation (binary exponentiation). Square the base and halve the exponent at each step. Handle negative exponents by inverting. Time: O(log n), Space: O(1)."
   },
   {
     "id": "spiral-matrix",
@@ -942,7 +1097,11 @@
     ],
     "functionSignature": "def spiralOrder(matrix: list[list[int]]) -> list[int]:",
     "starterCode": "def spiralOrder(matrix: list[list[int]]) -> list[int]:\n    # Write your solution here\n    pass",
-    "tags": ["Arrays", "Matrix"]
+    "tags": [
+      "Arrays",
+      "Matrix"
+    ],
+    "solutionExplanation": "Simulate the spiral by maintaining four boundaries (top, bottom, left, right). Traverse right, down, left, up and shrink boundaries after each direction. Time: O(m*n), Space: O(1)."
   },
   {
     "id": "word-search",
@@ -968,7 +1127,12 @@
     ],
     "functionSignature": "def exist(board: list[list[str]], word: str) -> bool:",
     "starterCode": "def exist(board: list[list[str]], word: str) -> bool:\n    # Write your solution here\n    pass",
-    "tags": ["Arrays", "Backtracking", "Matrix"]
+    "tags": [
+      "Arrays",
+      "Backtracking",
+      "Matrix"
+    ],
+    "solutionExplanation": "Use backtracking DFS from each cell. Mark visited cells to avoid reuse, and restore them after backtracking. Time: O(m*n*4^L) where L is word length, Space: O(L)."
   },
   {
     "id": "trapping-rain-water",
@@ -989,7 +1153,12 @@
     ],
     "functionSignature": "def trap(height: list[int]) -> int:",
     "starterCode": "def trap(height: list[int]) -> int:\n    # Write your solution here\n    pass",
-    "tags": ["Arrays", "Two Pointers", "Dynamic Programming"]
+    "tags": [
+      "Arrays",
+      "Two Pointers",
+      "Dynamic Programming"
+    ],
+    "solutionExplanation": "Use two pointers from both ends tracking left_max and right_max. Water at each position equals min(left_max, right_max) - height. Move the pointer with the smaller max. Time: O(n), Space: O(1)."
   },
   {
     "id": "longest-palindromic-substring",
@@ -1010,7 +1179,11 @@
     ],
     "functionSignature": "def longestPalindrome(s: str) -> str:",
     "starterCode": "def longestPalindrome(s: str) -> str:\n    # Write your solution here\n    pass",
-    "tags": ["Strings", "Dynamic Programming"]
+    "tags": [
+      "Strings",
+      "Dynamic Programming"
+    ],
+    "solutionExplanation": "Expand around each center (both single character and between characters). Track the longest palindrome found. Time: O(n²), Space: O(1)."
   },
   {
     "id": "majority-element",
@@ -1031,7 +1204,11 @@
     ],
     "functionSignature": "def majorityElement(nums: list[int]) -> int:",
     "starterCode": "def majorityElement(nums: list[int]) -> int:\n    # Write your solution here\n    pass",
-    "tags": ["Arrays", "Hash Map"]
+    "tags": [
+      "Arrays",
+      "Hash Map"
+    ],
+    "solutionExplanation": "Boyer-Moore Voting Algorithm: maintain a candidate and count. Increment for same element, decrement for different. The candidate after one pass is the majority element. Time: O(n), Space: O(1)."
   },
   {
     "id": "happy-number",
@@ -1052,7 +1229,11 @@
     ],
     "functionSignature": "def isHappy(n: int) -> bool:",
     "starterCode": "def isHappy(n: int) -> bool:\n    # Write your solution here\n    pass",
-    "tags": ["Math", "Hash Map"]
+    "tags": [
+      "Math",
+      "Hash Map"
+    ],
+    "solutionExplanation": "Use Floyd's cycle detection (fast/slow pointers) or a hash set to detect cycles. Repeatedly sum squares of digits until reaching 1 or detecting a cycle. Time: O(log n), Space: O(1) with Floyd's."
   },
   {
     "id": "power-of-three",
@@ -1078,7 +1259,10 @@
     ],
     "functionSignature": "def isPowerOfThree(n: int) -> bool:",
     "starterCode": "def isPowerOfThree(n: int) -> bool:\n    # Write your solution here\n    pass",
-    "tags": ["Math"]
+    "tags": [
+      "Math"
+    ],
+    "solutionExplanation": "Repeatedly divide by 3 while divisible. If the result is 1, it's a power of three. Alternatively, check if 3^19 (largest power of 3 in int range) is divisible by n. Time: O(log n), Space: O(1)."
   },
   {
     "id": "merge-sorted-array",
@@ -1099,7 +1283,12 @@
     ],
     "functionSignature": "def mergeSortedArray(nums1: list[int], m: int, nums2: list[int], n: int) -> list[int]:",
     "starterCode": "def mergeSortedArray(nums1: list[int], m: int, nums2: list[int], n: int) -> list[int]:\n    # Merge in-place and return nums1\n    pass",
-    "tags": ["Arrays", "Two Pointers", "Sorting"]
+    "tags": [
+      "Arrays",
+      "Two Pointers",
+      "Sorting"
+    ],
+    "solutionExplanation": "Start from the end of both arrays and work backwards, placing the larger element at the end of nums1. This avoids overwriting elements. Time: O(n + m), Space: O(1)."
   },
   {
     "id": "remove-element",
@@ -1120,7 +1309,11 @@
     ],
     "functionSignature": "def removeElement(nums: list[int], val: int) -> int:",
     "starterCode": "def removeElement(nums: list[int], val: int) -> int:\n    # Write your solution here\n    pass",
-    "tags": ["Arrays", "Two Pointers"]
+    "tags": [
+      "Arrays",
+      "Two Pointers"
+    ],
+    "solutionExplanation": "Use two pointers: read and write positions. Copy non-target elements to the write position. Return the write pointer as the new length. Time: O(n), Space: O(1)."
   },
   {
     "id": "excel-column-number",
@@ -1146,7 +1339,11 @@
     ],
     "functionSignature": "def titleToNumber(columnTitle: str) -> int:",
     "starterCode": "def titleToNumber(columnTitle: str) -> int:\n    # Write your solution here\n    pass",
-    "tags": ["Math", "Strings"]
+    "tags": [
+      "Math",
+      "Strings"
+    ],
+    "solutionExplanation": "Treat it as a base-26 number. Iterate through characters, multiplying the result by 26 and adding the current character's value (A=1, B=2, etc.). Time: O(n), Space: O(1)."
   },
   {
     "id": "intersection-two-arrays",
@@ -1167,7 +1364,12 @@
     ],
     "functionSignature": "def intersect(nums1: list[int], nums2: list[int]) -> list[int]:",
     "starterCode": "def intersect(nums1: list[int], nums2: list[int]) -> list[int]:\n    # Write your solution here\n    pass",
-    "tags": ["Arrays", "Hash Map", "Sorting"]
+    "tags": [
+      "Arrays",
+      "Hash Map",
+      "Sorting"
+    ],
+    "solutionExplanation": "Use a Counter/hash map on one array, then iterate the other, decrementing counts for matches. Time: O(n + m), Space: O(min(n, m))."
   },
   {
     "id": "add-binary",
@@ -1188,7 +1390,12 @@
     ],
     "functionSignature": "def addBinary(a: str, b: str) -> str:",
     "starterCode": "def addBinary(a: str, b: str) -> str:\n    # Write your solution here\n    pass",
-    "tags": ["Math", "Strings", "Bit Manipulation"]
+    "tags": [
+      "Math",
+      "Strings",
+      "Bit Manipulation"
+    ],
+    "solutionExplanation": "Iterate both strings from the end, adding digits with carry. Build the result string in reverse. Time: O(max(n, m)), Space: O(max(n, m))."
   },
   {
     "id": "sqrt-x",
@@ -1209,7 +1416,11 @@
     ],
     "functionSignature": "def mySqrt(x: int) -> int:",
     "starterCode": "def mySqrt(x: int) -> int:\n    # Write your solution here (without using ** or pow)\n    pass",
-    "tags": ["Binary Search", "Math"]
+    "tags": [
+      "Binary Search",
+      "Math"
+    ],
+    "solutionExplanation": "Use binary search between 0 and x to find the largest integer whose square is <= x. Time: O(log x), Space: O(1)."
   },
   {
     "id": "top-k-frequent",
@@ -1230,7 +1441,12 @@
     ],
     "functionSignature": "def topKFrequent(nums: list[int], k: int) -> list[int]:",
     "starterCode": "def topKFrequent(nums: list[int], k: int) -> list[int]:\n    # Write your solution here\n    pass",
-    "tags": ["Arrays", "Hash Map", "Sorting"]
+    "tags": [
+      "Arrays",
+      "Hash Map",
+      "Sorting"
+    ],
+    "solutionExplanation": "Count frequencies with a hash map, then use bucket sort or a heap to get the top k elements. Bucket sort groups elements by frequency for O(n) time. Time: O(n), Space: O(n)."
   },
   {
     "id": "subsets",
@@ -1251,7 +1467,11 @@
     ],
     "functionSignature": "def subsets(nums: list[int]) -> list[list[int]]:",
     "starterCode": "def subsets(nums: list[int]) -> list[list[int]]:\n    # Write your solution here\n    pass",
-    "tags": ["Arrays", "Backtracking"]
+    "tags": [
+      "Arrays",
+      "Backtracking"
+    ],
+    "solutionExplanation": "Use backtracking: at each element, choose to include or exclude it. Alternatively, iterate and for each existing subset, create a new one with the current element added. Time: O(n * 2^n), Space: O(n)."
   },
   {
     "id": "permutations",
@@ -1277,7 +1497,12 @@
     ],
     "functionSignature": "def permute(nums: list[int]) -> list[list[int]]:",
     "starterCode": "def permute(nums: list[int]) -> list[list[int]]:\n    # Write your solution here\n    pass",
-    "tags": ["Arrays", "Backtracking", "Recursion"]
+    "tags": [
+      "Arrays",
+      "Backtracking",
+      "Recursion"
+    ],
+    "solutionExplanation": "Use backtracking: for each position, try every unused element. Swap elements to build permutations and backtrack by swapping back. Time: O(n * n!), Space: O(n)."
   },
   {
     "id": "letter-combinations",
@@ -1303,7 +1528,12 @@
     ],
     "functionSignature": "def letterCombinations(digits: str) -> list[str]:",
     "starterCode": "def letterCombinations(digits: str) -> list[str]:\n    # Write your solution here\n    pass",
-    "tags": ["Strings", "Backtracking", "Recursion"]
+    "tags": [
+      "Strings",
+      "Backtracking",
+      "Recursion"
+    ],
+    "solutionExplanation": "Use backtracking or BFS. Map each digit to its letters and build combinations by appending each possible letter for each digit. Time: O(4^n), Space: O(n)."
   },
   {
     "id": "generate-parentheses",
@@ -1324,7 +1554,12 @@
     ],
     "functionSignature": "def generateParenthesis(n: int) -> list[str]:",
     "starterCode": "def generateParenthesis(n: int) -> list[str]:\n    # Write your solution here\n    pass",
-    "tags": ["Strings", "Backtracking", "Recursion"]
+    "tags": [
+      "Strings",
+      "Backtracking",
+      "Recursion"
+    ],
+    "solutionExplanation": "Use backtracking with counts of open and close parentheses. Add open if count < n, add close if close count < open count. Time: O(4^n / sqrt(n)), Space: O(n)."
   },
   {
     "id": "set-matrix-zeroes",
@@ -1345,7 +1580,11 @@
     ],
     "functionSignature": "def setZeroes(matrix: list[list[int]]) -> list[list[int]]:",
     "starterCode": "def setZeroes(matrix: list[list[int]]) -> list[list[int]]:\n    # Modify in-place and return matrix\n    pass",
-    "tags": ["Arrays", "Matrix"]
+    "tags": [
+      "Arrays",
+      "Matrix"
+    ],
+    "solutionExplanation": "Use the first row and column as markers. Scan the matrix to mark which rows and columns contain zeros, then zero out marked rows and columns. Time: O(m*n), Space: O(1)."
   },
   {
     "id": "max-product-subarray",
@@ -1366,7 +1605,11 @@
     ],
     "functionSignature": "def maxProduct(nums: list[int]) -> int:",
     "starterCode": "def maxProduct(nums: list[int]) -> int:\n    # Write your solution here\n    pass",
-    "tags": ["Arrays", "Dynamic Programming"]
+    "tags": [
+      "Arrays",
+      "Dynamic Programming"
+    ],
+    "solutionExplanation": "Track both the maximum and minimum product ending at each position (minimum can become maximum when multiplied by a negative). Time: O(n), Space: O(1)."
   },
   {
     "id": "find-min-rotated",
@@ -1392,7 +1635,11 @@
     ],
     "functionSignature": "def findMin(nums: list[int]) -> int:",
     "starterCode": "def findMin(nums: list[int]) -> int:\n    # Write your solution here\n    pass",
-    "tags": ["Binary Search", "Arrays"]
+    "tags": [
+      "Binary Search",
+      "Arrays"
+    ],
+    "solutionExplanation": "Use binary search: compare mid with right. If mid > right, the minimum is in the right half. Otherwise, it's in the left half (including mid). Time: O(log n), Space: O(1)."
   },
   {
     "id": "longest-increasing-subsequence",
@@ -1418,7 +1665,12 @@
     ],
     "functionSignature": "def lengthOfLIS(nums: list[int]) -> int:",
     "starterCode": "def lengthOfLIS(nums: list[int]) -> int:\n    # Write your solution here\n    pass",
-    "tags": ["Arrays", "Dynamic Programming", "Binary Search"]
+    "tags": [
+      "Arrays",
+      "Dynamic Programming",
+      "Binary Search"
+    ],
+    "solutionExplanation": "Use dynamic programming with binary search (patience sorting). Maintain a tails array and use bisect to find insertion positions. Time: O(n log n), Space: O(n)."
   },
   {
     "id": "word-break",
@@ -1444,7 +1696,11 @@
     ],
     "functionSignature": "def wordBreak(s: str, wordDict: list[str]) -> bool:",
     "starterCode": "def wordBreak(s: str, wordDict: list[str]) -> bool:\n    # Write your solution here\n    pass",
-    "tags": ["Strings", "Dynamic Programming"]
+    "tags": [
+      "Strings",
+      "Dynamic Programming"
+    ],
+    "solutionExplanation": "Use bottom-up DP where dp[i] is true if s[0:i] can be segmented. For each position, check all possible last words from the dictionary. Time: O(n² * m), Space: O(n)."
   },
   {
     "id": "decode-ways",
@@ -1470,7 +1726,11 @@
     ],
     "functionSignature": "def numDecodings(s: str) -> int:",
     "starterCode": "def numDecodings(s: str) -> int:\n    # Write your solution here\n    pass",
-    "tags": ["Strings", "Dynamic Programming"]
+    "tags": [
+      "Strings",
+      "Dynamic Programming"
+    ],
+    "solutionExplanation": "Dynamic programming similar to climbing stairs. dp[i] depends on whether the last one or two digits form valid codes (1-26). Time: O(n), Space: O(1)."
   },
   {
     "id": "kth-largest-element",
@@ -1491,7 +1751,11 @@
     ],
     "functionSignature": "def findKthLargest(nums: list[int], k: int) -> int:",
     "starterCode": "def findKthLargest(nums: list[int], k: int) -> int:\n    # Write your solution here\n    pass",
-    "tags": ["Arrays", "Sorting"]
+    "tags": [
+      "Arrays",
+      "Sorting"
+    ],
+    "solutionExplanation": "Use a min-heap of size k. After processing all elements, the heap top is the kth largest. Alternatively, use quickselect for average O(n). Time: O(n log k) with heap, Space: O(k)."
   },
   {
     "id": "first-missing-positive",
@@ -1517,7 +1781,11 @@
     ],
     "functionSignature": "def firstMissingPositive(nums: list[int]) -> int:",
     "starterCode": "def firstMissingPositive(nums: list[int]) -> int:\n    # Write your solution here\n    pass",
-    "tags": ["Arrays", "Hash Map"]
+    "tags": [
+      "Arrays",
+      "Hash Map"
+    ],
+    "solutionExplanation": "Place each number in its correct index position (cyclic sort). Then scan for the first position where index + 1 != value. Time: O(n), Space: O(1)."
   },
   {
     "id": "minimum-window-substring",
@@ -1543,7 +1811,12 @@
     ],
     "functionSignature": "def minWindow(s: str, t: str) -> str:",
     "starterCode": "def minWindow(s: str, t: str) -> str:\n    # Write your solution here\n    pass",
-    "tags": ["Strings", "Sliding Window", "Hash Map"]
+    "tags": [
+      "Strings",
+      "Sliding Window",
+      "Hash Map"
+    ],
+    "solutionExplanation": "Use a sliding window with two pointers and a character frequency map. Expand right to include all chars, then shrink left to minimize the window. Time: O(n + m), Space: O(m)."
   },
   {
     "id": "edit-distance",
@@ -1564,7 +1837,11 @@
     ],
     "functionSignature": "def minDistance(word1: str, word2: str) -> int:",
     "starterCode": "def minDistance(word1: str, word2: str) -> int:\n    # Write your solution here\n    pass",
-    "tags": ["Strings", "Dynamic Programming"]
+    "tags": [
+      "Strings",
+      "Dynamic Programming"
+    ],
+    "solutionExplanation": "Use 2D dynamic programming where dp[i][j] represents min edits for word1[0:i] to word2[0:j]. Each cell considers insert, delete, or replace. Time: O(m*n), Space: O(m*n)."
   },
   {
     "id": "largest-rectangle-histogram",
@@ -1585,6 +1862,10 @@
     ],
     "functionSignature": "def largestRectangleArea(heights: list[int]) -> int:",
     "starterCode": "def largestRectangleArea(heights: list[int]) -> int:\n    # Write your solution here\n    pass",
-    "tags": ["Stack", "Arrays"]
+    "tags": [
+      "Stack",
+      "Arrays"
+    ],
+    "solutionExplanation": "Use a monotonic stack to find the nearest smaller bar on each side. The rectangle for each bar extends between its left and right boundaries. Time: O(n), Space: O(n)."
   }
 ]

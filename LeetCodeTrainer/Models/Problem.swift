@@ -9,6 +9,7 @@ struct Problem: Codable, Identifiable {
     let functionSignature: String
     let starterCode: String
     let tags: [String]
+    let solutionExplanation: String?
 
     enum Difficulty: String, Codable {
         case easy = "Easy"
