@@ -54,9 +54,9 @@
 
 /* Begin PBXFileReference section */
 		1CE64C559B993804947122F1 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/SwiftUI.framework; sourceTree = DEVELOPER_DIR; };
-		294F6CAC198C91E3CE07E270 /* LeetCodeTrainerWidget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LeetCodeTrainerWidget.swift; path = LeetCodeTrainerWidget.swift; sourceTree = "<group>"; };
+		294F6CAC198C91E3CE07E270 /* LeetCodeTrainerWidget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LeetCodeTrainerWidget.swift; sourceTree = "<group>"; };
 		4D527365EC4B87AE6007A4C6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		5632EF60C7527821FE5BC820 /* LeetCodeTrainerWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; name = LeetCodeTrainerWidget.appex; path = LeetCodeTrainerWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		5632EF60C7527821FE5BC820 /* LeetCodeTrainerWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LeetCodeTrainerWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4E15095E04732B24B901719 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/WidgetKit.framework; sourceTree = DEVELOPER_DIR; };
 		F4A7900D2F45A26900F745FA /* LeetCodeTrainer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LeetCodeTrainer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4A7901D2F45A26B00F745FA /* LeetCodeTrainerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LeetCodeTrainerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -66,22 +66,16 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		F4A7900F2F45A26900F745FA /* LeetCodeTrainer */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = LeetCodeTrainer;
 			sourceTree = "<group>";
 		};
 		F4A790202F45A26B00F745FA /* LeetCodeTrainerTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = LeetCodeTrainerTests;
 			sourceTree = "<group>";
 		};
 		F4A7902A2F45A26B00F745FA /* LeetCodeTrainerUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = LeetCodeTrainerUITests;
 			sourceTree = "<group>";
 		};
@@ -127,7 +121,6 @@
 			children = (
 				294F6CAC198C91E3CE07E270 /* LeetCodeTrainerWidget.swift */,
 			);
-			name = LeetCodeTrainerWidget;
 			path = LeetCodeTrainerWidget;
 			sourceTree = "<group>";
 		};

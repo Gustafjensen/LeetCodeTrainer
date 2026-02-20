@@ -1,11 +1,7 @@
 import Foundation
 
 class ExecutionService {
-    #if DEBUG
-    private let baseURL = "http://localhost:3000"
-    #else
-    private let baseURL = "https://leetcode-trainer.fly.dev"
-    #endif
+    private let baseURL = "https://leetcode-trainer-75896127852.europe-north1.run.app"
 
     private let session: URLSession
 

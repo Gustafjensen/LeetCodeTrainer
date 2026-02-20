@@ -4,7 +4,10 @@ struct ProblemDetailView: View {
     @State var viewModel: ProblemDetailViewModel
     var popToRoot: () -> Void = {}
     @Environment(\.dismiss) private var dismiss
+    @AppStorage("editorFontSize") private var editorFontSize: Double = 14
     @State private var isEditorFocused = false
+    @State private var revealedHints = 0
+    @State private var showHistory = false
 
     var body: some View {
         ScrollView {
@@ -64,6 +67,64 @@ struct ProblemDetailView: View {
                 .background(Theme.card)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
 
+                // Hints
+                if !viewModel.problem.hints.isEmpty {
+                    VStack(alignment: .leading, spacing: 10) {
+                        HStack {
+                            Image(systemName: "lightbulb.fill")
+                                .foregroundStyle(.yellow)
+                            Text("Hints")
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(Theme.textPrimary)
+                            Spacer()
+                            Text("\(viewModel.problem.hints.count) available")
+                                .font(.caption)
+                                .foregroundStyle(Theme.textSecondary)
+                        }
+
+                        ForEach(Array(viewModel.problem.hints.enumerated()), id: \.offset) { index, hint in
+                            if index < revealedHints {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("Hint \(index + 1)")
+                                        .font(.caption2)
+                                        .fontWeight(.semibold)
+                                        .foregroundStyle(Theme.accent)
+                                    Text(hint)
+                                        .font(.caption)
+                                        .foregroundStyle(Theme.textSecondary)
+                                }
+                                .padding(10)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .background(Color.yellow.opacity(0.08))
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                                .transition(.opacity.combined(with: .move(edge: .top)))
+                            } else if index == revealedHints {
+                                Button {
+                                    withAnimation(.easeOut(duration: 0.25)) {
+                                        revealedHints += 1
+                                    }
+                                } label: {
+                                    HStack {
+                                        Image(systemName: "eye.slash")
+                                            .font(.caption)
+                                        Text("Tap to reveal Hint \(index + 1)")
+                                            .font(.caption)
+                                    }
+                                    .foregroundStyle(Theme.accent)
+                                    .padding(10)
+                                    .frame(maxWidth: .infinity)
+                                    .background(Theme.primaryDark.opacity(0.5))
+                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                                }
+                            }
+                        }
+                    }
+                    .padding(16)
+                    .background(Theme.card)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                }
+
                 // Code editor
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Solution")
@@ -71,7 +132,7 @@ struct ProblemDetailView: View {
                         .fontWeight(.semibold)
                         .foregroundStyle(Theme.textPrimary)
 
-                    CodeEditorView(text: $viewModel.sourceCode) { focused in
+                    CodeEditorView(text: $viewModel.sourceCode, fontSize: CGFloat(editorFontSize)) { focused in
                         withAnimation(.easeInOut(duration: 0.3)) {
                             isEditorFocused = focused
                         }
@@ -128,6 +189,70 @@ struct ProblemDetailView: View {
                 // Results
                 if let result = viewModel.executionResult {
                     ResultsView(result: result)
+                }
+
+                // Previous Attempts
+                let attempts = SkillXPManager.shared.submissions(for: viewModel.problem.id)
+                if !attempts.isEmpty {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Button {
+                            withAnimation(.easeInOut(duration: 0.2)) {
+                                showHistory.toggle()
+                            }
+                        } label: {
+                            HStack {
+                                Image(systemName: "clock.arrow.circlepath")
+                                    .foregroundStyle(Theme.accent)
+                                Text("Previous Attempts")
+                                    .font(.subheadline)
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(Theme.textPrimary)
+                                Spacer()
+                                Text("\(attempts.count)")
+                                    .font(.caption)
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(Theme.accent)
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 3)
+                                    .background(Theme.accent.opacity(0.15))
+                                    .clipShape(Capsule())
+                                Image(systemName: showHistory ? "chevron.up" : "chevron.down")
+                                    .font(.caption)
+                                    .foregroundStyle(Theme.textSecondary)
+                            }
+                        }
+
+                        if showHistory {
+                            ForEach(attempts) { attempt in
+                                Button {
+                                    viewModel.sourceCode = attempt.sourceCode
+                                } label: {
+                                    HStack {
+                                        Image(systemName: attempt.passed ? "checkmark.circle.fill" : "xmark.circle.fill")
+                                            .foregroundStyle(attempt.passed ? .green : .red)
+                                        VStack(alignment: .leading, spacing: 2) {
+                                            Text(attempt.timestamp, style: .relative)
+                                                .font(.caption)
+                                                .foregroundStyle(Theme.textPrimary)
+                                            Text("\(attempt.testsPassed)/\(attempt.testsTotal) tests passed")
+                                                .font(.caption2)
+                                                .foregroundStyle(Theme.textSecondary)
+                                        }
+                                        Spacer()
+                                        Image(systemName: "arrow.up.doc")
+                                            .font(.caption)
+                                            .foregroundStyle(Theme.accent)
+                                    }
+                                    .padding(10)
+                                    .background(Theme.primaryDark.opacity(0.5))
+                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                                }
+                            }
+                        }
+                    }
+                    .padding(16)
+                    .background(Theme.card)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
             }
             .padding()

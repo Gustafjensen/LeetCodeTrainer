@@ -1,18 +1,23 @@
 import Foundation
 import SwiftUI
+import UIKit
 
 @Observable
 class SkillXPManager {
     static let shared = SkillXPManager()
 
+    var userName: String = ""
+    var profileImage: UIImage?
     var skillXP: [String: Int] = [:]
     var solvedProblems: Set<String> = []
     var completedDailyDates: Set<String> = []
     var unlockedAchievements: Set<String> = []
+    var submissionHistory: [CodeSubmission] = []
 
     /// Cumulative XP thresholds to reach each level.
     static let levelThresholds = [0, 10, 50, 100, 150, 200]
 
+    private let userNameKey = "userName"
     private let storageKey = "skillXP"
     private let solvedKey = "solvedProblems"
     private let dailyCompletionsKey = "completedDailyDates"
@@ -39,9 +44,21 @@ class SkillXPManager {
         }
     }
 
+    private var profileImageURL: URL {
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("profile.jpg")
+    }
+
+    private var submissionsURL: URL {
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("submissions.json")
+    }
+
     private init() {
         migrateToAppGroup()
         load()
+        profileImage = loadProfileImage()
+        submissionHistory = loadSubmissions()
     }
 
     // MARK: - Static level helpers
@@ -189,8 +206,56 @@ class SkillXPManager {
         return newlyUnlocked
     }
 
+    func resetProgress() {
+        skillXP = [:]
+        solvedProblems = []
+        completedDailyDates = []
+        unlockedAchievements = []
+        save()
+    }
+
+    func saveUserName(_ name: String) {
+        userName = name
+        sharedDefaults.set(name, forKey: userNameKey)
+    }
+
+    func saveProfileImage(_ data: Data) {
+        try? data.write(to: profileImageURL)
+        profileImage = UIImage(data: data)
+    }
+
+    private func loadProfileImage() -> UIImage? {
+        guard let data = try? Data(contentsOf: profileImageURL) else { return nil }
+        return UIImage(data: data)
+    }
+
+    // MARK: - Submission history
+
+    func recordSubmission(_ submission: CodeSubmission) {
+        submissionHistory.insert(submission, at: 0)
+        saveSubmissions()
+    }
+
+    func submissions(for problemId: String) -> [CodeSubmission] {
+        submissionHistory.filter { $0.problemId == problemId }
+    }
+
+    private func saveSubmissions() {
+        guard let data = try? JSONEncoder().encode(submissionHistory) else { return }
+        try? data.write(to: submissionsURL)
+    }
+
+    private func loadSubmissions() -> [CodeSubmission] {
+        guard let data = try? Data(contentsOf: submissionsURL),
+              let submissions = try? JSONDecoder().decode([CodeSubmission].self, from: data) else {
+            return []
+        }
+        return submissions
+    }
+
     private func save() {
         let defaults = sharedDefaults
+        defaults.set(userName, forKey: userNameKey)
         defaults.set(skillXP, forKey: storageKey)
         defaults.set(Array(solvedProblems), forKey: solvedKey)
         defaults.set(Array(completedDailyDates), forKey: dailyCompletionsKey)
@@ -199,6 +264,7 @@ class SkillXPManager {
 
     private func load() {
         let defaults = sharedDefaults
+        userName = defaults.string(forKey: userNameKey) ?? ""
         if let stored = defaults.dictionary(forKey: storageKey) as? [String: Int] {
             skillXP = stored
         }

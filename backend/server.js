@@ -4,7 +4,7 @@ const { executeCode } = require('./executor');
 const problems = require('./problems');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 app.use(cors());
 app.use(express.json({ limit: '1mb' }));

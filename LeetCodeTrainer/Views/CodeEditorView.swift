@@ -3,6 +3,7 @@ import UIKit
 
 struct CodeEditorView: UIViewRepresentable {
     @Binding var text: String
+    var fontSize: CGFloat = 14
     var onFocusChange: (Bool) -> Void = { _ in }
 
     func makeCoordinator() -> Coordinator {
@@ -12,7 +13,7 @@ struct CodeEditorView: UIViewRepresentable {
     func makeUIView(context: Context) -> UITextView {
         let textView = UITextView()
         textView.delegate = context.coordinator
-        textView.font = UIFont.monospacedSystemFont(ofSize: 12, weight: .regular)
+        textView.font = UIFont.monospacedSystemFont(ofSize: fontSize, weight: .regular)
         textView.backgroundColor = UIColor(red: 0.06, green: 0.09, blue: 0.25, alpha: 1)
         textView.textColor = UIColor.white
         textView.tintColor = UIColor.white
@@ -120,7 +121,7 @@ struct CodeEditorView: UIViewRepresentable {
             let fullRange = NSRange(location: 0, length: text.utf16.count)
 
             attributed.addAttribute(.font,
-                value: UIFont.monospacedSystemFont(ofSize: 12, weight: .regular), range: fullRange)
+                value: UIFont.monospacedSystemFont(ofSize: parent.fontSize, weight: .regular), range: fullRange)
             attributed.addAttribute(.foregroundColor,
                 value: UIColor.white, range: fullRange)
 
@@ -171,7 +172,7 @@ struct CodeEditorView: UIViewRepresentable {
             textView.attributedText = attributed
             textView.selectedRange = selectedRange
             textView.typingAttributes = [
-                .font: UIFont.monospacedSystemFont(ofSize: 12, weight: .regular),
+                .font: UIFont.monospacedSystemFont(ofSize: parent.fontSize, weight: .regular),
                 .foregroundColor: UIColor.white
             ]
         }

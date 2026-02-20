@@ -2,14 +2,14 @@ const { execFile } = require('child_process');
 const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
 const path = require('path');
-const os = require('os');
 
 const TIMEOUT_MS = 10000;
-const SANDBOX_IMAGE = 'leetcode-python-sandbox';
+const EXEC_TIMEOUT_SECS = 5;
+const TEMP_BASE = '/tmp/leetcode';
 
 async function executeCode(sourceCode, problem) {
     const runId = uuidv4();
-    const tempDir = path.join(os.tmpdir(), `leetcode-${runId}`);
+    const tempDir = path.join(TEMP_BASE, runId);
 
     try {
         fs.mkdirSync(tempDir, { recursive: true });
@@ -34,8 +34,9 @@ async function executeCode(sourceCode, problem) {
 
         const scriptPath = path.join(tempDir, 'solution.py');
         fs.writeFileSync(scriptPath, script);
+        fs.chmodSync(scriptPath, 0o644);
 
-        const result = await runInDocker(scriptPath, tempDir);
+        const result = await runAsSubprocess(scriptPath);
         return result;
     } finally {
         try {
@@ -46,39 +47,29 @@ async function executeCode(sourceCode, problem) {
     }
 }
 
-function runInDocker(scriptPath, tempDir) {
+function runAsSubprocess(scriptPath) {
     return new Promise((resolve) => {
         const args = [
-            'run',
-            '--rm',
-            '--network=none',
-            '--memory=128m',
-            '--cpus=0.5',
-            '--read-only',
-            '--tmpfs', '/tmp:size=10m',
-            '--user', '1000:1000',
-            '-v', `${tempDir}/solution.py:/sandbox/solution.py:ro`,
-            SANDBOX_IMAGE,
-            'timeout', '5', 'python3', '/sandbox/solution.py'
+            String(EXEC_TIMEOUT_SECS),
+            'python3', '-I', '-u',
+            scriptPath
         ];
 
-        execFile('docker', args, {
+        execFile('timeout', args, {
             timeout: TIMEOUT_MS,
-            maxBuffer: 1024 * 1024
+            maxBuffer: 1024 * 1024,
+            uid: 1000,
+            gid: 1000,
+            cwd: path.dirname(scriptPath),
+            env: {
+                PATH: '/usr/local/bin:/usr/bin:/bin',
+                HOME: '/home/runner',
+                PYTHONDONTWRITEBYTECODE: '1',
+                PYTHONHASHSEED: '0',
+            }
         }, (error, stdout, stderr) => {
             if (error) {
-                if (error.killed || error.signal === 'SIGTERM') {
-                    return resolve({
-                        compilationSuccess: false,
-                        runtimeError: 'Time Limit Exceeded (5 seconds)',
-                        testResults: [],
-                        overallStatus: 'error',
-                        runtime: '5000ms',
-                        memory: '0MB'
-                    });
-                }
-
-                if (error.code === 124) {
+                if (error.killed || error.signal === 'SIGTERM' || error.code === 124) {
                     return resolve({
                         compilationSuccess: false,
                         runtimeError: 'Time Limit Exceeded (5 seconds)',

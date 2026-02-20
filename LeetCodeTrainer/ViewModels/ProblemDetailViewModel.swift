@@ -38,6 +38,18 @@ class ProblemDetailViewModel {
             )
             executionResult = result
 
+            let testsPassed = result.testResults.filter { $0.passed }.count
+            let submission = CodeSubmission(
+                id: UUID().uuidString,
+                problemId: problem.id,
+                timestamp: Date(),
+                sourceCode: sourceCode,
+                passed: result.overallStatus == .pass,
+                testsPassed: testsPassed,
+                testsTotal: result.testResults.count
+            )
+            xpManager.recordSubmission(submission)
+
             if result.overallStatus == .pass {
                 let gains = xpManager.awardXP(for: problem)
                 xpGains = gains

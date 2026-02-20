@@ -1,8 +1,10 @@
 import SwiftUI
+import PhotosUI
 
 struct ProfileView: View {
     var problems: [Problem] = []
     private var xpManager: SkillXPManager { .shared }
+    @State private var selectedPhoto: PhotosPickerItem?
 
     private var sortedSkills: [(skill: String, xp: Int)] {
         xpManager.skillXP
@@ -38,10 +40,35 @@ struct ProfileView: View {
                 VStack(spacing: 16) {
                     // Avatar card
                     VStack(spacing: 12) {
-                        Image(systemName: "person.circle.fill")
-                            .font(.system(size: 64))
-                            .foregroundStyle(Theme.accent)
-                        Text("Guest User")
+                        PhotosPicker(selection: $selectedPhoto, matching: .images) {
+                            ZStack(alignment: .bottomTrailing) {
+                                if let profileImage = xpManager.profileImage {
+                                    Image(uiImage: profileImage)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 80, height: 80)
+                                        .clipShape(Circle())
+                                } else {
+                                    Image(systemName: "person.circle.fill")
+                                        .font(.system(size: 72))
+                                        .foregroundStyle(Theme.accent)
+                                        .frame(width: 80, height: 80)
+                                }
+                                Image(systemName: "camera.circle.fill")
+                                    .font(.system(size: 24))
+                                    .foregroundStyle(Theme.accent)
+                                    .background(Circle().fill(Theme.card).frame(width: 22, height: 22))
+                            }
+                        }
+                        .onChange(of: selectedPhoto) { _, newValue in
+                            guard let item = newValue else { return }
+                            Task {
+                                if let data = try? await item.loadTransferable(type: Data.self) {
+                                    xpManager.saveProfileImage(data)
+                                }
+                            }
+                        }
+                        Text(xpManager.userName.isEmpty ? "Guest User" : xpManager.userName)
                             .font(.title3)
                             .fontWeight(.semibold)
                             .foregroundStyle(Theme.textPrimary)
