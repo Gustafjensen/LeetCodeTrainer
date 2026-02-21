@@ -27,7 +27,8 @@
       "For each element, check if the complement (target minus current element) already exists in your hash map.",
       "Store each number as a key and its index as the value. When you find a complement match, return both indices immediately."
     ],
-    "solutionExplanation": "Use a hash map to store each number's index as you iterate. For each element, check if target - current exists in the map. Time: O(n), Space: O(n)."
+    "solutionExplanation": "Use a hash map to store each number's index as you iterate. For each element, check if target - current exists in the map. Time: O(n), Space: O(n).",
+    "optimalCode": "def twoSum(nums: list[int], target: int) -> list[int]:\n    seen = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in seen:\n            return [seen[complement], i]\n        seen[num] = i"
   },
   {
     "id": "reverse-string",
@@ -57,7 +58,8 @@
       "Swap the characters at the left and right pointers, then move both pointers toward the center.",
       "Continue swapping until the left pointer meets or passes the right pointer. No extra space is needed beyond the two pointer variables."
     ],
-    "solutionExplanation": "Use two pointers starting at the beginning and end, swapping characters and moving inward. This reverses in-place with no extra space. Time: O(n), Space: O(1)."
+    "solutionExplanation": "Use two pointers starting at the beginning and end, swapping characters and moving inward. This reverses in-place with no extra space. Time: O(n), Space: O(1).",
+    "optimalCode": "def reverseString(s: list[str]) -> list[str]:\n    left, right = 0, len(s) - 1\n    while left < right:\n        s[left], s[right] = s[right], s[left]\n        left += 1\n        right -= 1\n    return s"
   },
   {
     "id": "fizz-buzz",
@@ -92,7 +94,8 @@
       "Check divisibility by 15 first (for FizzBuzz), then by 3 (for Fizz), then by 5 (for Buzz), using the modulo operator.",
       "The order of checks matters: test the combined condition (divisible by both 3 and 5) before the individual conditions to avoid incorrect outputs."
     ],
-    "solutionExplanation": "Iterate from 1 to n, checking divisibility by 15 first, then 3, then 5, appending the appropriate string. Time: O(n), Space: O(n)."
+    "solutionExplanation": "Iterate from 1 to n, checking divisibility by 15 first, then 3, then 5, appending the appropriate string. Time: O(n), Space: O(n).",
+    "optimalCode": "def fizzBuzz(n: int) -> list[str]:\n    result = []\n    for i in range(1, n + 1):\n        if i % 15 == 0:\n            result.append(\"FizzBuzz\")\n        elif i % 3 == 0:\n            result.append(\"Fizz\")\n        elif i % 5 == 0:\n            result.append(\"Buzz\")\n        else:\n            result.append(str(i))\n    return result"
   },
   {
     "id": "valid-palindrome",
@@ -127,7 +130,8 @@
       "Skip non-alphanumeric characters by advancing the pointers, and compare characters in lowercase.",
       "Be careful with edge cases: empty strings and strings with only non-alphanumeric characters should return true."
     ],
-    "solutionExplanation": "Use two pointers from both ends, skipping non-alphanumeric characters and comparing lowercase versions. Time: O(n), Space: O(1)."
+    "solutionExplanation": "Use two pointers from both ends, skipping non-alphanumeric characters and comparing lowercase versions. Time: O(n), Space: O(1).",
+    "optimalCode": "def isPalindrome(s: str) -> bool:\n    left, right = 0, len(s) - 1\n    while left < right:\n        while left < right and not s[left].isalnum():\n            left += 1\n        while left < right and not s[right].isalnum():\n            right -= 1\n        if s[left].lower() != s[right].lower():\n            return False\n        left += 1\n        right -= 1\n    return True"
   },
   {
     "id": "climbing-stairs",
@@ -157,7 +161,8 @@
       "This follows the Fibonacci pattern: the ways to reach step n equals the sum of ways to reach step n-1 and step n-2.",
       "You only need two variables to track the previous two values instead of a full array. Base cases are: 1 way for step 1, 2 ways for step 2."
     ],
-    "solutionExplanation": "This is a Fibonacci-like dynamic programming problem. Each step can be reached from one or two steps below, so dp[i] = dp[i-1] + dp[i-2]. Time: O(n), Space: O(1)."
+    "solutionExplanation": "This is a Fibonacci-like dynamic programming problem. Each step can be reached from one or two steps below, so dp[i] = dp[i-1] + dp[i-2]. Time: O(n), Space: O(1).",
+    "optimalCode": "def climbStairs(n: int) -> int:\n    if n <= 2:\n        return n\n    a, b = 1, 2\n    for _ in range(3, n + 1):\n        a, b = b, a + b\n    return b"
   },
   {
     "id": "contains-duplicate",
@@ -192,7 +197,8 @@
       "Use a set to track elements as you iterate. Sets provide O(1) lookup time.",
       "For each element, check if it already exists in the set before adding it. If it does, return true immediately."
     ],
-    "solutionExplanation": "Add each element to a set while iterating. If an element is already in the set, return true. Time: O(n), Space: O(n)."
+    "solutionExplanation": "Add each element to a set while iterating. If an element is already in the set, return true. Time: O(n), Space: O(n).",
+    "optimalCode": "def containsDuplicate(nums: list[int]) -> bool:\n    seen = set()\n    for num in nums:\n        if num in seen:\n            return True\n        seen.add(num)\n    return False"
   },
   {
     "id": "valid-anagram",
@@ -222,7 +228,8 @@
       "Count the frequency of each character in both strings and compare the counts.",
       "You can use a single frequency array of size 26 (for lowercase letters): increment for one string, decrement for the other, then check all counts are zero."
     ],
-    "solutionExplanation": "Count character frequencies using a hash map or Counter for both strings and compare. Alternatively, sort both strings and check equality. Time: O(n), Space: O(1) since alphabet is fixed."
+    "solutionExplanation": "Count character frequencies using a hash map or Counter for both strings and compare. Alternatively, sort both strings and check equality. Time: O(n), Space: O(1) since alphabet is fixed.",
+    "optimalCode": "def isAnagram(s: str, t: str) -> bool:\n    if len(s) != len(t):\n        return False\n    count = {}\n    for c in s:\n        count[c] = count.get(c, 0) + 1\n    for c in t:\n        count[c] = count.get(c, 0) - 1\n        if count[c] < 0:\n            return False\n    return True"
   },
   {
     "id": "palindrome-number",
@@ -256,7 +263,8 @@
       "You can reverse just the second half of the number and compare it to the first half.",
       "Negative numbers are never palindromes. Numbers ending in 0 (except 0 itself) are not palindromes. Stop reversing when the reversed half is greater than or equal to the remaining number."
     ],
-    "solutionExplanation": "Reverse the second half of the number and compare with the first half. Negative numbers and numbers ending in 0 (except 0 itself) are not palindromes. Time: O(log n), Space: O(1)."
+    "solutionExplanation": "Reverse the second half of the number and compare with the first half. Negative numbers and numbers ending in 0 (except 0 itself) are not palindromes. Time: O(log n), Space: O(1).",
+    "optimalCode": "def isPalindromeNumber(x: int) -> bool:\n    if x < 0 or (x % 10 == 0 and x != 0):\n        return False\n    reversed_half = 0\n    while x > reversed_half:\n        reversed_half = reversed_half * 10 + x % 10\n        x //= 10\n    return x == reversed_half or x == reversed_half // 10"
   },
   {
     "id": "roman-to-integer",
@@ -291,7 +299,8 @@
       "Iterate through the string; if the current value is less than the next value, subtract it instead of adding it.",
       "Handle the subtraction cases (IV, IX, XL, XC, CD, CM) by comparing adjacent characters. Process the string from left to right."
     ],
-    "solutionExplanation": "Iterate through the string, adding the value of each symbol. If a smaller value precedes a larger one, subtract it instead. Time: O(n), Space: O(1)."
+    "solutionExplanation": "Iterate through the string, adding the value of each symbol. If a smaller value precedes a larger one, subtract it instead. Time: O(n), Space: O(1).",
+    "optimalCode": "def romanToInt(s: str) -> int:\n    values = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}\n    result = 0\n    for i in range(len(s)):\n        if i + 1 < len(s) and values[s[i]] < values[s[i + 1]]:\n            result -= values[s[i]]\n        else:\n            result += values[s[i]]\n    return result"
   },
   {
     "id": "longest-common-prefix",
@@ -320,7 +329,8 @@
       "Use the first string as a reference and check each character position against all other strings.",
       "Stop as soon as you find a mismatch or reach the end of the shortest string. Return the substring up to that position."
     ],
-    "solutionExplanation": "Compare characters at each position across all strings. Stop when characters differ or the shortest string ends. Time: O(n * m) where m is prefix length, Space: O(1)."
+    "solutionExplanation": "Compare characters at each position across all strings. Stop when characters differ or the shortest string ends. Time: O(n * m) where m is prefix length, Space: O(1).",
+    "optimalCode": "def longestCommonPrefix(strs: list[str]) -> str:\n    if not strs:\n        return \"\"\n    for i in range(len(strs[0])):\n        for s in strs[1:]:\n            if i >= len(s) or s[i] != strs[0][i]:\n                return strs[0][:i]\n    return strs[0]"
   },
   {
     "id": "length-of-last-word",
@@ -354,7 +364,8 @@
       "First skip any trailing spaces, then count characters until you hit another space or the start of the string.",
       "Alternatively, use built-in string trimming and splitting, but be mindful of multiple consecutive spaces."
     ],
-    "solutionExplanation": "Strip trailing spaces, then count backwards from the end until hitting a space or the start. Time: O(n), Space: O(1)."
+    "solutionExplanation": "Strip trailing spaces, then count backwards from the end until hitting a space or the start. Time: O(n), Space: O(1).",
+    "optimalCode": "def lengthOfLastWord(s: str) -> int:\n    return len(s.rstrip().split(' ')[-1])"
   },
   {
     "id": "search-insert-position",
@@ -389,7 +400,8 @@
       "Use standard binary search, but when the target is not found, the left pointer will be at the correct insertion position.",
       "Maintain left and right bounds. When left > right, return left as the insertion index."
     ],
-    "solutionExplanation": "Use binary search to find the target or its insertion point. Maintain left and right bounds, returning left when the loop ends. Time: O(log n), Space: O(1)."
+    "solutionExplanation": "Use binary search to find the target or its insertion point. Maintain left and right bounds, returning left when the loop ends. Time: O(log n), Space: O(1).",
+    "optimalCode": "def searchInsert(nums: list[int], target: int) -> int:\n    left, right = 0, len(nums) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if nums[mid] == target:\n            return mid\n        elif nums[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return left"
   },
   {
     "id": "single-number",
@@ -424,7 +436,8 @@
       "XOR has the property that a ^ a = 0 and a ^ 0 = a, so XORing all elements cancels out duplicates.",
       "Simply XOR all elements in the array together. The final result is the single number since all pairs cancel to zero."
     ],
-    "solutionExplanation": "XOR all elements together. Since a ^ a = 0 and a ^ 0 = a, all pairs cancel out leaving the single number. Time: O(n), Space: O(1)."
+    "solutionExplanation": "XOR all elements together. Since a ^ a = 0 and a ^ 0 = a, all pairs cancel out leaving the single number. Time: O(n), Space: O(1).",
+    "optimalCode": "def singleNumber(nums: list[int]) -> int:\n    result = 0\n    for num in nums:\n        result ^= num\n    return result"
   },
   {
     "id": "missing-number",
@@ -459,7 +472,8 @@
       "The expected sum is n * (n + 1) / 2. Subtract the actual array sum to find the missing number.",
       "Alternatively, XOR all numbers from 0 to n with all array elements. Paired values cancel, leaving the missing number."
     ],
-    "solutionExplanation": "Use the sum formula n*(n+1)/2 and subtract the array sum to find the missing number. Alternatively, use XOR. Time: O(n), Space: O(1)."
+    "solutionExplanation": "Use the sum formula n*(n+1)/2 and subtract the array sum to find the missing number. Alternatively, use XOR. Time: O(n), Space: O(1).",
+    "optimalCode": "def missingNumber(nums: list[int]) -> int:\n    n = len(nums)\n    return n * (n + 1) // 2 - sum(nums)"
   },
   {
     "id": "ransom-note",
@@ -494,7 +508,8 @@
       "Build a frequency map of magazine characters, then check if each ransom note character has sufficient count.",
       "Decrement counts as you use characters from the magazine. If any character count goes below zero, the ransom note cannot be constructed."
     ],
-    "solutionExplanation": "Count character frequencies in magazine using a hash map, then verify each character in ransomNote has sufficient count. Time: O(n + m), Space: O(1)."
+    "solutionExplanation": "Count character frequencies in magazine using a hash map, then verify each character in ransomNote has sufficient count. Time: O(n + m), Space: O(1).",
+    "optimalCode": "def canConstruct(ransomNote: str, magazine: str) -> bool:\n    count = {}\n    for c in magazine:\n        count[c] = count.get(c, 0) + 1\n    for c in ransomNote:\n        if count.get(c, 0) <= 0:\n            return False\n        count[c] -= 1\n    return True"
   },
   {
     "id": "isomorphic-strings",
@@ -529,7 +544,8 @@
       "You need two mappings: one from s to t and one from t to s, to ensure the mapping is bidirectional (one-to-one).",
       "If a character in s already maps to a different character in t (or vice versa), the strings are not isomorphic. Check both directions at each position."
     ],
-    "solutionExplanation": "Use two hash maps to track character mappings in both directions (s->t and t->s). If any mapping conflicts, return false. Time: O(n), Space: O(1)."
+    "solutionExplanation": "Use two hash maps to track character mappings in both directions (s->t and t->s). If any mapping conflicts, return false. Time: O(n), Space: O(1).",
+    "optimalCode": "def isIsomorphic(s: str, t: str) -> bool:\n    s_to_t = {}\n    t_to_s = {}\n    for cs, ct in zip(s, t):\n        if cs in s_to_t and s_to_t[cs] != ct:\n            return False\n        if ct in t_to_s and t_to_s[ct] != cs:\n            return False\n        s_to_t[cs] = ct\n        t_to_s[ct] = cs\n    return True"
   },
   {
     "id": "best-time-to-buy-sell-stock",
@@ -559,7 +575,8 @@
       "Keep track of the minimum price seen so far as you iterate through the array.",
       "At each day, calculate the profit if you sold today (current price minus minimum so far) and update the maximum profit. Remember you must buy before you sell."
     ],
-    "solutionExplanation": "Track the minimum price seen so far while iterating. At each step, calculate profit if selling today and update the maximum profit. Time: O(n), Space: O(1)."
+    "solutionExplanation": "Track the minimum price seen so far while iterating. At each step, calculate profit if selling today and update the maximum profit. Time: O(n), Space: O(1).",
+    "optimalCode": "def maxProfit(prices: list[int]) -> int:\n    min_price = float('inf')\n    max_profit = 0\n    for price in prices:\n        min_price = min(min_price, price)\n        max_profit = max(max_profit, price - min_price)\n    return max_profit"
   },
   {
     "id": "move-zeroes",
@@ -589,7 +606,8 @@
       "Iterate through the array; whenever you find a non-zero element, place it at the write pointer position and advance the write pointer.",
       "After all non-zero elements are moved forward, fill the remaining positions with zeros."
     ],
-    "solutionExplanation": "Use a two-pointer approach: one pointer tracks the position for the next non-zero element. Move non-zero elements forward and fill remaining positions with zeros. Time: O(n), Space: O(1)."
+    "solutionExplanation": "Use a two-pointer approach: one pointer tracks the position for the next non-zero element. Move non-zero elements forward and fill remaining positions with zeros. Time: O(n), Space: O(1).",
+    "optimalCode": "def moveZeroes(nums: list[int]) -> list[int]:\n    write = 0\n    for read in range(len(nums)):\n        if nums[read] != 0:\n            nums[write], nums[read] = nums[read], nums[write]\n            write += 1\n    return nums"
   },
   {
     "id": "plus-one",
@@ -624,7 +642,8 @@
       "If a digit is 9, it becomes 0 and you carry 1 to the next digit. Otherwise, increment and return.",
       "If the carry propagates past the first digit (e.g., 999 becomes 1000), prepend a 1 to the array."
     ],
-    "solutionExplanation": "Iterate from the last digit backward, adding carry. If a digit becomes 10, set to 0 and carry 1. If carry remains after the loop, prepend 1. Time: O(n), Space: O(1)."
+    "solutionExplanation": "Iterate from the last digit backward, adding carry. If a digit becomes 10, set to 0 and carry 1. If carry remains after the loop, prepend 1. Time: O(n), Space: O(1).",
+    "optimalCode": "def plusOne(digits: list[int]) -> list[int]:\n    for i in range(len(digits) - 1, -1, -1):\n        if digits[i] < 9:\n            digits[i] += 1\n            return digits\n        digits[i] = 0\n    return [1] + digits"
   },
   {
     "id": "max-subarray",
@@ -659,7 +678,8 @@
       "Maintain a running sum. If the running sum becomes negative, reset it to the current element since a negative prefix only hurts.",
       "Track the global maximum separately from the running sum. Initialize both with the first element to handle all-negative arrays correctly."
     ],
-    "solutionExplanation": "Use Kadane's algorithm: maintain a running sum, resetting to the current element when the sum becomes negative. Track the maximum sum seen. Time: O(n), Space: O(1)."
+    "solutionExplanation": "Use Kadane's algorithm: maintain a running sum, resetting to the current element when the sum becomes negative. Track the maximum sum seen. Time: O(n), Space: O(1).",
+    "optimalCode": "def maxSubArray(nums: list[int]) -> int:\n    max_sum = nums[0]\n    current_sum = nums[0]\n    for i in range(1, len(nums)):\n        current_sum = max(nums[i], current_sum + nums[i])\n        max_sum = max(max_sum, current_sum)\n    return max_sum"
   },
   {
     "id": "valid-parentheses",
@@ -694,7 +714,8 @@
       "Push opening brackets onto the stack. When you encounter a closing bracket, check if the top of the stack is the matching opening bracket.",
       "If the stack is empty when you see a closing bracket, or the brackets don't match, return false. The string is valid only if the stack is empty at the end."
     ],
-    "solutionExplanation": "Use a stack: push opening brackets, and for closing brackets, check if the top of the stack matches. The string is valid if the stack is empty at the end. Time: O(n), Space: O(n)."
+    "solutionExplanation": "Use a stack: push opening brackets, and for closing brackets, check if the top of the stack matches. The string is valid if the stack is empty at the end. Time: O(n), Space: O(n).",
+    "optimalCode": "def isValid(s: str) -> bool:\n    stack = []\n    mapping = {')': '(', '}': '{', ']': '['}\n    for char in s:\n        if char in mapping:\n            if not stack or stack[-1] != mapping[char]:\n                return False\n            stack.pop()\n        else:\n            stack.append(char)\n    return len(stack) == 0"
   },
   {
     "id": "merge-sorted-lists",
@@ -729,7 +750,8 @@
       "At each step, append the smaller of the two current elements to the result and advance that pointer.",
       "When one list is exhausted, append all remaining elements from the other list."
     ],
-    "solutionExplanation": "Use two pointers to compare elements from both lists, appending the smaller one to the result. Append any remaining elements. Time: O(n + m), Space: O(n + m)."
+    "solutionExplanation": "Use two pointers to compare elements from both lists, appending the smaller one to the result. Append any remaining elements. Time: O(n + m), Space: O(n + m).",
+    "optimalCode": "def mergeTwoLists(list1: list[int], list2: list[int]) -> list[int]:\n    result = []\n    i, j = 0, 0\n    while i < len(list1) and j < len(list2):\n        if list1[i] <= list2[j]:\n            result.append(list1[i])\n            i += 1\n        else:\n            result.append(list2[j])\n            j += 1\n    result.extend(list1[i:])\n    result.extend(list2[j:])\n    return result"
   },
   {
     "id": "group-anagrams",
@@ -765,7 +787,8 @@
       "Use the sorted version of each string as a key in a hash map, grouping strings with the same key.",
       "Alternatively, use a character count tuple as the key (e.g., count of each letter a-z) for potentially better performance than sorting each string."
     ],
-    "solutionExplanation": "Sort each string to create a key, and group strings with the same sorted key using a hash map. Time: O(n * k log k) where k is max string length, Space: O(n * k)."
+    "solutionExplanation": "Sort each string to create a key, and group strings with the same sorted key using a hash map. Time: O(n * k log k) where k is max string length, Space: O(n * k).",
+    "optimalCode": "def groupAnagrams(strs: list[str]) -> list[list[str]]:\n    groups = {}\n    for s in strs:\n        key = ''.join(sorted(s))\n        if key not in groups:\n            groups[key] = []\n        groups[key].append(s)\n    return list(groups.values())"
   },
   {
     "id": "product-except-self",
@@ -794,7 +817,8 @@
       "First pass: build an array of prefix products (product of all elements before index i). Second pass: multiply by suffix products (product of all elements after index i).",
       "You can use the output array for prefix products and a single variable for the running suffix product to achieve O(1) extra space."
     ],
-    "solutionExplanation": "Make two passes: first compute prefix products from the left, then multiply with suffix products from the right. This avoids division. Time: O(n), Space: O(1) excluding output."
+    "solutionExplanation": "Make two passes: first compute prefix products from the left, then multiply with suffix products from the right. This avoids division. Time: O(n), Space: O(1) excluding output.",
+    "optimalCode": "def productExceptSelf(nums: list[int]) -> list[int]:\n    n = len(nums)\n    result = [1] * n\n    prefix = 1\n    for i in range(n):\n        result[i] = prefix\n        prefix *= nums[i]\n    suffix = 1\n    for i in range(n - 1, -1, -1):\n        result[i] *= suffix\n        suffix *= nums[i]\n    return result"
   },
   {
     "id": "container-with-most-water",
@@ -824,7 +848,8 @@
       "Calculate the water area as min(height[left], height[right]) * (right - left). Then move the pointer pointing to the shorter line inward.",
       "Moving the shorter line is optimal because the width decreases regardless, so only a taller line can potentially increase the area. The taller line could never benefit from moving inward."
     ],
-    "solutionExplanation": "Use two pointers at both ends. Calculate the area, then move the pointer with the shorter line inward. The shorter line limits the area, so moving it might find a taller one. Time: O(n), Space: O(1)."
+    "solutionExplanation": "Use two pointers at both ends. Calculate the area, then move the pointer with the shorter line inward. The shorter line limits the area, so moving it might find a taller one. Time: O(n), Space: O(1).",
+    "optimalCode": "def maxArea(height: list[int]) -> int:\n    left, right = 0, len(height) - 1\n    max_area = 0\n    while left < right:\n        area = min(height[left], height[right]) * (right - left)\n        max_area = max(max_area, area)\n        if height[left] < height[right]:\n            left += 1\n        else:\n            right -= 1\n    return max_area"
   },
   {
     "id": "three-sum",
@@ -860,7 +885,8 @@
       "For each element, use two pointers on the remaining elements to find pairs that sum to the negative of the current element.",
       "Skip duplicate values for the outer loop and both inner pointers to avoid duplicate triplets. If the current element is positive, you can break early since no three positive numbers sum to zero."
     ],
-    "solutionExplanation": "Sort the array, then for each element use two pointers on the remaining elements to find pairs that sum to the negative of the current element. Skip duplicates. Time: O(n²), Space: O(1)."
+    "solutionExplanation": "Sort the array, then for each element use two pointers on the remaining elements to find pairs that sum to the negative of the current element. Skip duplicates. Time: O(n²), Space: O(1).",
+    "optimalCode": "def threeSum(nums: list[int]) -> list[list[int]]:\n    nums.sort()\n    result = []\n    for i in range(len(nums) - 2):\n        if i > 0 and nums[i] == nums[i - 1]:\n            continue\n        left, right = i + 1, len(nums) - 1\n        while left < right:\n            total = nums[i] + nums[left] + nums[right]\n            if total < 0:\n                left += 1\n            elif total > 0:\n                right -= 1\n            else:\n                result.append([nums[i], nums[left], nums[right]])\n                while left < right and nums[left] == nums[left + 1]:\n                    left += 1\n                while left < right and nums[right] == nums[right - 1]:\n                    right -= 1\n                left += 1\n                right -= 1\n    return result"
   },
   {
     "id": "house-robber",
@@ -890,7 +916,8 @@
       "At each house, you have two choices: rob it (add its value to the best from two houses ago) or skip it (keep the best from the previous house).",
       "The recurrence is dp[i] = max(dp[i-1], dp[i-2] + nums[i]). You only need two variables instead of a full array."
     ],
-    "solutionExplanation": "Dynamic programming where dp[i] = max(dp[i-1], dp[i-2] + nums[i]). At each house, choose to rob it (adding to two houses ago) or skip it. Time: O(n), Space: O(1)."
+    "solutionExplanation": "Dynamic programming where dp[i] = max(dp[i-1], dp[i-2] + nums[i]). At each house, choose to rob it (adding to two houses ago) or skip it. Time: O(n), Space: O(1).",
+    "optimalCode": "def rob(nums: list[int]) -> int:\n    if not nums:\n        return 0\n    if len(nums) == 1:\n        return nums[0]\n    prev2, prev1 = 0, 0\n    for num in nums:\n        curr = max(prev1, prev2 + num)\n        prev2 = prev1\n        prev1 = curr\n    return prev1"
   },
   {
     "id": "coin-change",
@@ -924,7 +951,8 @@
       "Create a dp array where dp[i] represents the minimum coins needed to make amount i. For each amount, try subtracting each coin denomination.",
       "Initialize dp[0] = 0 and all other values to amount + 1 (representing infinity). If dp[amount] is still greater than amount, return -1."
     ],
-    "solutionExplanation": "Use bottom-up dynamic programming. dp[amount] = min coins needed. For each amount, try each coin: dp[i] = min(dp[i], dp[i-coin] + 1). Time: O(amount * coins), Space: O(amount)."
+    "solutionExplanation": "Use bottom-up dynamic programming. dp[amount] = min coins needed. For each amount, try each coin: dp[i] = min(dp[i], dp[i-coin] + 1). Time: O(amount * coins), Space: O(amount).",
+    "optimalCode": "def coinChange(coins: list[int], amount: int) -> int:\n    dp = [float('inf')] * (amount + 1)\n    dp[0] = 0\n    for i in range(1, amount + 1):\n        for coin in coins:\n            if coin <= i:\n                dp[i] = min(dp[i], dp[i - coin] + 1)\n    return dp[amount] if dp[amount] != float('inf') else -1"
   },
   {
     "id": "unique-paths",
@@ -954,7 +982,8 @@
       "Use dynamic programming: dp[i][j] = dp[i-1][j] + dp[i][j-1]. Initialize the first row and first column to 1.",
       "You can optimize space to a single row, updating each cell by adding the value from above (already in the row) to the value from the left."
     ],
-    "solutionExplanation": "Dynamic programming on a grid where dp[i][j] = dp[i-1][j] + dp[i][j-1]. Each cell can only be reached from above or the left. Can optimize to a single row. Time: O(m*n), Space: O(n)."
+    "solutionExplanation": "Dynamic programming on a grid where dp[i][j] = dp[i-1][j] + dp[i][j-1]. Each cell can only be reached from above or the left. Can optimize to a single row. Time: O(m*n), Space: O(n).",
+    "optimalCode": "def uniquePaths(m: int, n: int) -> int:\n    dp = [1] * n\n    for i in range(1, m):\n        for j in range(1, n):\n            dp[j] += dp[j - 1]\n    return dp[n - 1]"
   },
   {
     "id": "jump-game",
@@ -984,7 +1013,8 @@
       "At each position, update the maximum reachable index as max(maxReach, i + nums[i]).",
       "If at any point the current index exceeds the maximum reachable index, you are stuck and should return false. If maxReach reaches the last index, return true."
     ],
-    "solutionExplanation": "Greedy approach: track the farthest reachable index. Iterate through the array updating the max reach. If current index exceeds max reach, return false. Time: O(n), Space: O(1)."
+    "solutionExplanation": "Greedy approach: track the farthest reachable index. Iterate through the array updating the max reach. If current index exceeds max reach, return false. Time: O(n), Space: O(1).",
+    "optimalCode": "def canJump(nums: list[int]) -> bool:\n    max_reach = 0\n    for i in range(len(nums)):\n        if i > max_reach:\n            return False\n        max_reach = max(max_reach, i + nums[i])\n    return True"
   },
   {
     "id": "sort-colors",
@@ -1015,7 +1045,8 @@
       "Use pointers for the boundary of 0s (low), current element (mid), and boundary of 2s (high). Swap elements to their correct regions.",
       "When mid finds a 0, swap with low and advance both. When mid finds a 2, swap with high and decrement high (don't advance mid since the swapped element needs checking). When mid finds a 1, just advance mid."
     ],
-    "solutionExplanation": "Use the Dutch National Flag algorithm with three pointers (low, mid, high). Swap 0s to the front, 2s to the back, leaving 1s in the middle. Time: O(n), Space: O(1)."
+    "solutionExplanation": "Use the Dutch National Flag algorithm with three pointers (low, mid, high). Swap 0s to the front, 2s to the back, leaving 1s in the middle. Time: O(n), Space: O(1).",
+    "optimalCode": "def sortColors(nums: list[int]) -> list[int]:\n    low, mid, high = 0, 0, len(nums) - 1\n    while mid <= high:\n        if nums[mid] == 0:\n            nums[low], nums[mid] = nums[mid], nums[low]\n            low += 1\n            mid += 1\n        elif nums[mid] == 1:\n            mid += 1\n        else:\n            nums[mid], nums[high] = nums[high], nums[mid]\n            high -= 1\n    return nums"
   },
   {
     "id": "min-stack",
@@ -1040,7 +1071,8 @@
       "Use an auxiliary stack that stores the current minimum at each level. Push to the min stack whenever a new minimum is encountered.",
       "When popping, also pop from the min stack if the popped value equals the current minimum. The top of the min stack always gives the current minimum in O(1)."
     ],
-    "solutionExplanation": "Use two stacks: one for values and one for tracking minimums. Push to the min stack only when the value is <= current minimum. Time: O(1) per operation, Space: O(n)."
+    "solutionExplanation": "Use two stacks: one for values and one for tracking minimums. Push to the min stack only when the value is <= current minimum. Time: O(1) per operation, Space: O(n).",
+    "optimalCode": "def minStack(operations: list[str], arguments: list[list]) -> list:\n    stack = []\n    min_stack = []\n    results = []\n    for op, args in zip(operations, arguments):\n        if op == 'push':\n            val = args[0]\n            stack.append(val)\n            if not min_stack or val <= min_stack[-1]:\n                min_stack.append(val)\n            results.append(None)\n        elif op == 'pop':\n            val = stack.pop()\n            if val == min_stack[-1]:\n                min_stack.pop()\n            results.append(None)\n        elif op == 'top':\n            results.append(stack[-1])\n        elif op == 'getMin':\n            results.append(min_stack[-1])\n    return results"
   },
   {
     "id": "search-rotated-array",
@@ -1075,7 +1107,8 @@
       "At each step, determine which half is sorted by comparing the mid element with the left or right boundary. Then check if the target falls within the sorted half.",
       "If the target is in the sorted half, narrow the search there. Otherwise, search the other half. Be careful with equal comparisons at boundaries."
     ],
-    "solutionExplanation": "Modified binary search: determine which half is sorted, then check if the target lies in that sorted half. Narrow the search accordingly. Time: O(log n), Space: O(1)."
+    "solutionExplanation": "Modified binary search: determine which half is sorted, then check if the target lies in that sorted half. Narrow the search accordingly. Time: O(log n), Space: O(1).",
+    "optimalCode": "def search(nums: list[int], target: int) -> int:\n    left, right = 0, len(nums) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if nums[mid] == target:\n            return mid\n        if nums[left] <= nums[mid]:\n            if nums[left] <= target < nums[mid]:\n                right = mid - 1\n            else:\n                left = mid + 1\n        else:\n            if nums[mid] < target <= nums[right]:\n                left = mid + 1\n            else:\n                right = mid - 1\n    return -1"
   },
   {
     "id": "merge-intervals",
@@ -1105,7 +1138,8 @@
       "Iterate through sorted intervals; if the current interval overlaps with the previous one (current start <= previous end), merge them by updating the end to max of both ends.",
       "Keep a result list. An interval overlaps with the last merged interval if its start is less than or equal to the last merged interval's end."
     ],
-    "solutionExplanation": "Sort intervals by start time. Iterate and merge overlapping intervals by comparing the current start with the previous end. Time: O(n log n), Space: O(n)."
+    "solutionExplanation": "Sort intervals by start time. Iterate and merge overlapping intervals by comparing the current start with the previous end. Time: O(n log n), Space: O(n).",
+    "optimalCode": "def merge(intervals: list[list[int]]) -> list[list[int]]:\n    intervals.sort(key=lambda x: x[0])\n    merged = [intervals[0]]\n    for start, end in intervals[1:]:\n        if start <= merged[-1][1]:\n            merged[-1][1] = max(merged[-1][1], end)\n        else:\n            merged.append([start, end])\n    return merged"
   },
   {
     "id": "remove-duplicates-sorted",
@@ -1135,7 +1169,8 @@
       "Use a slow pointer for the write position and a fast pointer to scan. When the fast pointer finds a new value, write it at the slow pointer position.",
       "Start the slow pointer at index 1 (first element is always unique). Compare each element with the previous unique element, not with its adjacent element."
     ],
-    "solutionExplanation": "Use a slow pointer for the write position and a fast pointer to scan. Write unique elements at the slow pointer position. Time: O(n), Space: O(1)."
+    "solutionExplanation": "Use a slow pointer for the write position and a fast pointer to scan. Write unique elements at the slow pointer position. Time: O(n), Space: O(1).",
+    "optimalCode": "def removeDuplicates(nums: list[int]) -> int:\n    if not nums:\n        return 0\n    write = 1\n    for read in range(1, len(nums)):\n        if nums[read] != nums[write - 1]:\n            nums[write] = nums[read]\n            write += 1\n    return write"
   },
   {
     "id": "longest-substring-no-repeat",
@@ -1171,7 +1206,8 @@
       "Expand the window by moving the right pointer. When a duplicate is found, shrink from the left until the duplicate is removed.",
       "For optimization, use a hash map storing each character's last index. When a duplicate is found, jump the left pointer directly past the previous occurrence."
     ],
-    "solutionExplanation": "Use a sliding window with a hash set. Expand the right boundary, and shrink from the left when a duplicate is found. Track the maximum window size. Time: O(n), Space: O(min(n, alphabet))."
+    "solutionExplanation": "Use a sliding window with a hash set. Expand the right boundary, and shrink from the left when a duplicate is found. Track the maximum window size. Time: O(n), Space: O(min(n, alphabet)).",
+    "optimalCode": "def lengthOfLongestSubstring(s: str) -> int:\n    char_index = {}\n    left = 0\n    max_len = 0\n    for right in range(len(s)):\n        if s[right] in char_index and char_index[s[right]] >= left:\n            left = char_index[s[right]] + 1\n        char_index[s[right]] = right\n        max_len = max(max_len, right - left + 1)\n    return max_len"
   },
   {
     "id": "best-time-buy-sell-stock-ii",
@@ -1206,7 +1242,8 @@
       "Think greedily: capture every upward price movement. If tomorrow's price is higher than today's, buy today and sell tomorrow.",
       "Sum up all positive differences between consecutive days. This is equivalent to capturing every profitable transaction, no matter how small."
     ],
-    "solutionExplanation": "Greedy approach: add up all positive price differences between consecutive days. Every profitable day-to-day increase contributes to the total. Time: O(n), Space: O(1)."
+    "solutionExplanation": "Greedy approach: add up all positive price differences between consecutive days. Every profitable day-to-day increase contributes to the total. Time: O(n), Space: O(1).",
+    "optimalCode": "def maxProfitII(prices: list[int]) -> int:\n    profit = 0\n    for i in range(1, len(prices)):\n        if prices[i] > prices[i - 1]:\n            profit += prices[i] - prices[i - 1]\n    return profit"
   },
   {
     "id": "rotate-array",
@@ -1236,7 +1273,8 @@
       "The trick is three reversals: reverse the entire array, then reverse the first k elements, then reverse the remaining elements.",
       "Remember to use k % n to handle cases where k is larger than the array length. Each reversal can be done in-place with two pointers."
     ],
-    "solutionExplanation": "Reverse the entire array, then reverse the first k elements, then reverse the remaining. Use k % n to handle k larger than array length. Time: O(n), Space: O(1)."
+    "solutionExplanation": "Reverse the entire array, then reverse the first k elements, then reverse the remaining. Use k % n to handle k larger than array length. Time: O(n), Space: O(1).",
+    "optimalCode": "def rotate(nums: list[int], k: int) -> list[int]:\n    n = len(nums)\n    k = k % n\n    def reverse(start, end):\n        while start < end:\n            nums[start], nums[end] = nums[end], nums[start]\n            start += 1\n            end -= 1\n    reverse(0, n - 1)\n    reverse(0, k - 1)\n    reverse(k, n - 1)\n    return nums"
   },
   {
     "id": "pow-x-n",
@@ -1271,7 +1309,8 @@
       "If n is even, x^n = (x^2)^(n/2). If n is odd, x^n = x * x^(n-1). This reduces the exponent logarithmically.",
       "Handle negative exponents by computing 1 / x^(-n). Be careful with the edge case when n is the minimum integer value, as negating it can cause overflow."
     ],
-    "solutionExplanation": "Use fast exponentiation (binary exponentiation). Square the base and halve the exponent at each step. Handle negative exponents by inverting. Time: O(log n), Space: O(1)."
+    "solutionExplanation": "Use fast exponentiation (binary exponentiation). Square the base and halve the exponent at each step. Handle negative exponents by inverting. Time: O(log n), Space: O(1).",
+    "optimalCode": "def myPow(x: float, n: int) -> float:\n    if n < 0:\n        x = 1 / x\n        n = -n\n    result = 1.0\n    while n > 0:\n        if n % 2 == 1:\n            result *= x\n        x *= x\n        n //= 2\n    return round(result, 3)"
   },
   {
     "id": "spiral-matrix",
@@ -1301,7 +1340,8 @@
       "Traverse in order: left to right along top row, top to bottom along right column, right to left along bottom row, bottom to top along left column. Shrink the corresponding boundary after each traversal.",
       "After each direction, check if the boundaries are still valid before proceeding to the next direction. This handles non-square matrices correctly."
     ],
-    "solutionExplanation": "Simulate the spiral by maintaining four boundaries (top, bottom, left, right). Traverse right, down, left, up and shrink boundaries after each direction. Time: O(m*n), Space: O(1)."
+    "solutionExplanation": "Simulate the spiral by maintaining four boundaries (top, bottom, left, right). Traverse right, down, left, up and shrink boundaries after each direction. Time: O(m*n), Space: O(1).",
+    "optimalCode": "def spiralOrder(matrix: list[list[int]]) -> list[int]:\n    result = []\n    top, bottom, left, right = 0, len(matrix) - 1, 0, len(matrix[0]) - 1\n    while top <= bottom and left <= right:\n        for i in range(left, right + 1):\n            result.append(matrix[top][i])\n        top += 1\n        for i in range(top, bottom + 1):\n            result.append(matrix[i][right])\n        right -= 1\n        if top <= bottom:\n            for i in range(right, left - 1, -1):\n                result.append(matrix[bottom][i])\n            bottom -= 1\n        if left <= right:\n            for i in range(bottom, top - 1, -1):\n                result.append(matrix[i][left])\n            left += 1\n    return result"
   },
   {
     "id": "word-search",
@@ -1337,7 +1377,8 @@
       "At each step, mark the current cell as visited, then explore all four adjacent cells for the next character. Restore the cell after backtracking.",
       "Prune early: before starting DFS, count character frequencies in the board and word to quickly reject impossible cases. Also, if the last character is rarer than the first, search the word in reverse."
     ],
-    "solutionExplanation": "Use backtracking DFS from each cell. Mark visited cells to avoid reuse, and restore them after backtracking. Time: O(m*n*4^L) where L is word length, Space: O(L)."
+    "solutionExplanation": "Use backtracking DFS from each cell. Mark visited cells to avoid reuse, and restore them after backtracking. Time: O(m*n*4^L) where L is word length, Space: O(L).",
+    "optimalCode": "def exist(board: list[list[str]], word: str) -> bool:\n    rows, cols = len(board), len(board[0])\n    def dfs(r, c, idx):\n        if idx == len(word):\n            return True\n        if r < 0 or r >= rows or c < 0 or c >= cols or board[r][c] != word[idx]:\n            return False\n        temp = board[r][c]\n        board[r][c] = '#'\n        found = (dfs(r + 1, c, idx + 1) or dfs(r - 1, c, idx + 1) or\n                 dfs(r, c + 1, idx + 1) or dfs(r, c - 1, idx + 1))\n        board[r][c] = temp\n        return found\n    for r in range(rows):\n        for c in range(cols):\n            if dfs(r, c, 0):\n                return True\n    return False"
   },
   {
     "id": "trapping-rain-water",
@@ -1368,7 +1409,8 @@
       "Use two pointers from both ends, tracking the maximum height seen from each side.",
       "Move the pointer with the smaller maximum inward. The water at that position is the difference between the smaller maximum and the current height. This works because the other side is guaranteed to be at least as tall."
     ],
-    "solutionExplanation": "Use two pointers from both ends tracking left_max and right_max. Water at each position equals min(left_max, right_max) - height. Move the pointer with the smaller max. Time: O(n), Space: O(1)."
+    "solutionExplanation": "Use two pointers from both ends tracking left_max and right_max. Water at each position equals min(left_max, right_max) - height. Move the pointer with the smaller max. Time: O(n), Space: O(1).",
+    "optimalCode": "def trap(height: list[int]) -> int:\n    left, right = 0, len(height) - 1\n    left_max, right_max = 0, 0\n    water = 0\n    while left < right:\n        if height[left] < height[right]:\n            if height[left] >= left_max:\n                left_max = height[left]\n            else:\n                water += left_max - height[left]\n            left += 1\n        else:\n            if height[right] >= right_max:\n                right_max = height[right]\n            else:\n                water += right_max - height[right]\n            right -= 1\n    return water"
   },
   {
     "id": "longest-palindromic-substring",
@@ -1398,7 +1440,8 @@
       "For each index, try expanding outward from that index (odd-length palindromes) and from between that index and the next (even-length palindromes).",
       "Track the start and length of the longest palindrome found. Expanding stops when characters no longer match or boundaries are reached."
     ],
-    "solutionExplanation": "Expand around each center (both single character and between characters). Track the longest palindrome found. Time: O(n²), Space: O(1)."
+    "solutionExplanation": "Expand around each center (both single character and between characters). Track the longest palindrome found. Time: O(n²), Space: O(1).",
+    "optimalCode": "def longestPalindrome(s: str) -> str:\n    start, max_len = 0, 1\n    def expand(left, right):\n        nonlocal start, max_len\n        while left >= 0 and right < len(s) and s[left] == s[right]:\n            if right - left + 1 > max_len:\n                start = left\n                max_len = right - left + 1\n            left -= 1\n            right += 1\n    for i in range(len(s)):\n        expand(i, i)\n        expand(i, i + 1)\n    return s[start:start + max_len]"
   },
   {
     "id": "majority-element",
@@ -1428,7 +1471,8 @@
       "Maintain a candidate and a count. For each element, if count is 0, set the current element as candidate. Increment count if the element matches the candidate, decrement otherwise.",
       "This works because the majority element appears more than n/2 times, so it will always survive the counting process. The final candidate is the majority element."
     ],
-    "solutionExplanation": "Boyer-Moore Voting Algorithm: maintain a candidate and count. Increment for same element, decrement for different. The candidate after one pass is the majority element. Time: O(n), Space: O(1)."
+    "solutionExplanation": "Boyer-Moore Voting Algorithm: maintain a candidate and count. Increment for same element, decrement for different. The candidate after one pass is the majority element. Time: O(n), Space: O(1).",
+    "optimalCode": "def majorityElement(nums: list[int]) -> int:\n    candidate = None\n    count = 0\n    for num in nums:\n        if count == 0:\n            candidate = num\n        count += 1 if num == candidate else -1\n    return candidate"
   },
   {
     "id": "happy-number",
@@ -1458,7 +1502,8 @@
       "Use a set to track numbers you've already seen. If a number repeats, you're in a cycle and it's not happy.",
       "For O(1) space, use Floyd's cycle detection (tortoise and hare): compute the digit-square-sum at two different speeds. If the fast one reaches 1, it's happy; if they meet at another number, it's not."
     ],
-    "solutionExplanation": "Use Floyd's cycle detection (fast/slow pointers) or a hash set to detect cycles. Repeatedly sum squares of digits until reaching 1 or detecting a cycle. Time: O(log n), Space: O(1) with Floyd's."
+    "solutionExplanation": "Use Floyd's cycle detection (fast/slow pointers) or a hash set to detect cycles. Repeatedly sum squares of digits until reaching 1 or detecting a cycle. Time: O(log n), Space: O(1) with Floyd's.",
+    "optimalCode": "def isHappy(n: int) -> bool:\n    seen = set()\n    while n != 1:\n        n = sum(int(d) ** 2 for d in str(n))\n        if n in seen:\n            return False\n        seen.add(n)\n    return True"
   },
   {
     "id": "power-of-three",
@@ -1492,7 +1537,8 @@
       "While n is divisible by 3, divide by 3. If the result is 1, it's a power of three. Make sure n > 0 first.",
       "A mathematical trick: 3^19 = 1162261467 is the largest power of 3 fitting in a 32-bit integer. Check if n > 0 and 1162261467 % n == 0."
     ],
-    "solutionExplanation": "Repeatedly divide by 3 while divisible. If the result is 1, it's a power of three. Alternatively, check if 3^19 (largest power of 3 in int range) is divisible by n. Time: O(log n), Space: O(1)."
+    "solutionExplanation": "Repeatedly divide by 3 while divisible. If the result is 1, it's a power of three. Alternatively, check if 3^19 (largest power of 3 in int range) is divisible by n. Time: O(log n), Space: O(1).",
+    "optimalCode": "def isPowerOfThree(n: int) -> bool:\n    if n <= 0:\n        return False\n    while n % 3 == 0:\n        n //= 3\n    return n == 1"
   },
   {
     "id": "merge-sorted-array",
@@ -1523,7 +1569,8 @@
       "Use three pointers: one at position m-1 in nums1, one at position n-1 in nums2, and one at position m+n-1 for where to write.",
       "Compare elements from both arrays and place the larger one at the write position, moving backwards. If nums2 has remaining elements after nums1 is exhausted, copy them over."
     ],
-    "solutionExplanation": "Start from the end of both arrays and work backwards, placing the larger element at the end of nums1. This avoids overwriting elements. Time: O(n + m), Space: O(1)."
+    "solutionExplanation": "Start from the end of both arrays and work backwards, placing the larger element at the end of nums1. This avoids overwriting elements. Time: O(n + m), Space: O(1).",
+    "optimalCode": "def mergeSortedArray(nums1: list[int], m: int, nums2: list[int], n: int) -> list[int]:\n    p1, p2, p = m - 1, n - 1, m + n - 1\n    while p2 >= 0:\n        if p1 >= 0 and nums1[p1] > nums2[p2]:\n            nums1[p] = nums1[p1]\n            p1 -= 1\n        else:\n            nums1[p] = nums2[p2]\n            p2 -= 1\n        p -= 1\n    return nums1"
   },
   {
     "id": "remove-element",
@@ -1553,7 +1600,8 @@
       "The write pointer only advances when the read pointer encounters a value that is not equal to val.",
       "Copy non-target values to the write position. The write pointer at the end gives you the count of remaining elements. The order of remaining elements may change."
     ],
-    "solutionExplanation": "Use two pointers: read and write positions. Copy non-target elements to the write position. Return the write pointer as the new length. Time: O(n), Space: O(1)."
+    "solutionExplanation": "Use two pointers: read and write positions. Copy non-target elements to the write position. Return the write pointer as the new length. Time: O(n), Space: O(1).",
+    "optimalCode": "def removeElement(nums: list[int], val: int) -> int:\n    write = 0\n    for read in range(len(nums)):\n        if nums[read] != val:\n            nums[write] = nums[read]\n            write += 1\n    return write"
   },
   {
     "id": "excel-column-number",
@@ -1588,7 +1636,8 @@
       "Process characters from left to right, multiplying the running result by 26 before adding the current character's value.",
       "Convert each character to its value using: ord(char) - ord('A') + 1. This gives A=1, B=2, etc."
     ],
-    "solutionExplanation": "Treat it as a base-26 number. Iterate through characters, multiplying the result by 26 and adding the current character's value (A=1, B=2, etc.). Time: O(n), Space: O(1)."
+    "solutionExplanation": "Treat it as a base-26 number. Iterate through characters, multiplying the result by 26 and adding the current character's value (A=1, B=2, etc.). Time: O(n), Space: O(1).",
+    "optimalCode": "def titleToNumber(columnTitle: str) -> int:\n    result = 0\n    for c in columnTitle:\n        result = result * 26 + (ord(c) - ord('A') + 1)\n    return result"
   },
   {
     "id": "intersection-two-arrays",
@@ -1619,7 +1668,8 @@
       "Build a frequency counter for the smaller array, then iterate through the larger array, collecting matches and decrementing counts.",
       "Each time you find a match, decrement the count so elements are not used more times than they appear. If the arrays were sorted, you could use a two-pointer approach instead."
     ],
-    "solutionExplanation": "Use a Counter/hash map on one array, then iterate the other, decrementing counts for matches. Time: O(n + m), Space: O(min(n, m))."
+    "solutionExplanation": "Use a Counter/hash map on one array, then iterate the other, decrementing counts for matches. Time: O(n + m), Space: O(min(n, m)).",
+    "optimalCode": "def intersect(nums1: list[int], nums2: list[int]) -> list[int]:\n    count = {}\n    for num in nums1:\n        count[num] = count.get(num, 0) + 1\n    result = []\n    for num in nums2:\n        if count.get(num, 0) > 0:\n            result.append(num)\n            count[num] -= 1\n    return result"
   },
   {
     "id": "add-binary",
@@ -1650,7 +1700,8 @@
       "At each position, sum the two digits and the carry. The result digit is sum % 2, and the new carry is sum / 2.",
       "Don't forget to handle the final carry after processing all digits. Also handle strings of different lengths by treating missing digits as 0."
     ],
-    "solutionExplanation": "Iterate both strings from the end, adding digits with carry. Build the result string in reverse. Time: O(max(n, m)), Space: O(max(n, m))."
+    "solutionExplanation": "Iterate both strings from the end, adding digits with carry. Build the result string in reverse. Time: O(max(n, m)), Space: O(max(n, m)).",
+    "optimalCode": "def addBinary(a: str, b: str) -> str:\n    result = []\n    carry = 0\n    i, j = len(a) - 1, len(b) - 1\n    while i >= 0 or j >= 0 or carry:\n        total = carry\n        if i >= 0:\n            total += int(a[i])\n            i -= 1\n        if j >= 0:\n            total += int(b[j])\n            j -= 1\n        result.append(str(total % 2))\n        carry = total // 2\n    return ''.join(reversed(result))"
   },
   {
     "id": "sqrt-x",
@@ -1680,7 +1731,8 @@
       "Search in the range [0, x]. For each mid value, check if mid * mid <= x and (mid+1) * (mid+1) > x.",
       "To avoid integer overflow when computing mid * mid, you can compare mid with x / mid instead, or use a language with big integers."
     ],
-    "solutionExplanation": "Use binary search between 0 and x to find the largest integer whose square is <= x. Time: O(log x), Space: O(1)."
+    "solutionExplanation": "Use binary search between 0 and x to find the largest integer whose square is <= x. Time: O(log x), Space: O(1).",
+    "optimalCode": "def mySqrt(x: int) -> int:\n    if x < 2:\n        return x\n    left, right = 1, x // 2\n    while left <= right:\n        mid = (left + right) // 2\n        if mid * mid == x:\n            return mid\n        elif mid * mid < x:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return right"
   },
   {
     "id": "top-k-frequent",
@@ -1711,7 +1763,8 @@
       "Use bucket sort where the index represents frequency. Create an array of size n+1 where bucket[i] contains elements that appear i times.",
       "Iterate through the buckets from highest to lowest frequency, collecting elements until you have k elements. This gives O(n) time complexity."
     ],
-    "solutionExplanation": "Count frequencies with a hash map, then use bucket sort or a heap to get the top k elements. Bucket sort groups elements by frequency for O(n) time. Time: O(n), Space: O(n)."
+    "solutionExplanation": "Count frequencies with a hash map, then use bucket sort or a heap to get the top k elements. Bucket sort groups elements by frequency for O(n) time. Time: O(n), Space: O(n).",
+    "optimalCode": "def topKFrequent(nums: list[int], k: int) -> list[int]:\n    count = {}\n    for num in nums:\n        count[num] = count.get(num, 0) + 1\n    buckets = [[] for _ in range(len(nums) + 1)]\n    for num, freq in count.items():\n        buckets[freq].append(num)\n    result = []\n    for i in range(len(buckets) - 1, -1, -1):\n        for num in buckets[i]:\n            result.append(num)\n            if len(result) == k:\n                return result\n    return result"
   },
   {
     "id": "subsets",
@@ -1741,7 +1794,8 @@
       "For each element, you have two choices: include it in the current subset or don't. Recurse on the remaining elements.",
       "Alternatively, iterate through existing subsets and for each one, create a new subset by adding the current element. Start with an empty subset."
     ],
-    "solutionExplanation": "Use backtracking: at each element, choose to include or exclude it. Alternatively, iterate and for each existing subset, create a new one with the current element added. Time: O(n * 2^n), Space: O(n)."
+    "solutionExplanation": "Use backtracking: at each element, choose to include or exclude it. Alternatively, iterate and for each existing subset, create a new one with the current element added. Time: O(n * 2^n), Space: O(n).",
+    "optimalCode": "def subsets(nums: list[int]) -> list[list[int]]:\n    result = [[]]\n    for num in nums:\n        result += [subset + [num] for subset in result]\n    return result"
   },
   {
     "id": "permutations",
@@ -1777,7 +1831,8 @@
       "Maintain a current permutation and a set of used indices. At each recursive step, try each unused element, add it, recurse, then remove it.",
       "Alternatively, use swapping: for position i, swap it with each position from i to n-1, recurse for position i+1, then swap back."
     ],
-    "solutionExplanation": "Use backtracking: for each position, try every unused element. Swap elements to build permutations and backtrack by swapping back. Time: O(n * n!), Space: O(n)."
+    "solutionExplanation": "Use backtracking: for each position, try every unused element. Swap elements to build permutations and backtrack by swapping back. Time: O(n * n!), Space: O(n).",
+    "optimalCode": "def permute(nums: list[int]) -> list[list[int]]:\n    result = []\n    def backtrack(current, remaining):\n        if not remaining:\n            result.append(current[:])\n            return\n        for i in range(len(remaining)):\n            current.append(remaining[i])\n            backtrack(current, remaining[:i] + remaining[i+1:])\n            current.pop()\n    backtrack([], nums)\n    return result"
   },
   {
     "id": "letter-combinations",
@@ -1813,7 +1868,8 @@
       "Use backtracking: for each digit in the input, try appending each of its possible letters to the current combination.",
       "Handle the empty input case separately (return empty list). The number of combinations grows exponentially (up to 4^n), so there's no way to avoid generating all of them."
     ],
-    "solutionExplanation": "Use backtracking or BFS. Map each digit to its letters and build combinations by appending each possible letter for each digit. Time: O(4^n), Space: O(n)."
+    "solutionExplanation": "Use backtracking or BFS. Map each digit to its letters and build combinations by appending each possible letter for each digit. Time: O(4^n), Space: O(n).",
+    "optimalCode": "def letterCombinations(digits: str) -> list[str]:\n    if not digits:\n        return []\n    phone = {'2': 'abc', '3': 'def', '4': 'ghi', '5': 'jkl', '6': 'mno', '7': 'pqrs', '8': 'tuv', '9': 'wxyz'}\n    result = []\n    def backtrack(idx, current):\n        if idx == len(digits):\n            result.append(current)\n            return\n        for letter in phone[digits[idx]]:\n            backtrack(idx + 1, current + letter)\n    backtrack(0, '')\n    return result"
   },
   {
     "id": "generate-parentheses",
@@ -1844,7 +1900,8 @@
       "You can add an open parenthesis if the open count is less than n. You can add a close parenthesis if the close count is less than the open count.",
       "The constraint that close < open ensures you never have more closing parentheses than opening ones at any point, guaranteeing well-formed results."
     ],
-    "solutionExplanation": "Use backtracking with counts of open and close parentheses. Add open if count < n, add close if close count < open count. Time: O(4^n / sqrt(n)), Space: O(n)."
+    "solutionExplanation": "Use backtracking with counts of open and close parentheses. Add open if count < n, add close if close count < open count. Time: O(4^n / sqrt(n)), Space: O(n).",
+    "optimalCode": "def generateParenthesis(n: int) -> list[str]:\n    result = []\n    def backtrack(current, open_count, close_count):\n        if len(current) == 2 * n:\n            result.append(current)\n            return\n        if open_count < n:\n            backtrack(current + '(', open_count + 1, close_count)\n        if close_count < open_count:\n            backtrack(current + ')', open_count, close_count + 1)\n    backtrack('', 0, 0)\n    return result"
   },
   {
     "id": "set-matrix-zeroes",
@@ -1874,7 +1931,8 @@
       "Use the first row and first column as markers. If matrix[i][j] is 0, set matrix[i][0] and matrix[0][j] to 0.",
       "Process the matrix in reverse (bottom-right to top-left) when zeroing out to avoid corrupting the markers. Handle the first row and column separately with boolean flags."
     ],
-    "solutionExplanation": "Use the first row and column as markers. Scan the matrix to mark which rows and columns contain zeros, then zero out marked rows and columns. Time: O(m*n), Space: O(1)."
+    "solutionExplanation": "Use the first row and column as markers. Scan the matrix to mark which rows and columns contain zeros, then zero out marked rows and columns. Time: O(m*n), Space: O(1).",
+    "optimalCode": "def setZeroes(matrix: list[list[int]]) -> list[list[int]]:\n    m, n = len(matrix), len(matrix[0])\n    first_row_zero = any(matrix[0][j] == 0 for j in range(n))\n    first_col_zero = any(matrix[i][0] == 0 for i in range(m))\n    for i in range(1, m):\n        for j in range(1, n):\n            if matrix[i][j] == 0:\n                matrix[i][0] = 0\n                matrix[0][j] = 0\n    for i in range(1, m):\n        for j in range(1, n):\n            if matrix[i][0] == 0 or matrix[0][j] == 0:\n                matrix[i][j] = 0\n    if first_row_zero:\n        for j in range(n):\n            matrix[0][j] = 0\n    if first_col_zero:\n        for i in range(m):\n            matrix[i][0] = 0\n    return matrix"
   },
   {
     "id": "max-product-subarray",
@@ -1904,7 +1962,8 @@
       "Track both the maximum and minimum products ending at each position, since the minimum (most negative) can become the maximum when multiplied by a negative.",
       "At each element, the new max is the max of: current element, current * previous max, current * previous min. Similarly for the new min. Swap max and min when the current element is negative."
     ],
-    "solutionExplanation": "Track both the maximum and minimum product ending at each position (minimum can become maximum when multiplied by a negative). Time: O(n), Space: O(1)."
+    "solutionExplanation": "Track both the maximum and minimum product ending at each position (minimum can become maximum when multiplied by a negative). Time: O(n), Space: O(1).",
+    "optimalCode": "def maxProduct(nums: list[int]) -> int:\n    max_prod = nums[0]\n    cur_max = nums[0]\n    cur_min = nums[0]\n    for i in range(1, len(nums)):\n        if nums[i] < 0:\n            cur_max, cur_min = cur_min, cur_max\n        cur_max = max(nums[i], cur_max * nums[i])\n        cur_min = min(nums[i], cur_min * nums[i])\n        max_prod = max(max_prod, cur_max)\n    return max_prod"
   },
   {
     "id": "find-min-rotated",
@@ -1939,7 +1998,8 @@
       "Compare the middle element with the rightmost element. If mid > right, the minimum is in the right half. If mid < right, it's in the left half (including mid).",
       "Shrink the search range accordingly. When left == right, you've found the minimum. Be careful not to exclude mid when it could be the answer."
     ],
-    "solutionExplanation": "Use binary search: compare mid with right. If mid > right, the minimum is in the right half. Otherwise, it's in the left half (including mid). Time: O(log n), Space: O(1)."
+    "solutionExplanation": "Use binary search: compare mid with right. If mid > right, the minimum is in the right half. Otherwise, it's in the left half (including mid). Time: O(log n), Space: O(1).",
+    "optimalCode": "def findMin(nums: list[int]) -> int:\n    left, right = 0, len(nums) - 1\n    while left < right:\n        mid = (left + right) // 2\n        if nums[mid] > nums[right]:\n            left = mid + 1\n        else:\n            right = mid\n    return nums[left]"
   },
   {
     "id": "longest-increasing-subsequence",
@@ -1975,7 +2035,8 @@
       "The basic DP approach: dp[i] = max(dp[j] + 1) for all j < i where nums[j] < nums[i]. This is O(n^2).",
       "For O(n log n), maintain a tails array where tails[i] is the smallest tail element for an increasing subsequence of length i+1. Use binary search to find the insertion point for each new element."
     ],
-    "solutionExplanation": "Use dynamic programming with binary search (patience sorting). Maintain a tails array and use bisect to find insertion positions. Time: O(n log n), Space: O(n)."
+    "solutionExplanation": "Use dynamic programming with binary search (patience sorting). Maintain a tails array and use bisect to find insertion positions. Time: O(n log n), Space: O(n).",
+    "optimalCode": "def lengthOfLIS(nums: list[int]) -> int:\n    from bisect import bisect_left\n    tails = []\n    for num in nums:\n        pos = bisect_left(tails, num)\n        if pos == len(tails):\n            tails.append(num)\n        else:\n            tails[pos] = num\n    return len(tails)"
   },
   {
     "id": "word-break",
@@ -2010,7 +2071,8 @@
       "For each position i, check all possible last words: is there a j < i such that dp[j] is true and s[j:i] is in the dictionary?",
       "Convert the word dictionary to a set for O(1) lookups. To optimize, limit the inner loop to the maximum word length in the dictionary."
     ],
-    "solutionExplanation": "Use bottom-up DP where dp[i] is true if s[0:i] can be segmented. For each position, check all possible last words from the dictionary. Time: O(n² * m), Space: O(n)."
+    "solutionExplanation": "Use bottom-up DP where dp[i] is true if s[0:i] can be segmented. For each position, check all possible last words from the dictionary. Time: O(n² * m), Space: O(n).",
+    "optimalCode": "def wordBreak(s: str, wordDict: list[str]) -> bool:\n    word_set = set(wordDict)\n    dp = [False] * (len(s) + 1)\n    dp[0] = True\n    for i in range(1, len(s) + 1):\n        for j in range(i):\n            if dp[j] and s[j:i] in word_set:\n                dp[i] = True\n                break\n    return dp[len(s)]"
   },
   {
     "id": "decode-ways",
@@ -2045,7 +2107,8 @@
       "At each position, you can decode one digit (if it's 1-9) and optionally two digits (if they form 10-26). dp[i] = dp[i-1] (if valid single) + dp[i-2] (if valid double).",
       "The key edge case is '0': it cannot be decoded alone, so it must be part of '10' or '20'. If a '0' doesn't follow '1' or '2', the string is invalid (return 0)."
     ],
-    "solutionExplanation": "Dynamic programming similar to climbing stairs. dp[i] depends on whether the last one or two digits form valid codes (1-26). Time: O(n), Space: O(1)."
+    "solutionExplanation": "Dynamic programming similar to climbing stairs. dp[i] depends on whether the last one or two digits form valid codes (1-26). Time: O(n), Space: O(1).",
+    "optimalCode": "def numDecodings(s: str) -> int:\n    if not s or s[0] == '0':\n        return 0\n    n = len(s)\n    prev2, prev1 = 1, 1\n    for i in range(1, n):\n        current = 0\n        if s[i] != '0':\n            current = prev1\n        two_digit = int(s[i-1:i+1])\n        if 10 <= two_digit <= 26:\n            current += prev2\n        prev2 = prev1\n        prev1 = current\n    return prev1"
   },
   {
     "id": "kth-largest-element",
@@ -2075,7 +2138,8 @@
       "Maintain a min-heap of size k. After processing all elements, the top of the heap is the kth largest.",
       "For each element, add it to the heap. If the heap size exceeds k, remove the smallest. This way, the heap always contains the k largest elements seen so far."
     ],
-    "solutionExplanation": "Use a min-heap of size k. After processing all elements, the heap top is the kth largest. Alternatively, use quickselect for average O(n). Time: O(n log k) with heap, Space: O(k)."
+    "solutionExplanation": "Use a min-heap of size k. After processing all elements, the heap top is the kth largest. Alternatively, use quickselect for average O(n). Time: O(n log k) with heap, Space: O(k).",
+    "optimalCode": "def findKthLargest(nums: list[int], k: int) -> int:\n    import heapq\n    return heapq.nlargest(k, nums)[-1]"
   },
   {
     "id": "first-missing-positive",
@@ -2110,7 +2174,8 @@
       "Use cyclic sort: place each positive number i at index i-1. Swap nums[i] with nums[nums[i]-1] until each position holds the correct value or an out-of-range value.",
       "After sorting, scan the array. The first index i where nums[i] != i + 1 gives the answer i + 1. If all positions are correct, the answer is n + 1."
     ],
-    "solutionExplanation": "Place each number in its correct index position (cyclic sort). Then scan for the first position where index + 1 != value. Time: O(n), Space: O(1)."
+    "solutionExplanation": "Place each number in its correct index position (cyclic sort). Then scan for the first position where index + 1 != value. Time: O(n), Space: O(1).",
+    "optimalCode": "def firstMissingPositive(nums: list[int]) -> int:\n    n = len(nums)\n    for i in range(n):\n        while 1 <= nums[i] <= n and nums[nums[i] - 1] != nums[i]:\n            nums[nums[i] - 1], nums[i] = nums[i], nums[nums[i] - 1]\n    for i in range(n):\n        if nums[i] != i + 1:\n            return i + 1\n    return n + 1"
   },
   {
     "id": "minimum-window-substring",
@@ -2146,7 +2211,8 @@
       "Expand the window by moving the right pointer until all characters in t are covered. Then shrink from the left to find the minimum valid window.",
       "Use a 'formed' counter to track how many unique characters in t have their required frequency met. This avoids rechecking the entire frequency map each time."
     ],
-    "solutionExplanation": "Use a sliding window with two pointers and a character frequency map. Expand right to include all chars, then shrink left to minimize the window. Time: O(n + m), Space: O(m)."
+    "solutionExplanation": "Use a sliding window with two pointers and a character frequency map. Expand right to include all chars, then shrink left to minimize the window. Time: O(n + m), Space: O(m).",
+    "optimalCode": "def minWindow(s: str, t: str) -> str:\n    from collections import Counter\n    need = Counter(t)\n    missing = len(t)\n    left = 0\n    start, end = 0, float('inf')\n    for right in range(len(s)):\n        if need[s[right]] > 0:\n            missing -= 1\n        need[s[right]] -= 1\n        while missing == 0:\n            if right - left < end - start:\n                start, end = left, right\n            need[s[left]] += 1\n            if need[s[left]] > 0:\n                missing += 1\n            left += 1\n    return '' if end == float('inf') else s[start:end + 1]"
   },
   {
     "id": "edit-distance",
@@ -2176,7 +2242,8 @@
       "If characters match (word1[i-1] == word2[j-1]), dp[i][j] = dp[i-1][j-1]. Otherwise, take the minimum of insert (dp[i][j-1]+1), delete (dp[i-1][j]+1), and replace (dp[i-1][j-1]+1).",
       "Initialize the first row and column with values 0 to n and 0 to m respectively, representing the cost of converting to/from an empty string."
     ],
-    "solutionExplanation": "Use 2D dynamic programming where dp[i][j] represents min edits for word1[0:i] to word2[0:j]. Each cell considers insert, delete, or replace. Time: O(m*n), Space: O(m*n)."
+    "solutionExplanation": "Use 2D dynamic programming where dp[i][j] represents min edits for word1[0:i] to word2[0:j]. Each cell considers insert, delete, or replace. Time: O(m*n), Space: O(m*n).",
+    "optimalCode": "def minDistance(word1: str, word2: str) -> int:\n    m, n = len(word1), len(word2)\n    dp = list(range(n + 1))\n    for i in range(1, m + 1):\n        prev = dp[0]\n        dp[0] = i\n        for j in range(1, n + 1):\n            temp = dp[j]\n            if word1[i-1] == word2[j-1]:\n                dp[j] = prev\n            else:\n                dp[j] = 1 + min(prev, dp[j], dp[j-1])\n            prev = temp\n    return dp[n]"
   },
   {
     "id": "largest-rectangle-histogram",
@@ -2206,6 +2273,7 @@
       "Use a monotonic increasing stack storing indices. When a bar is shorter than the stack top, pop and calculate the area using the popped bar as the shortest in the rectangle.",
       "The width of the rectangle is determined by the current index and the new stack top after popping. Add a sentinel (height 0) at the end to flush all remaining bars from the stack."
     ],
-    "solutionExplanation": "Use a monotonic stack to find the nearest smaller bar on each side. The rectangle for each bar extends between its left and right boundaries. Time: O(n), Space: O(n)."
+    "solutionExplanation": "Use a monotonic stack to find the nearest smaller bar on each side. The rectangle for each bar extends between its left and right boundaries. Time: O(n), Space: O(n).",
+    "optimalCode": "def largestRectangleArea(heights: list[int]) -> int:\n    stack = []\n    max_area = 0\n    heights.append(0)\n    for i in range(len(heights)):\n        while stack and heights[i] < heights[stack[-1]]:\n            h = heights[stack.pop()]\n            w = i if not stack else i - stack[-1] - 1\n            max_area = max(max_area, h * w)\n        stack.append(i)\n    heights.pop()\n    return max_area"
   }
 ]

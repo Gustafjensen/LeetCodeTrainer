@@ -5,6 +5,7 @@ struct CodeEditorView: UIViewRepresentable {
     @Binding var text: String
     var fontSize: CGFloat = 14
     var onFocusChange: (Bool) -> Void = { _ in }
+    var onContentHeightChange: ((CGFloat) -> Void)?
 
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
@@ -28,21 +29,19 @@ struct CodeEditorView: UIViewRepresentable {
         textView.textContainerInset = UIEdgeInsets(top: 12, left: 8, bottom: 12, right: 8)
         textView.alwaysBounceVertical = true
 
-        let toolbar = UIToolbar()
-        toolbar.sizeToFit()
-        let tabButton = UIBarButtonItem(
-            title: "Tab", style: .plain,
-            target: context.coordinator, action: #selector(Coordinator.insertTab))
-        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let doneButton = UIBarButtonItem(
-            barButtonSystemItem: .done,
-            target: context.coordinator, action: #selector(Coordinator.dismissKeyboard))
-        toolbar.items = [tabButton, flexSpace, doneButton]
-        textView.inputAccessoryView = toolbar
+        // Enable horizontal scrolling (disable line wrapping)
+        textView.textContainer.lineBreakMode = .byClipping
+        textView.textContainer.widthTracksTextView = false
+        textView.textContainer.size.width = CGFloat.greatestFiniteMagnitude
+
+        let accessory = CodeKeyboardAccessory(coordinator: context.coordinator)
+        accessory.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
+        textView.inputAccessoryView = accessory
 
         context.coordinator.textView = textView
         textView.text = text
         context.coordinator.applySyntaxHighlighting()
+        context.coordinator.reportContentHeight()
         return textView
     }
 
@@ -52,6 +51,7 @@ struct CodeEditorView: UIViewRepresentable {
             textView.text = text
             context.coordinator.applySyntaxHighlighting()
             textView.selectedRange = selectedRange
+            context.coordinator.reportContentHeight()
         }
     }
 
@@ -88,6 +88,13 @@ struct CodeEditorView: UIViewRepresentable {
         func textViewDidChange(_ textView: UITextView) {
             parent.text = textView.text
             applySyntaxHighlighting()
+            reportContentHeight()
+        }
+
+        func reportContentHeight() {
+            guard let textView = textView else { return }
+            let height = textView.contentSize.height
+            parent.onContentHeightChange?(height)
         }
 
         func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange,
@@ -184,5 +191,139 @@ struct CodeEditorView: UIViewRepresentable {
         @objc func dismissKeyboard() {
             textView?.resignFirstResponder()
         }
+
+        func insertSnippet(_ snippet: String) {
+            textView?.insertText(snippet)
+            if let tv = textView {
+                parent.text = tv.text
+                applySyntaxHighlighting()
+                reportContentHeight()
+            }
+        }
+
+        func undo() {
+            guard let tv = textView, let undoManager = tv.undoManager, undoManager.canUndo else { return }
+            undoManager.undo()
+            parent.text = tv.text
+            applySyntaxHighlighting()
+            reportContentHeight()
+        }
+    }
+}
+
+private class CodeKeyboardAccessory: UIView {
+    private static let shortcuts: [(label: String, snippet: String)] = [
+        ("Tab", "    "),
+        ("if", "if "),
+        ("elif", "elif "),
+        ("else", "else:"),
+        ("for", "for "),
+        ("while", "while "),
+        ("def", "def "),
+        ("return", "return "),
+        ("in", " in "),
+        ("not", " not "),
+        ("and", " and "),
+        ("or", " or "),
+        ("=", "= "),
+        ("( )", "()"),
+        ("[ ]", "[]"),
+        ("{ }", "{}"),
+        (":", ":"),
+        ("\"\"", "\"\""),
+        (".", "."),
+        (",", ", "),
+        ("#", "# "),
+        ("_", "_"),
+        ("+", " + "),
+        ("-", " - "),
+        ("*", " * "),
+        ("<", " < "),
+        (">", " > "),
+        ("!", "!"),
+    ]
+
+    weak var coordinator: CodeEditorView.Coordinator?
+
+    init(coordinator: CodeEditorView.Coordinator) {
+        self.coordinator = coordinator
+        super.init(frame: .zero)
+        setup()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    private func setup() {
+        backgroundColor = UIColor(red: 0.12, green: 0.12, blue: 0.14, alpha: 1)
+
+        let scrollView = UIScrollView()
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(scrollView)
+
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.spacing = 6
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(stack)
+
+        for (index, shortcut) in Self.shortcuts.enumerated() {
+            let button = UIButton(type: .system)
+            button.setTitle(shortcut.label, for: .normal)
+            button.titleLabel?.font = UIFont.monospacedSystemFont(ofSize: 15, weight: .medium)
+            button.setTitleColor(.white, for: .normal)
+            button.backgroundColor = UIColor(white: 0.25, alpha: 1)
+            button.layer.cornerRadius = 6
+            button.contentEdgeInsets = UIEdgeInsets(top: 6, left: 10, bottom: 6, right: 10)
+            button.tag = index
+            button.addTarget(self, action: #selector(snippetTapped(_:)), for: .touchUpInside)
+            stack.addArrangedSubview(button)
+        }
+
+        // Undo button
+        let undoButton = UIButton(type: .system)
+        undoButton.setImage(UIImage(systemName: "arrow.uturn.backward"), for: .normal)
+        undoButton.tintColor = .white
+        undoButton.backgroundColor = UIColor(white: 0.25, alpha: 1)
+        undoButton.layer.cornerRadius = 6
+        undoButton.contentEdgeInsets = UIEdgeInsets(top: 6, left: 10, bottom: 6, right: 10)
+        undoButton.addTarget(self, action: #selector(undoTapped), for: .touchUpInside)
+        stack.addArrangedSubview(undoButton)
+
+        // Done button at the end
+        let doneButton = UIButton(type: .system)
+        doneButton.setTitle("Done", for: .normal)
+        doneButton.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
+        doneButton.setTitleColor(UIColor.systemBlue, for: .normal)
+        doneButton.contentEdgeInsets = UIEdgeInsets(top: 6, left: 12, bottom: 6, right: 12)
+        doneButton.addTarget(self, action: #selector(doneTapped), for: .touchUpInside)
+        stack.addArrangedSubview(doneButton)
+
+        NSLayoutConstraint.activate([
+            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            stack.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor, constant: 8),
+            stack.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor, constant: -8),
+            stack.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor, constant: 4),
+            stack.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor, constant: -4),
+            stack.heightAnchor.constraint(equalTo: scrollView.frameLayoutGuide.heightAnchor, constant: -8),
+        ])
+    }
+
+    @objc private func snippetTapped(_ sender: UIButton) {
+        let snippet = Self.shortcuts[sender.tag].snippet
+        coordinator?.insertSnippet(snippet)
+    }
+
+    @objc private func undoTapped() {
+        coordinator?.undo()
+    }
+
+    @objc private func doneTapped() {
+        coordinator?.dismissKeyboard()
     }
 }

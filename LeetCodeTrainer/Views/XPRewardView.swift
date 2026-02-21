@@ -4,6 +4,7 @@ struct XPRewardView: View {
     let gains: [SkillXPGain]
     let sourceCode: String
     var solutionExplanation: String?
+    var optimalCode: String?
     var newAchievements: [Achievement] = []
     var popToRoot: () -> Void = {}
 
@@ -147,6 +148,24 @@ struct XPRewardView: View {
                                     .font(.subheadline)
                                     .foregroundStyle(Theme.textSecondary)
                                     .fixedSize(horizontal: false, vertical: true)
+
+                                if let code = optimalCode {
+                                    Text("Optimal Solution")
+                                        .font(.caption)
+                                        .fontWeight(.semibold)
+                                        .foregroundStyle(Theme.accent)
+                                        .padding(.top, 4)
+
+                                    ScrollView(.horizontal, showsIndicators: false) {
+                                        Text(code)
+                                            .font(.system(size: 12, design: .monospaced))
+                                            .foregroundStyle(Theme.textSecondary)
+                                    }
+                                    .padding(12)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .background(Theme.primaryDark)
+                                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                                }
                             }
                             .padding(16)
                             .background(

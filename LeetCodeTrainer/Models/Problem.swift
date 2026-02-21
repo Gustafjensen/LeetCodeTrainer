@@ -11,6 +11,7 @@ struct Problem: Codable, Identifiable {
     let tags: [String]
     let hints: [String]
     let solutionExplanation: String?
+    let optimalCode: String?
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -24,6 +25,7 @@ struct Problem: Codable, Identifiable {
         tags = try container.decode([String].self, forKey: .tags)
         hints = (try? container.decode([String].self, forKey: .hints)) ?? []
         solutionExplanation = try container.decodeIfPresent(String.self, forKey: .solutionExplanation)
+        optimalCode = try container.decodeIfPresent(String.self, forKey: .optimalCode)
     }
 
     enum Difficulty: String, Codable {

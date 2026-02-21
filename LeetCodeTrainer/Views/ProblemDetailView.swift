@@ -5,7 +5,7 @@ struct ProblemDetailView: View {
     var popToRoot: () -> Void = {}
     @Environment(\.dismiss) private var dismiss
     @AppStorage("editorFontSize") private var editorFontSize: Double = 14
-    @State private var isEditorFocused = false
+    @State private var editorContentHeight: CGFloat = 150
     @State private var revealedHints = 0
     @State private var showHistory = false
 
@@ -132,13 +132,14 @@ struct ProblemDetailView: View {
                         .fontWeight(.semibold)
                         .foregroundStyle(Theme.textPrimary)
 
-                    CodeEditorView(text: $viewModel.sourceCode, fontSize: CGFloat(editorFontSize)) { focused in
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            isEditorFocused = focused
+                    CodeEditorView(
+                        text: $viewModel.sourceCode,
+                        fontSize: CGFloat(editorFontSize),
+                        onContentHeightChange: { height in
+                            editorContentHeight = height
                         }
-                    }
-                    .frame(minHeight: isEditorFocused ? 350 : 150,
-                           maxHeight: isEditorFocused ? 500 : 200)
+                    )
+                    .frame(height: min(max(editorContentHeight, 150), 500))
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
                 .padding(16)
@@ -287,6 +288,7 @@ struct ProblemDetailView: View {
                     gains: gains,
                     sourceCode: viewModel.sourceCode,
                     solutionExplanation: viewModel.problem.solutionExplanation,
+                    optimalCode: viewModel.problem.optimalCode,
                     newAchievements: viewModel.newAchievements,
                     popToRoot: popToRoot
                 )
