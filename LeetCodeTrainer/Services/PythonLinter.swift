@@ -680,6 +680,176 @@ final class PythonLinter {
             severity: .error, category: .crossLanguage, lineOnly: true
         ))
 
+        // ============================================================
+        // CATEGORY 7: Common Algorithm Mistakes (8 rules)
+        // ============================================================
+
+        rules.append(LintRule(
+            id: "algo-off-by-one", pattern: re("\\[\\s*len\\(\\w+\\)\\s*\\]"),
+            message: "Index len(x) is out of bounds — last valid index is len(x)-1",
+            suggestion: "Use [-1] for the last element",
+            severity: .error, category: .logicalMistake, lineOnly: false
+        ))
+
+        rules.append(LintRule(
+            id: "algo-string-concat-loop", pattern: re("(?:for|while)\\s.*:.*\\n\\s+\\w+\\s*\\+=\\s*['\"]"),
+            message: "String concatenation in a loop is slow",
+            suggestion: "Collect in a list and use ''.join()",
+            severity: .hint, category: .logicalMistake, lineOnly: false
+        ))
+
+        rules.append(LintRule(
+            id: "algo-except-pass", pattern: re("except.*:\\s*\\n\\s+pass\\s*$"),
+            message: "Silently catching exceptions hides bugs",
+            suggestion: "Log the error or handle it explicitly",
+            severity: .warning, category: .logicalMistake, lineOnly: false
+        ))
+
+        rules.append(LintRule(
+            id: "algo-dict-keys-in", pattern: re("\\bin\\s+\\w+\\.keys\\(\\)"),
+            message: "'key in dict' already checks keys — .keys() is redundant",
+            suggestion: "Use 'if key in dict:' directly",
+            severity: .hint, category: .logicalMistake, lineOnly: false
+        ))
+
+        rules.append(LintRule(
+            id: "algo-list-remove-iterate", pattern: re("for\\s+\\w+\\s+in\\s+(\\w+)\\s*:.*\\n\\s+\\1\\.remove\\("),
+            message: "Modifying a list while iterating over it causes skipped elements",
+            suggestion: "Iterate over a copy: for x in list[:]",
+            severity: .error, category: .logicalMistake, lineOnly: false
+        ))
+
+        rules.append(LintRule(
+            id: "algo-global-statement", pattern: re("^\\s*global\\s+\\w+"),
+            message: "Avoid using global variables — pass values as parameters instead",
+            suggestion: nil,
+            severity: .hint, category: .logicalMistake, lineOnly: true
+        ))
+
+        rules.append(LintRule(
+            id: "algo-not-equal-precedence", pattern: re("\\bif\\s+not\\s+\\w+\\s*=="),
+            message: "'not' binds tighter than '==' — this may not do what you expect",
+            suggestion: "Use 'if x != y:' or 'if not (x == y):'",
+            severity: .warning, category: .logicalMistake, lineOnly: true
+        ))
+
+        rules.append(LintRule(
+            id: "algo-return-in-finally", pattern: re("^\\s*finally\\s*:.*\\n(?:\\s+.*\\n)*?\\s+return\\b"),
+            message: "Return in finally block silently overwrites other return values",
+            suggestion: "Avoid return statements inside finally blocks",
+            severity: .warning, category: .logicalMistake, lineOnly: false
+        ))
+
+        // ============================================================
+        // CATEGORY 8: String/Format Mistakes (5 rules)
+        // ============================================================
+
+        rules.append(LintRule(
+            id: "string-percent-format", pattern: re("['\"].*%[dsfr].*['\"]\\s*%\\s*"),
+            message: "%-formatting is outdated",
+            suggestion: "Use f-strings: f\"value is {x}\"",
+            severity: .hint, category: .logicalMistake, lineOnly: true
+        ))
+
+        rules.append(LintRule(
+            id: "string-concat-type", pattern: re("['\"].*['\"]\\s*\\+\\s*\\w+(?!\\s*['\"])"),
+            message: "Concatenating string with non-string may cause TypeError",
+            suggestion: "Use f-string or str() to convert",
+            severity: .hint, category: .logicalMistake, lineOnly: true
+        ))
+
+        rules.append(LintRule(
+            id: "string-split-empty", pattern: re("\\.split\\(\\s*['\"]['\"]\\s*\\)"),
+            message: ".split('') doesn't work in Python — it raises ValueError",
+            suggestion: "Use list(string) to split into characters",
+            severity: .error, category: .methodConfusion, lineOnly: false
+        ))
+
+        rules.append(LintRule(
+            id: "string-replace-no-assign", pattern: re("^\\s*\\w+\\.replace\\([^)]+\\)\\s*$"),
+            message: "Strings are immutable — .replace() returns a new string",
+            suggestion: "Assign the result: x = x.replace(...)",
+            severity: .warning, category: .methodConfusion, lineOnly: true
+        ))
+
+        rules.append(LintRule(
+            id: "string-strip-no-assign", pattern: re("^\\s*\\w+\\.strip\\(\\)\\s*$"),
+            message: "Strings are immutable — .strip() returns a new string",
+            suggestion: "Assign the result: x = x.strip()",
+            severity: .warning, category: .methodConfusion, lineOnly: true
+        ))
+
+        // ============================================================
+        // CATEGORY 9: Collection Mistakes (5 rules)
+        // ============================================================
+
+        rules.append(LintRule(
+            id: "collection-sorted-assign", pattern: re("=\\s*\\w+\\.sorted\\("),
+            message: "Lists don't have .sorted() — it's a built-in function",
+            suggestion: "Use sorted(list) or list.sort()",
+            severity: .error, category: .methodConfusion, lineOnly: true
+        ))
+
+        rules.append(LintRule(
+            id: "collection-add-list", pattern: re("\\.add\\(.*\\)"),
+            message: ".add() is for sets — use .append() for lists",
+            suggestion: "Use .append() for lists or .add() for sets",
+            severity: .hint, category: .methodConfusion, lineOnly: false
+        ))
+
+        rules.append(LintRule(
+            id: "collection-extend-element", pattern: re("\\.extend\\(\\s*[^\\[\\(]\\w+\\s*\\)"),
+            message: ".extend() with a string will add each character individually",
+            suggestion: "Use .append() for a single element",
+            severity: .hint, category: .methodConfusion, lineOnly: false
+        ))
+
+        rules.append(LintRule(
+            id: "collection-pop-no-args", pattern: re("\\.pop\\(0\\)"),
+            message: ".pop(0) is O(n) — consider using collections.deque for frequent left pops",
+            suggestion: "Use deque.popleft() for O(1) performance",
+            severity: .hint, category: .logicalMistake, lineOnly: false
+        ))
+
+        rules.append(LintRule(
+            id: "collection-insert-append", pattern: re("\\.insert\\(\\s*len\\(\\w+\\)"),
+            message: ".insert(len(x), val) is the same as .append(val)",
+            suggestion: "Use .append() instead",
+            severity: .hint, category: .logicalMistake, lineOnly: false
+        ))
+
+        // ============================================================
+        // CATEGORY 10: Additional Cross-Language (4 rules)
+        // ============================================================
+
+        rules.append(LintRule(
+            id: "cross-array-new", pattern: re("\\bArray\\("),
+            message: "Python uses list(), not Array()",
+            suggestion: "Use list() or [] literal",
+            severity: .error, category: .crossLanguage, lineOnly: false
+        ))
+
+        rules.append(LintRule(
+            id: "cross-string-equals", pattern: re("\\.equals\\("),
+            message: "Python uses == for comparison, not .equals()",
+            suggestion: "Use == operator",
+            severity: .error, category: .crossLanguage, lineOnly: false
+        ))
+
+        rules.append(LintRule(
+            id: "cross-println", pattern: re("\\bprintln\\("),
+            message: "Python uses print(), not println()",
+            suggestion: "Use print() instead",
+            severity: .error, category: .crossLanguage, lineOnly: false
+        ))
+
+        rules.append(LintRule(
+            id: "cross-elif-spelling", pattern: re("^\\s*elseif\\s+"),
+            message: "Python uses 'elif', not 'elseif'",
+            suggestion: "Replace 'elseif' with 'elif'",
+            severity: .error, category: .crossLanguage, lineOnly: true
+        ))
+
         return rules
     }
 }

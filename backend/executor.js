@@ -7,6 +7,16 @@ const TIMEOUT_MS = 10000;
 const EXEC_TIMEOUT_SECS = 5;
 const TEMP_BASE = '/tmp/leetcode';
 
+function classifyError(stderr) {
+    if (!stderr) return 'Unknown';
+    const lastLine = stderr.trim().split('\n').pop() || '';
+    const match = lastLine.match(/^(\w+Error):/);
+    if (match) return match[1];
+    if (lastLine.includes('Time Limit')) return 'TimeLimit';
+    if (lastLine.includes('Module') && lastLine.includes('not available')) return 'ForbiddenImport';
+    return 'Unknown';
+}
+
 async function executeCode(sourceCode, problem) {
     const runId = uuidv4();
     const tempDir = path.join(TEMP_BASE, runId);
@@ -37,6 +47,18 @@ async function executeCode(sourceCode, problem) {
         fs.chmodSync(scriptPath, 0o644);
 
         const result = await runAsSubprocess(scriptPath);
+
+        // Structured error logging for Cloud Logging analytics
+        if (result.runtimeError) {
+            console.log(JSON.stringify({
+                type: 'execution_error',
+                problemId: problem.title || 'unknown',
+                errorType: classifyError(result.runtimeError),
+                errorMessage: result.runtimeError.split('\n').pop(),
+                timestamp: new Date().toISOString()
+            }));
+        }
+
         return result;
     } finally {
         try {

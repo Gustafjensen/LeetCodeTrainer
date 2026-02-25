@@ -75,6 +75,7 @@ struct CodeEditorView: UIViewRepresentable {
         weak var textView: UITextView?
         var lastAppliedFontSize: CGFloat = 0
         private var pinchBaseFontSize: CGFloat = 14
+        private var currentWarnings: [LintWarning] = []
 
         private let keywords = [
             "def", "return", "if", "elif", "else", "for", "while",
@@ -127,10 +128,13 @@ struct CodeEditorView: UIViewRepresentable {
         private func runLinter() {
             guard let onWarnings = parent.onLinterWarnings else { return }
             let code = parent.text
-            DispatchQueue.global(qos: .userInitiated).async {
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
                 let warnings = PythonLinter.shared.lint(code)
                 DispatchQueue.main.async {
                     onWarnings(warnings)
+                    guard let self = self else { return }
+                    self.currentWarnings = warnings
+                    self.applySyntaxHighlighting()
                 }
             }
         }
@@ -211,6 +215,33 @@ struct CodeEditorView: UIViewRepresentable {
                 for match in regex.matches(in: text, range: fullRange) {
                     attributed.addAttribute(.foregroundColor,
                         value: UIColor.systemBlue, range: match.range)
+                }
+            }
+
+            // Inline warning highlights — yellow tint on lines with issues
+            if !currentWarnings.isEmpty {
+                let lines = text.components(separatedBy: "\n")
+                // Collect worst severity per line
+                var warningLines: [Int: LintWarning.Severity] = [:]
+                for warning in currentWarnings {
+                    let line = warning.line
+                    if let existing = warningLines[line] {
+                        if warning.severity < existing { warningLines[line] = warning.severity }
+                    } else {
+                        warningLines[line] = warning.severity
+                    }
+                }
+                // Apply background tint to each warning line
+                var offset = 0
+                for (index, line) in lines.enumerated() {
+                    let lineNumber = index + 1
+                    if warningLines[lineNumber] != nil {
+                        let lineRange = NSRange(location: offset, length: line.utf16.count)
+                        attributed.addAttribute(.backgroundColor,
+                            value: UIColor.systemYellow.withAlphaComponent(0.15),
+                            range: lineRange)
+                    }
+                    offset += line.utf16.count + 1 // +1 for newline
                 }
             }
 
