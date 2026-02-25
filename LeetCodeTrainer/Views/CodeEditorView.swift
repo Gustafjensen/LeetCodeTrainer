@@ -54,6 +54,9 @@ struct CodeEditorView: UIViewRepresentable {
     }
 
     func updateUIView(_ textView: UITextView, context: Context) {
+        // Keep coordinator's reference to parent in sync with latest SwiftUI state
+        context.coordinator.parent = self
+
         let needsHighlight = textView.text != text || context.coordinator.lastAppliedFontSize != fontSize
         if textView.text != text {
             let selectedRange = textView.selectedRange
