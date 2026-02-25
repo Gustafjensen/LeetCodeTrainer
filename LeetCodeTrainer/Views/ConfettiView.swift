@@ -6,7 +6,7 @@ struct ConfettiView: View {
     @State private var startTime: Date?
     @State private var opacity: Double = 1
 
-    private let duration: Double = 3.0
+    private let duration: Double = 4.0
     private let particleCount = 80
     private let colors: [Color] = [.green, .yellow, .orange, .pink, .purple, .cyan, Theme.accent]
 
@@ -54,8 +54,8 @@ struct ConfettiView: View {
                 startTime = .now
                 opacity = 1
 
-                DispatchQueue.main.asyncAfter(deadline: .now() + duration * 0.7) {
-                    withAnimation(.easeOut(duration: duration * 0.3)) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + duration * 0.5) {
+                    withAnimation(.easeOut(duration: duration * 0.5)) {
                         opacity = 0
                     }
                 }
