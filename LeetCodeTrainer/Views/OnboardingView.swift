@@ -9,7 +9,7 @@ struct OnboardingView: View {
     private let totalPages = 4
 
     private let pages: [(icon: String, title: String, subtitle: String)] = [
-        ("chevron.left.forwardslash.chevron.right", "Code Trainer", "Practice coding on the go"),
+        ("chevron.left.forwardslash.chevron.right", "Even More Code", "Practice coding on the go"),
         ("keyboard.fill", "Write & Run Code", "Solve problems in Python with instant feedback"),
         ("chart.bar.fill", "Track Your Progress", "Earn XP, level up skills, and complete daily challenges")
     ]
