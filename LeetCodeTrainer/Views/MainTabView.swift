@@ -44,18 +44,26 @@ struct MainTabView: View {
 
     var body: some View {
         TabView(selection: $selectedTab) {
-            Tab("Daily", systemImage: "calendar", value: 0) {
-                DailyProblemView(viewModel: viewModel)
-            }
-            Tab("Problems", systemImage: "list.bullet.rectangle.fill", value: 1) {
-                ProblemListView(viewModel: viewModel)
-            }
-            Tab("Settings", systemImage: "gearshape.fill", value: 2) {
-                SettingsView()
-            }
-            Tab("Profile", systemImage: "person.fill", value: 3) {
-                ProfileView(problems: viewModel.problems)
-            }
+            DailyProblemView(viewModel: viewModel)
+                .tabItem {
+                    Label("Daily", systemImage: "calendar")
+                }
+                .tag(0)
+            ProblemListView(viewModel: viewModel)
+                .tabItem {
+                    Label("Problems", systemImage: "list.bullet.rectangle.fill")
+                }
+                .tag(1)
+            SettingsView()
+                .tabItem {
+                    Label("Settings", systemImage: "gearshape.fill")
+                }
+                .tag(2)
+            ProfileView(problems: viewModel.problems)
+                .tabItem {
+                    Label("Profile", systemImage: "person.fill")
+                }
+                .tag(3)
         }
         .tint(Theme.accent)
     }
