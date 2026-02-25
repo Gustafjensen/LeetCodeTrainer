@@ -38,6 +38,7 @@ class ProblemListViewModel {
         do {
             let data = try Data(contentsOf: url)
             problems = try JSONDecoder().decode([Problem].self, from: data)
+                .filter { $0.id != "tutorial-add-two" }
         } catch {
             errorMessage = "Failed to load problems: \(error.localizedDescription)"
         }

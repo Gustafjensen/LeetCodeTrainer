@@ -220,8 +220,20 @@ class SkillXPManager {
     }
 
     func saveProfileImage(_ data: Data) {
-        try? data.write(to: profileImageURL)
-        profileImage = UIImage(data: data)
+        guard let image = UIImage(data: data) else { return }
+        let maxSize: CGFloat = 500
+        let resized: UIImage
+        if max(image.size.width, image.size.height) > maxSize {
+            let scale = maxSize / max(image.size.width, image.size.height)
+            let newSize = CGSize(width: image.size.width * scale, height: image.size.height * scale)
+            let renderer = UIGraphicsImageRenderer(size: newSize)
+            resized = renderer.image { _ in image.draw(in: CGRect(origin: .zero, size: newSize)) }
+        } else {
+            resized = image
+        }
+        guard let compressed = resized.jpegData(compressionQuality: 0.7) else { return }
+        try? compressed.write(to: profileImageURL)
+        profileImage = resized
     }
 
     private func loadProfileImage() -> UIImage? {

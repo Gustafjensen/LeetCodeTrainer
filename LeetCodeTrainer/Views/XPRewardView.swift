@@ -228,7 +228,12 @@ struct XPRewardView: View {
                     animateProgress = true
                 }
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            // Estimate animation duration based on whether any skill leveled up
+            let hasLevelUp = gains.contains { $0.didLevelUp }
+            let barDuration: Double = hasLevelUp ? 3.0 : 1.5
+            let achievementDelay = 0.5 + barDuration + 0.3
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + achievementDelay) {
                 withAnimation(.spring(duration: 0.5, bounce: 0.3)) {
                     showAchievements = true
                 }
@@ -236,7 +241,7 @@ struct XPRewardView: View {
                     Haptics.impact(.heavy)
                 }
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + (newAchievements.isEmpty ? 1.2 : 1.8)) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + achievementDelay + (newAchievements.isEmpty ? 0.3 : 0.8)) {
                 withAnimation(.spring(duration: 0.4)) {
                     showButton = true
                 }
@@ -253,6 +258,8 @@ struct SkillXPCard: View {
     @State private var displayLevel: Int = 0
     @State private var displayXPText: String = ""
     @State private var hasStarted = false
+    @State private var showLevelUp = false
+    @State private var levelUpScale: CGFloat = 1.0
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -267,7 +274,7 @@ struct SkillXPCard: View {
                     .fontWeight(.bold)
                     .foregroundStyle(.green)
 
-                if gain.didLevelUp {
+                if showLevelUp {
                     Text("LEVEL UP!")
                         .font(.caption2)
                         .fontWeight(.heavy)
@@ -276,6 +283,8 @@ struct SkillXPCard: View {
                         .padding(.vertical, 2)
                         .background(Theme.accent.opacity(0.2))
                         .clipShape(Capsule())
+                        .scaleEffect(levelUpScale)
+                        .transition(.scale.combined(with: .opacity))
                 }
             }
 
@@ -294,7 +303,7 @@ struct SkillXPCard: View {
                                 )
                             )
                             .frame(
-                                width: geo.size.width * barProgress,
+                                width: geo.size.width * min(barProgress, 1.0),
                                 height: 8
                             )
                     }
@@ -316,18 +325,88 @@ struct SkillXPCard: View {
         .background(Theme.card)
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .onAppear {
-            displayLevel = gain.newLevel
-            let newInLevel = SkillXPManager.xpInCurrentLevel(forXP: gain.newXP)
-            let newNeeded = SkillXPManager.xpNeededForNextLevel(atLevel: gain.newLevel)
-            displayXPText = "\(newInLevel)/\(newNeeded) XP"
-            barProgress = 0
+            displayLevel = gain.previousLevel
+            barProgress = gain.previousProgress
+            updateXPText(level: gain.previousLevel, xp: gain.previousXP)
         }
         .onChange(of: animate) {
             guard animate, !hasStarted else { return }
             hasStarted = true
+            runAnimation()
+        }
+    }
 
-            withAnimation(.easeOut(duration: 0.8)) {
+    private func updateXPText(level: Int, xp: Int) {
+        let inLevel = SkillXPManager.xpInCurrentLevel(forXP: xp)
+        let needed = SkillXPManager.xpNeededForNextLevel(atLevel: level)
+        displayXPText = "\(inLevel)/\(needed) XP"
+    }
+
+    private func runAnimation() {
+        if !gain.didLevelUp {
+            // Simple case: no level up, just fill to new progress
+            withAnimation(.easeInOut(duration: 1.2)) {
                 barProgress = gain.newProgress
+            }
+            updateXPText(level: gain.newLevel, xp: gain.newXP)
+            return
+        }
+
+        // Level-up case: animate through each level
+        let levelsToAnimate = gain.newLevel - gain.previousLevel
+        var delay: Double = 0
+        let fillDuration: Double = 1.0
+        let pauseDuration: Double = 0.5
+
+        for i in 0..<levelsToAnimate {
+            let currentLevel = gain.previousLevel + i
+            let nextLevel = currentLevel + 1
+            let isLastLevel = (i == levelsToAnimate - 1)
+
+            // Fill bar to 100% for this level
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                withAnimation(.easeInOut(duration: fillDuration)) {
+                    barProgress = 1.0
+                }
+            }
+            delay += fillDuration
+
+            // Show level-up pump
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                Haptics.impact(.medium)
+                displayLevel = nextLevel
+                updateXPText(level: nextLevel, xp: isLastLevel ? gain.newXP : SkillXPManager.xpForLevel(nextLevel))
+
+                withAnimation(.spring(duration: 0.3, bounce: 0.5)) {
+                    showLevelUp = true
+                    levelUpScale = 1.3
+                }
+            }
+
+            // Settle the pump back down
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay + 0.3) {
+                withAnimation(.easeOut(duration: 0.2)) {
+                    levelUpScale = 1.0
+                }
+            }
+
+            delay += pauseDuration
+
+            // Reset bar to 0 for next level (or fill to final progress)
+            if isLastLevel {
+                DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                    barProgress = 0
+                    withAnimation(.easeInOut(duration: 0.8)) {
+                        barProgress = gain.newProgress
+                    }
+                    updateXPText(level: gain.newLevel, xp: gain.newXP)
+                }
+            } else {
+                DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                    barProgress = 0
+                    showLevelUp = false
+                }
+                delay += 0.15
             }
         }
     }

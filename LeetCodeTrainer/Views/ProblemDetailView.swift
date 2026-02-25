@@ -8,6 +8,8 @@ struct ProblemDetailView: View {
     @State private var editorContentHeight: CGFloat = 150
     @State private var revealedHints = 0
     @State private var showHistory = false
+    @State private var linterWarnings: [LintWarning] = []
+    @AppStorage("linterEnabled") private var linterEnabled = true
 
     var body: some View {
         ScrollView {
@@ -137,7 +139,10 @@ struct ProblemDetailView: View {
                         fontSize: CGFloat(editorFontSize),
                         onContentHeightChange: { height in
                             editorContentHeight = height
-                        }
+                        },
+                        onLinterWarnings: linterEnabled ? { warnings in
+                            linterWarnings = warnings
+                        } : nil
                     )
                     .frame(height: min(max(editorContentHeight, 150), 500))
                     .clipShape(RoundedRectangle(cornerRadius: 8))
@@ -145,6 +150,11 @@ struct ProblemDetailView: View {
                 .padding(16)
                 .background(Theme.card)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
+
+                // Linter warnings
+                if linterEnabled && !linterWarnings.isEmpty {
+                    LinterWarningsView(warnings: linterWarnings)
+                }
 
                 // Run button
                 Button {

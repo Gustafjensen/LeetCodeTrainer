@@ -5,6 +5,7 @@ struct SettingsView: View {
     @State private var editingName = false
     @State private var nameText = ""
     @AppStorage("editorFontSize") private var editorFontSize: Double = 14
+    @AppStorage("linterEnabled") private var linterEnabled = true
     @State private var showResetAlert = false
 
     var body: some View {
@@ -82,6 +83,22 @@ struct SettingsView: View {
                         .padding(.vertical, 8)
 
                         SettingsRow(icon: "globe", label: "Language", value: "Python")
+
+                        HStack {
+                            Image(systemName: "checkmark.shield")
+                                .font(.subheadline)
+                                .foregroundStyle(Theme.accent)
+                                .frame(width: 24)
+                            Text("Python Linter")
+                                .font(.subheadline)
+                                .foregroundStyle(Theme.textPrimary)
+                            Spacer()
+                            Toggle("", isOn: $linterEnabled)
+                                .labelsHidden()
+                                .tint(Theme.accent)
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
                     }
 
                     SettingsSection(title: "About") {

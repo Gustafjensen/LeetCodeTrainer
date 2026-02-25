@@ -1,4 +1,14 @@
 const problems = {
+    'tutorial-add-two': {
+        title: 'Add Two Numbers',
+        functionName: 'addTwo',
+        testCases: [
+            { args: [1, 2], expected: 3, inputDisplay: 'a = 1, b = 2' },
+            { args: [0, 0], expected: 0, inputDisplay: 'a = 0, b = 0' },
+            { args: [-5, 10], expected: 5, inputDisplay: 'a = -5, b = 10' }
+        ],
+        compareFunction: 'exact'
+    },
     'two-sum': {
         title: 'Two Sum',
         functionName: 'twoSum',

@@ -6,6 +6,7 @@ struct CodeEditorView: UIViewRepresentable {
     var fontSize: CGFloat = 14
     var onFocusChange: (Bool) -> Void = { _ in }
     var onContentHeightChange: ((CGFloat) -> Void)?
+    var onLinterWarnings: (([LintWarning]) -> Void)?
 
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
@@ -85,16 +86,37 @@ struct CodeEditorView: UIViewRepresentable {
             parent.onFocusChange(false)
         }
 
+        private var lintTimer: Timer?
+
         func textViewDidChange(_ textView: UITextView) {
             parent.text = textView.text
             applySyntaxHighlighting()
             reportContentHeight()
+            scheduleLinting()
         }
 
         func reportContentHeight() {
             guard let textView = textView else { return }
             let height = textView.contentSize.height
             parent.onContentHeightChange?(height)
+        }
+
+        func scheduleLinting() {
+            lintTimer?.invalidate()
+            lintTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] _ in
+                self?.runLinter()
+            }
+        }
+
+        private func runLinter() {
+            guard let onWarnings = parent.onLinterWarnings else { return }
+            let code = parent.text
+            DispatchQueue.global(qos: .userInitiated).async {
+                let warnings = PythonLinter.shared.lint(code)
+                DispatchQueue.main.async {
+                    onWarnings(warnings)
+                }
+            }
         }
 
         func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange,
@@ -116,6 +138,7 @@ struct CodeEditorView: UIViewRepresentable {
                 textView.insertText("\n" + indent)
                 parent.text = textView.text
                 applySyntaxHighlighting()
+                scheduleLinting()
                 return false
             }
             return true
@@ -178,6 +201,12 @@ struct CodeEditorView: UIViewRepresentable {
             let selectedRange = textView.selectedRange
             textView.attributedText = attributed
             textView.selectedRange = selectedRange
+
+            // Re-apply text container settings (attributedText resets them)
+            textView.textContainer.lineBreakMode = .byClipping
+            textView.textContainer.widthTracksTextView = false
+            textView.textContainer.size.width = CGFloat.greatestFiniteMagnitude
+
             textView.typingAttributes = [
                 .font: UIFont.monospacedSystemFont(ofSize: parent.fontSize, weight: .regular),
                 .foregroundColor: UIColor.white
@@ -192,13 +221,39 @@ struct CodeEditorView: UIViewRepresentable {
             textView?.resignFirstResponder()
         }
 
+        private static let bracketPairs: [String: String] = [
+            "()": ")",
+            "[]": "]",
+            "{}": "}",
+            "\"\"": "\"",
+        ]
+
         func insertSnippet(_ snippet: String) {
-            textView?.insertText(snippet)
-            if let tv = textView {
-                parent.text = tv.text
-                applySyntaxHighlighting()
-                reportContentHeight()
+            guard let tv = textView else { return }
+
+            // Check if this is a bracket pair snippet
+            if let closing = Self.bracketPairs[snippet] {
+                let cursorPos = tv.selectedRange.location
+                let text = tv.text as NSString
+
+                // If the character right after the cursor is the closing bracket, jump past it
+                if cursorPos < text.length,
+                   text.substring(with: NSRange(location: cursorPos, length: closing.count)) == closing {
+                    tv.selectedRange = NSRange(location: cursorPos + closing.count, length: 0)
+                    return
+                }
+
+                // Otherwise insert the pair and place cursor inside
+                tv.insertText(snippet)
+                tv.selectedRange = NSRange(location: tv.selectedRange.location - closing.count, length: 0)
+            } else {
+                tv.insertText(snippet)
             }
+
+            parent.text = tv.text
+            applySyntaxHighlighting()
+            reportContentHeight()
+            scheduleLinting()
         }
 
         func undo() {
@@ -207,6 +262,7 @@ struct CodeEditorView: UIViewRepresentable {
             parent.text = tv.text
             applySyntaxHighlighting()
             reportContentHeight()
+            scheduleLinting()
         }
     }
 }

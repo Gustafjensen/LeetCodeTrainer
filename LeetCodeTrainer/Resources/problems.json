@@ -1,5 +1,24 @@
 [
   {
+    "id": "tutorial-add-two",
+    "title": "Add Two Numbers",
+    "difficulty": "Easy",
+    "description": "Given two integers a and b, return their sum.",
+    "examples": [
+      {
+        "input": "a = 1, b = 2",
+        "output": "3",
+        "explanation": "1 + 2 = 3"
+      }
+    ],
+    "functionSignature": "def addTwo(a: int, b: int) -> int:",
+    "starterCode": "def addTwo(a: int, b: int) -> int:\n    # Write your solution here\n    pass",
+    "tags": ["Tutorial"],
+    "hints": ["Use the + operator to add a and b together, then return the result."],
+    "solutionExplanation": "Simply return a + b. Time: O(1), Space: O(1).",
+    "optimalCode": "def addTwo(a: int, b: int) -> int:\n    return a + b"
+  },
+  {
     "id": "two-sum",
     "title": "Two Sum",
     "difficulty": "Easy",
