@@ -7,6 +7,7 @@ struct CodeEditorView: UIViewRepresentable {
     var onFocusChange: (Bool) -> Void = { _ in }
     var onContentHeightChange: ((CGFloat) -> Void)?
     var onLinterWarnings: (([LintWarning]) -> Void)?
+    var onFontSizeChange: ((CGFloat) -> Void)?
 
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
@@ -28,12 +29,18 @@ struct CodeEditorView: UIViewRepresentable {
         textView.keyboardType = .asciiCapable
         textView.layer.cornerRadius = 8
         textView.textContainerInset = UIEdgeInsets(top: 12, left: 8, bottom: 12, right: 8)
+        textView.isScrollEnabled = true
         textView.alwaysBounceVertical = true
+        textView.showsHorizontalScrollIndicator = true
 
         // Enable horizontal scrolling (disable line wrapping)
         textView.textContainer.lineBreakMode = .byClipping
         textView.textContainer.widthTracksTextView = false
         textView.textContainer.size.width = CGFloat.greatestFiniteMagnitude
+
+        // Pinch-to-zoom gesture
+        let pinch = UIPinchGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.handlePinch(_:)))
+        textView.addGestureRecognizer(pinch)
 
         let accessory = CodeKeyboardAccessory(coordinator: context.coordinator)
         accessory.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
@@ -47,11 +54,15 @@ struct CodeEditorView: UIViewRepresentable {
     }
 
     func updateUIView(_ textView: UITextView, context: Context) {
+        let needsHighlight = textView.text != text || context.coordinator.lastAppliedFontSize != fontSize
         if textView.text != text {
             let selectedRange = textView.selectedRange
             textView.text = text
             context.coordinator.applySyntaxHighlighting()
             textView.selectedRange = selectedRange
+            context.coordinator.reportContentHeight()
+        } else if needsHighlight {
+            context.coordinator.applySyntaxHighlighting()
             context.coordinator.reportContentHeight()
         }
     }
@@ -59,6 +70,8 @@ struct CodeEditorView: UIViewRepresentable {
     class Coordinator: NSObject, UITextViewDelegate {
         var parent: CodeEditorView
         weak var textView: UITextView?
+        var lastAppliedFontSize: CGFloat = 0
+        private var pinchBaseFontSize: CGFloat = 14
 
         private let keywords = [
             "def", "return", "if", "elif", "else", "for", "while",
@@ -207,6 +220,17 @@ struct CodeEditorView: UIViewRepresentable {
             textView.textContainer.widthTracksTextView = false
             textView.textContainer.size.width = CGFloat.greatestFiniteMagnitude
 
+            // Force layout recalculation so content size reflects actual text width
+            textView.layoutManager.ensureLayout(for: textView.textContainer)
+            let usedRect = textView.layoutManager.usedRect(for: textView.textContainer)
+            let insets = textView.textContainerInset
+            textView.contentSize = CGSize(
+                width: usedRect.width + insets.left + insets.right + textView.textContainer.lineFragmentPadding * 2,
+                height: usedRect.height + insets.top + insets.bottom
+            )
+
+            lastAppliedFontSize = parent.fontSize
+
             textView.typingAttributes = [
                 .font: UIFont.monospacedSystemFont(ofSize: parent.fontSize, weight: .regular),
                 .foregroundColor: UIColor.white
@@ -263,6 +287,21 @@ struct CodeEditorView: UIViewRepresentable {
             applySyntaxHighlighting()
             reportContentHeight()
             scheduleLinting()
+        }
+
+        @objc func handlePinch(_ gesture: UIPinchGestureRecognizer) {
+            switch gesture.state {
+            case .began:
+                pinchBaseFontSize = parent.fontSize
+            case .changed:
+                let newSize = pinchBaseFontSize * gesture.scale
+                let clamped = round(min(max(newSize, 10), 32))
+                if clamped != parent.fontSize {
+                    parent.onFontSizeChange?(clamped)
+                }
+            default:
+                break
+            }
         }
     }
 }

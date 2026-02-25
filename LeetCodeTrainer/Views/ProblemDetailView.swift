@@ -142,7 +142,10 @@ struct ProblemDetailView: View {
                         },
                         onLinterWarnings: linterEnabled ? { warnings in
                             linterWarnings = warnings
-                        } : nil
+                        } : nil,
+                        onFontSizeChange: { newSize in
+                            editorFontSize = Double(newSize)
+                        }
                     )
                     .frame(height: min(max(editorContentHeight, 150), 500))
                     .clipShape(RoundedRectangle(cornerRadius: 8))
