@@ -298,7 +298,7 @@ struct CodeEditorView: UIViewRepresentable {
                 pinchBaseFontSize = parent.fontSize
             case .changed:
                 let newSize = pinchBaseFontSize * gesture.scale
-                let clamped = round(min(max(newSize, 10), 32))
+                let clamped = round(min(max(newSize, 6), 32))
                 if clamped != parent.fontSize {
                     parent.onFontSizeChange?(clamped)
                 }

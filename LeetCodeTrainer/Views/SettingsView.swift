@@ -76,7 +76,7 @@ struct SettingsView: View {
                                 .fontWeight(.medium)
                                 .foregroundStyle(Theme.textSecondary)
                                 .frame(width: 36)
-                            Stepper("", value: $editorFontSize, in: 10...24, step: 1)
+                            Stepper("", value: $editorFontSize, in: 6...32, step: 1)
                                 .labelsHidden()
                         }
                         .padding(.horizontal, 16)

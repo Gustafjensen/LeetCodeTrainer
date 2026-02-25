@@ -33,6 +33,7 @@ class ExecutionService {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(Secrets.apiKey, forHTTPHeaderField: "x-api-key")
 
         let body = ExecuteRequest(problemId: problemId, language: language, sourceCode: sourceCode)
         request.httpBody = try JSONEncoder().encode(body)

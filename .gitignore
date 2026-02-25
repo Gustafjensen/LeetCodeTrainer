@@ -14,5 +14,8 @@ backend/node_modules/
 # Environment
 .env
 
+# Secrets
+LeetCodeTrainer/Secrets.swift
+
 # Claude
 .claude/
