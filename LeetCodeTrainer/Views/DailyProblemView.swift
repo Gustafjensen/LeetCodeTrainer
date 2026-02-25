@@ -4,11 +4,6 @@ struct DailyProblemView: View {
     var viewModel: ProblemListViewModel
     @State private var displayedMonth: Date = .now
     @State private var path = NavigationPath()
-    @State private var showWidgetPrompt = false
-    @State private var widgetPromptMessage = ""
-    @AppStorage("hasShownWidgetPromptFirst") private var hasShownWidgetPromptFirst = false
-    @AppStorage("hasShownWidgetPromptStreak5") private var hasShownWidgetPromptStreak5 = false
-
     private var xpManager: SkillXPManager { .shared }
 
     private var dailyProblem: Problem? {
@@ -38,6 +33,16 @@ struct DailyProblemView: View {
                             isCompleted: xpManager.isDailyCompleted(for: .now)
                         )
                     }
+
+                    // Subtle widget hint
+                    HStack(spacing: 6) {
+                        Image(systemName: "square.grid.2x2")
+                            .font(.caption2)
+                        Text("Add home screen widget")
+                            .font(.caption)
+                    }
+                    .foregroundStyle(Theme.textSecondary.opacity(0.5))
+                    .padding(.top, 4)
                 }
                 .padding()
             }
@@ -67,28 +72,7 @@ struct DailyProblemView: View {
                    xpManager.isSolved(problem.id),
                    !xpManager.isDailyCompleted(for: .now) {
                     xpManager.markDailyCompleted()
-
-                    // Prompt to add widget at milestones
-                    let streak = xpManager.currentStreak()
-                    if xpManager.completedDailyDates.count == 1 && !hasShownWidgetPromptFirst {
-                        hasShownWidgetPromptFirst = true
-                        widgetPromptMessage = "Great job on your first daily challenge! Add the CodeCrush widget to your home screen to track your streak at a glance."
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                            showWidgetPrompt = true
-                        }
-                    } else if streak >= 5 && !hasShownWidgetPromptStreak5 {
-                        hasShownWidgetPromptStreak5 = true
-                        widgetPromptMessage = "Amazing 5-day streak! Add the CodeCrush widget to your home screen to show off your progress."
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                            showWidgetPrompt = true
-                        }
-                    }
                 }
-            }
-            .alert("Add Widget", isPresented: $showWidgetPrompt) {
-                Button("Got It") {}
-            } message: {
-                Text(widgetPromptMessage + "\n\nLong-press your home screen → tap + → search for CodeCrush.")
             }
         }
     }
