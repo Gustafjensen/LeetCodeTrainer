@@ -103,6 +103,28 @@ struct SettingsView: View {
 
                     SettingsSection(title: "About") {
                         SettingsRow(icon: "info.circle", label: "Version", value: "1.0.0")
+
+                        Button {
+                            if let url = URL(string: "https://axellangenskiold.github.io/") {
+                                UIApplication.shared.open(url)
+                            }
+                        } label: {
+                            HStack {
+                                Image(systemName: "hand.raised")
+                                    .font(.subheadline)
+                                    .foregroundStyle(Theme.accent)
+                                    .frame(width: 24)
+                                Text("Privacy Policy")
+                                    .font(.subheadline)
+                                    .foregroundStyle(Theme.textPrimary)
+                                Spacer()
+                                Image(systemName: "arrow.up.right")
+                                    .font(.caption)
+                                    .foregroundStyle(Theme.textSecondary)
+                            }
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 12)
+                        }
                     }
 
                     SettingsSection(title: "Data") {
