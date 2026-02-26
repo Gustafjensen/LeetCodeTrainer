@@ -22,8 +22,15 @@ struct MainTabView: View {
         tabAppearance.stackedLayoutAppearance.selected.iconColor = UIColor(Theme.accent)
         tabAppearance.stackedLayoutAppearance.selected.titleTextAttributes = selectedAttrs
 
+        // Add spacing above icons
+        tabAppearance.stackedLayoutAppearance.normal.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: -2)
+        tabAppearance.stackedLayoutAppearance.selected.titlePositionAdjustment = UIOffset(horizontal: 0, vertical: -2)
+
         UITabBar.appearance().standardAppearance = tabAppearance
         UITabBar.appearance().scrollEdgeAppearance = tabAppearance
+
+        // Push content down from the top edge of the tab bar
+        UITabBar.appearance().layoutMargins = UIEdgeInsets(top: 8, left: 0, bottom: 0, right: 0)
 
         // Navigation bar
         let navAppearance = UINavigationBarAppearance()
