@@ -321,6 +321,7 @@ struct ProblemDetailView: View {
                 XPRewardView(
                     gains: gains,
                     sourceCode: viewModel.sourceCode,
+                    problemTitle: viewModel.problem.title,
                     solutionExplanation: viewModel.problem.solutionExplanation,
                     optimalCode: viewModel.problem.optimalCode,
                     newAchievements: viewModel.newAchievements,

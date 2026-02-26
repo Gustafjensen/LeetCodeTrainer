@@ -325,6 +325,7 @@ private struct OnboardingTutorialView: View {
                 XPRewardView(
                     gains: gains,
                     sourceCode: sourceCode,
+                    problemTitle: "Add Two Numbers",
                     solutionExplanation: "Simply return a + b. Time: O(1), Space: O(1).",
                     optimalCode: "def addTwo(a: int, b: int) -> int:\n    return a + b",
                     popToRoot: onComplete

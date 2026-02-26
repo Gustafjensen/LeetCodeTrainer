@@ -4,6 +4,7 @@ import StoreKit
 struct XPRewardView: View {
     let gains: [SkillXPGain]
     let sourceCode: String
+    var problemTitle: String = ""
     var solutionExplanation: String?
     var optimalCode: String?
     var newAchievements: [Achievement] = []
@@ -16,6 +17,8 @@ struct XPRewardView: View {
     @State private var showAchievements = false
     @State private var showButton = false
     @State private var showConfetti = false
+    @State private var showShareSheet = false
+    @State private var shareImage: UIImage?
 
     var body: some View {
         NavigationStack {
@@ -181,30 +184,44 @@ struct XPRewardView: View {
                             .opacity(showContent ? 1 : 0)
                         }
 
-                        // Continue button
+                        // Buttons
                         if showButton {
-                            Button {
-                                let solvedCount = SkillXPManager.shared.solvedProblems.count
-                                if solvedCount == 5 || solvedCount == 15 {
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                        requestReview()
-                                    }
+                            HStack(spacing: 12) {
+                                Button {
+                                    generateSolveShareImage()
+                                } label: {
+                                    Image(systemName: "square.and.arrow.up")
+                                        .font(.body.bold())
+                                        .frame(width: 50)
+                                        .padding(.vertical, 14)
+                                        .background(Theme.cardLight)
+                                        .foregroundStyle(Theme.accent)
+                                        .clipShape(RoundedRectangle(cornerRadius: 12))
                                 }
-                                dismiss()
-                                popToRoot()
-                            } label: {
-                                Text("Continue")
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.vertical, 14)
-                                    .background(
-                                        LinearGradient(
-                                            colors: [Theme.accent, Theme.primaryLight],
-                                            startPoint: .leading, endPoint: .trailing
+
+                                Button {
+                                    let solvedCount = SkillXPManager.shared.solvedProblems.count
+                                    if solvedCount == 5 || solvedCount == 15 {
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                            requestReview()
+                                        }
+                                    }
+                                    dismiss()
+                                    popToRoot()
+                                } label: {
+                                    Text("Continue")
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.vertical, 14)
+                                        .background(
+                                            LinearGradient(
+                                                colors: [Theme.accent, Theme.primaryLight],
+                                                startPoint: .leading, endPoint: .trailing
+                                            )
                                         )
-                                    )
-                                    .foregroundStyle(.white)
-                                    .fontWeight(.semibold)
-                                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                                        .foregroundStyle(.white)
+                                        .fontWeight(.semibold)
+                                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                                }
                             }
                             .transition(.opacity.combined(with: .move(edge: .bottom)))
                         }
@@ -255,6 +272,97 @@ struct XPRewardView: View {
                 }
             }
         }
+        .sheet(isPresented: $showShareSheet) {
+            if let image = shareImage {
+                ShareSheet(items: [image])
+            }
+        }
+    }
+
+    private func generateSolveShareImage() {
+        let totalXP = gains.reduce(0) { $0 + $1.gained }
+        let card = SolveShareCard(
+            problemTitle: problemTitle,
+            xpGained: totalXP,
+            sourceCode: sourceCode,
+            solvedCount: SkillXPManager.shared.solvedProblems.count
+        )
+        let renderer = ImageRenderer(content: card)
+        renderer.scale = UIScreen.main.scale
+        if let image = renderer.uiImage {
+            shareImage = image
+            showShareSheet = true
+        }
+    }
+}
+
+// MARK: - Solve Share Card
+
+struct SolveShareCard: View {
+    let problemTitle: String
+    let xpGained: Int
+    let sourceCode: String
+    let solvedCount: Int
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(spacing: 8) {
+                Text("< / >")
+                    .font(.system(size: 14, weight: .bold, design: .monospaced))
+                    .foregroundStyle(Color(red: 0.3, green: 0.5, blue: 1.0))
+                Text("CodeCrush")
+                    .font(.subheadline)
+                    .fontWeight(.bold)
+                    .foregroundStyle(.white)
+                Spacer()
+            }
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Solved")
+                    .font(.caption)
+                    .foregroundStyle(.green)
+                    .fontWeight(.semibold)
+                Text(problemTitle)
+                    .font(.title3)
+                    .fontWeight(.bold)
+                    .foregroundStyle(.white)
+            }
+
+            // Code snippet (first 8 lines)
+            let codeLines = sourceCode.components(separatedBy: "\n").prefix(8)
+            Text(codeLines.joined(separator: "\n"))
+                .font(.system(size: 11, design: .monospaced))
+                .foregroundStyle(.white.opacity(0.7))
+                .lineLimit(8)
+                .padding(10)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color.black.opacity(0.3))
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+
+            HStack {
+                Label("+\(xpGained) XP", systemImage: "star.fill")
+                    .font(.caption)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.yellow)
+                Spacer()
+                Text("\(solvedCount) problems solved")
+                    .font(.caption)
+                    .foregroundStyle(.white.opacity(0.5))
+            }
+        }
+        .padding(20)
+        .frame(width: 320)
+        .background(
+            LinearGradient(
+                colors: [
+                    Color(red: 0.1, green: 0.15, blue: 0.35),
+                    Color(red: 0.06, green: 0.09, blue: 0.25)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 20))
     }
 }
 
