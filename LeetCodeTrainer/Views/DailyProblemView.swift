@@ -4,13 +4,20 @@ struct DailyProblemView: View {
     var viewModel: ProblemListViewModel
     @State private var displayedMonth: Date = .now
     @State private var path = NavigationPath()
+    @AppStorage("dailyDifficulty") private var dailyDifficulty: String = "All"
     private var xpManager: SkillXPManager { .shared }
 
+    private var filteredProblems: [Problem] {
+        if dailyDifficulty == "All" { return viewModel.problems }
+        let filtered = viewModel.problems.filter { $0.difficulty.rawValue == dailyDifficulty }
+        return filtered.isEmpty ? viewModel.problems : filtered
+    }
+
     private var dailyProblem: Problem? {
-        guard !viewModel.problems.isEmpty else { return nil }
+        guard !filteredProblems.isEmpty else { return nil }
         let dayOfYear = Calendar.current.ordinality(of: .day, in: .year, for: .now) ?? 0
-        let index = dayOfYear % viewModel.problems.count
-        return viewModel.problems[index]
+        let index = dayOfYear % filteredProblems.count
+        return filteredProblems[index]
     }
 
     var body: some View {
@@ -21,6 +28,27 @@ struct DailyProblemView: View {
                         currentStreak: xpManager.currentStreak(),
                         longestStreak: xpManager.longestStreak()
                     )
+
+                    // Difficulty filter
+                    HStack(spacing: 8) {
+                        ForEach(["All", "Easy", "Medium", "Hard"], id: \.self) { option in
+                            Button {
+                                withAnimation(.easeInOut(duration: 0.2)) {
+                                    dailyDifficulty = option
+                                }
+                            } label: {
+                                Text(option)
+                                    .font(.caption)
+                                    .fontWeight(.medium)
+                                    .padding(.horizontal, 14)
+                                    .padding(.vertical, 7)
+                                    .background(dailyDifficulty == option ? difficultyColor(option) : Theme.card)
+                                    .foregroundStyle(dailyDifficulty == option ? .white : Theme.textSecondary)
+                                    .clipShape(Capsule())
+                            }
+                        }
+                        Spacer()
+                    }
 
                     CalendarMonthView(
                         displayedMonth: $displayedMonth,
@@ -74,6 +102,15 @@ struct DailyProblemView: View {
                     xpManager.markDailyCompleted()
                 }
             }
+        }
+    }
+
+    private func difficultyColor(_ difficulty: String) -> Color {
+        switch difficulty {
+        case "Easy": return .green
+        case "Medium": return .orange
+        case "Hard": return .red
+        default: return Theme.accent
         }
     }
 }
@@ -325,6 +362,8 @@ struct DailyChallengeCard: View {
 struct StreakBannerView: View {
     let currentStreak: Int
     let longestStreak: Int
+    @State private var shareImage: UIImage?
+    @State private var showShareSheet = false
 
     var body: some View {
         HStack(spacing: 14) {
@@ -351,6 +390,19 @@ struct StreakBannerView: View {
             }
 
             Spacer()
+
+            if currentStreak > 0 {
+                Button {
+                    generateShareImage()
+                } label: {
+                    Image(systemName: "square.and.arrow.up")
+                        .font(.subheadline)
+                        .foregroundStyle(Theme.accent)
+                        .padding(8)
+                        .background(Theme.accent.opacity(0.15))
+                        .clipShape(Circle())
+                }
+            }
         }
         .padding(16)
         .background(
@@ -360,5 +412,27 @@ struct StreakBannerView: View {
             )
         )
         .clipShape(RoundedRectangle(cornerRadius: 16))
+        .sheet(isPresented: $showShareSheet) {
+            if let image = shareImage {
+                ShareSheet(items: [image])
+            }
+        }
+    }
+
+    private func generateShareImage() {
+        let xpManager = SkillXPManager.shared
+        let card = StreakShareCard(
+            userName: xpManager.userName,
+            currentStreak: currentStreak,
+            longestStreak: longestStreak,
+            totalXP: xpManager.totalXP(),
+            solvedCount: xpManager.solvedProblems.count
+        )
+        let renderer = ImageRenderer(content: card)
+        renderer.scale = UIScreen.main.scale
+        if let image = renderer.uiImage {
+            shareImage = image
+            showShareSheet = true
+        }
     }
 }

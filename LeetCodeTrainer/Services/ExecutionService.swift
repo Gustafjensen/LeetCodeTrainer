@@ -6,10 +6,36 @@ class ExecutionService {
     private let session: URLSession
 
     enum ExecutionError: Error {
+        case offline
         case networkError(String)
         case serverError(String)
         case timeout
         case decodingError
+
+        var userMessage: String {
+            switch self {
+            case .offline:
+                return "You're offline. Connect to the internet to run your code."
+            case .networkError:
+                return "Could not connect to the server. Check your internet connection and try again."
+            case .serverError:
+                return "The server encountered an error. Please try again in a moment."
+            case .timeout:
+                return "Your code took too long to execute. Check for infinite loops or optimize your solution."
+            case .decodingError:
+                return "Received an unexpected response. Please try again."
+            }
+        }
+
+        var systemImage: String {
+            switch self {
+            case .offline: return "wifi.slash"
+            case .networkError: return "exclamationmark.icloud"
+            case .serverError: return "server.rack"
+            case .timeout: return "clock.badge.exclamationmark"
+            case .decodingError: return "questionmark.diamond"
+            }
+        }
     }
 
     init() {
@@ -26,6 +52,10 @@ class ExecutionService {
     }
 
     func execute(problemId: String, language: String, sourceCode: String) async throws -> ExecutionResult {
+        guard NetworkMonitor.shared.isConnected else {
+            throw ExecutionError.offline
+        }
+
         guard let url = URL(string: "\(baseURL)/execute") else {
             throw ExecutionError.networkError("Invalid URL")
         }

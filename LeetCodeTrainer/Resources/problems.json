@@ -2294,5 +2294,586 @@
     ],
     "solutionExplanation": "Use a monotonic stack to find the nearest smaller bar on each side. The rectangle for each bar extends between its left and right boundaries. Time: O(n), Space: O(n).",
     "optimalCode": "def largestRectangleArea(heights: list[int]) -> int:\n    stack = []\n    max_area = 0\n    heights.append(0)\n    for i in range(len(heights)):\n        while stack and heights[i] < heights[stack[-1]]:\n            h = heights[stack.pop()]\n            w = i if not stack else i - stack[-1] - 1\n            max_area = max(max_area, h * w)\n        stack.append(i)\n    heights.pop()\n    return max_area"
+  },
+  {
+    "id": "reverse-linked-list",
+    "title": "Reverse Linked List",
+    "difficulty": "Easy",
+    "description": "Given an array representing a linked list, return the reversed array.",
+    "examples": [
+      {
+        "input": "head = [1,2,3,4,5]",
+        "output": "[5,4,3,2,1]",
+        "explanation": null
+      },
+      {
+        "input": "head = [1,2]",
+        "output": "[2,1]",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def reverseList(head: list[int]) -> list[int]:",
+    "starterCode": "def reverseList(head: list[int]) -> list[int]:\n    # Write your solution here\n    pass",
+    "tags": [
+      "Arrays"
+    ],
+    "hints": [
+      "Try using Python slicing.",
+      "Two pointers can also work: swap from both ends."
+    ],
+    "solutionExplanation": "Reverse using slicing or two pointers. Time: O(n), Space: O(1) with two pointers.",
+    "optimalCode": "def reverseList(head: list[int]) -> list[int]:\n    return head[::-1]"
+  },
+  {
+    "id": "max-depth-binary-tree",
+    "title": "Maximum Depth of Binary Tree",
+    "difficulty": "Easy",
+    "description": "Given a binary tree represented as a level-order array (None for missing nodes), return its maximum depth. The depth is the number of nodes along the longest path from root to the farthest leaf.",
+    "examples": [
+      {
+        "input": "root = [3,9,20,None,None,15,7]",
+        "output": "3",
+        "explanation": null
+      },
+      {
+        "input": "root = [1,None,2]",
+        "output": "2",
+        "explanation": null
+      },
+      {
+        "input": "root = []",
+        "output": "0",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def maxDepth(root: list) -> int:",
+    "starterCode": "def maxDepth(root: list) -> int:\n    # Write your solution here\n    pass",
+    "tags": [
+      "Tree",
+      "DFS",
+      "Recursion"
+    ],
+    "hints": [
+      "Build the tree recursively or use BFS level by level.",
+      "For BFS, each level you process adds 1 to the depth."
+    ],
+    "solutionExplanation": "Use BFS to count levels. Process nodes level by level, incrementing depth each time. Time: O(n), Space: O(n).",
+    "optimalCode": "def maxDepth(root: list) -> int:\n    if not root or root[0] is None:\n        return 0\n    from collections import deque\n    queue = deque([0])\n    depth = 0\n    while queue:\n        depth += 1\n        for _ in range(len(queue)):\n            i = queue.popleft()\n            left = 2 * i + 1\n            right = 2 * i + 2\n            if left < len(root) and root[left] is not None:\n                queue.append(left)\n            if right < len(root) and root[right] is not None:\n                queue.append(right)\n    return depth"
+  },
+  {
+    "id": "invert-binary-tree",
+    "title": "Invert Binary Tree",
+    "difficulty": "Easy",
+    "description": "Given a binary tree as a level-order array, invert it (mirror it) and return the result as a level-order array.",
+    "examples": [
+      {
+        "input": "root = [4,2,7,1,3,6,9]",
+        "output": "[4,7,2,9,6,3,1]",
+        "explanation": null
+      },
+      {
+        "input": "root = [2,1,3]",
+        "output": "[2,3,1]",
+        "explanation": null
+      },
+      {
+        "input": "root = []",
+        "output": "[]",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def invertTree(root: list) -> list:",
+    "starterCode": "def invertTree(root: list) -> list:\n    # Write your solution here\n    pass",
+    "tags": [
+      "Tree",
+      "DFS",
+      "Recursion"
+    ],
+    "hints": [
+      "Swap left and right children at each level.",
+      "For a level-order array, think about the positions of left and right children."
+    ],
+    "solutionExplanation": "Build actual tree nodes, recursively swap children, then serialize back to level-order. Or work directly on the array by swapping children at each level. Time: O(n), Space: O(n).",
+    "optimalCode": "def invertTree(root: list) -> list:\n    if not root:\n        return []\n    from collections import deque\n    n = len(root)\n    result = list(root)\n    queue = deque([0])\n    while queue:\n        i = queue.popleft()\n        left = 2 * i + 1\n        right = 2 * i + 2\n        if left < n and right < n:\n            result[left], result[right] = result[right], result[left]\n        if left < n and result[left] is not None:\n            queue.append(left)\n        if right < n and result[right] is not None:\n            queue.append(right)\n    return result"
+  },
+  {
+    "id": "symmetric-tree",
+    "title": "Symmetric Tree",
+    "difficulty": "Easy",
+    "description": "Given a binary tree as a level-order array, check whether it is a mirror of itself (symmetric around its center).",
+    "examples": [
+      {
+        "input": "root = [1,2,2,3,4,4,3]",
+        "output": "true",
+        "explanation": null
+      },
+      {
+        "input": "root = [1,2,2,None,3,None,3]",
+        "output": "false",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def isSymmetric(root: list) -> bool:",
+    "starterCode": "def isSymmetric(root: list) -> bool:\n    # Write your solution here\n    pass",
+    "tags": [
+      "Tree",
+      "DFS",
+      "BFS"
+    ],
+    "hints": [
+      "Compare the tree level by level.",
+      "At each level, check if the values form a palindrome."
+    ],
+    "solutionExplanation": "Check each level of the tree for palindrome symmetry. Time: O(n), Space: O(n).",
+    "optimalCode": "def isSymmetric(root: list) -> bool:\n    if not root:\n        return True\n    from collections import deque\n    queue = deque([0])\n    while queue:\n        level_vals = []\n        for _ in range(len(queue)):\n            i = queue.popleft()\n            left = 2 * i + 1\n            right = 2 * i + 2\n            level_vals.append(root[left] if left < len(root) else None)\n            level_vals.append(root[right] if right < len(root) else None)\n            if left < len(root) and root[left] is not None:\n                queue.append(left)\n            if right < len(root) and root[right] is not None:\n                queue.append(right)\n        if level_vals != level_vals[::-1]:\n            return False\n    return True"
+  },
+  {
+    "id": "number-of-1-bits",
+    "title": "Number of 1 Bits",
+    "difficulty": "Easy",
+    "description": "Given a positive integer n, return the number of set bits (1s) in its binary representation (also known as the Hamming weight).",
+    "examples": [
+      {
+        "input": "n = 11",
+        "output": "3",
+        "explanation": "Binary representation is 1011, which has three 1 bits."
+      },
+      {
+        "input": "n = 128",
+        "output": "1",
+        "explanation": "Binary representation is 10000000, which has one 1 bit."
+      },
+      {
+        "input": "n = 255",
+        "output": "8",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def hammingWeight(n: int) -> int:",
+    "starterCode": "def hammingWeight(n: int) -> int:\n    # Write your solution here\n    pass",
+    "tags": [
+      "Bit Manipulation"
+    ],
+    "hints": [
+      "Use bin() to get binary representation and count '1's.",
+      "Or use bit manipulation: n & (n-1) clears the lowest set bit."
+    ],
+    "solutionExplanation": "Count set bits using bin().count('1') or the n & (n-1) trick. Time: O(log n), Space: O(1).",
+    "optimalCode": "def hammingWeight(n: int) -> int:\n    count = 0\n    while n:\n        n &= n - 1\n        count += 1\n    return count"
+  },
+  {
+    "id": "implement-queue-stacks",
+    "title": "Implement Queue using Stacks",
+    "difficulty": "Easy",
+    "description": "Implement a first-in-first-out (FIFO) queue using only two stacks. The queue should support push (add to back), pop (remove from front), peek (get front element), and empty (check if empty). Given a list of operations and arguments, return the results.",
+    "examples": [
+      {
+        "input": "operations = [\"push\",\"push\",\"peek\",\"pop\",\"empty\"], arguments = [[1],[2],[],[],[]]",
+        "output": "[None,None,1,1,false]",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def queueUsingStacks(operations: list[str], arguments: list[list]) -> list:",
+    "starterCode": "def queueUsingStacks(operations: list[str], arguments: list[list]) -> list:\n    # Write your solution here\n    pass",
+    "tags": [
+      "Queue",
+      "Stack",
+      "Design"
+    ],
+    "hints": [
+      "Use two stacks: one for push, one for pop.",
+      "Only transfer elements between stacks when the pop stack is empty."
+    ],
+    "solutionExplanation": "Use two stacks. Push to stack1. For pop/peek, if stack2 is empty, transfer all from stack1. Time: O(1) amortized per operation.",
+    "optimalCode": "def queueUsingStacks(operations: list[str], arguments: list[list]) -> list:\n    stack1, stack2 = [], []\n    results = []\n    for op, args in zip(operations, arguments):\n        if op == \"push\":\n            stack1.append(args[0])\n            results.append(None)\n        elif op == \"pop\":\n            if not stack2:\n                while stack1:\n                    stack2.append(stack1.pop())\n            results.append(stack2.pop())\n        elif op == \"peek\":\n            if not stack2:\n                while stack1:\n                    stack2.append(stack1.pop())\n            results.append(stack2[-1])\n        elif op == \"empty\":\n            results.append(len(stack1) == 0 and len(stack2) == 0)\n    return results"
+  },
+  {
+    "id": "find-duplicate-number",
+    "title": "Find the Duplicate Number",
+    "difficulty": "Medium",
+    "description": "Given an array nums containing n + 1 integers where each integer is between 1 and n (inclusive), there is exactly one repeated number. Find and return this duplicate number. You must not modify the array and use only constant extra space.",
+    "examples": [
+      {
+        "input": "nums = [1,3,4,2,2]",
+        "output": "2",
+        "explanation": null
+      },
+      {
+        "input": "nums = [3,1,3,4,2]",
+        "output": "3",
+        "explanation": null
+      },
+      {
+        "input": "nums = [1,1]",
+        "output": "1",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def findDuplicate(nums: list[int]) -> int:",
+    "starterCode": "def findDuplicate(nums: list[int]) -> int:\n    # Write your solution here\n    pass",
+    "tags": [
+      "Arrays",
+      "Two Pointers"
+    ],
+    "hints": [
+      "Think of the array values as pointers to indices (like a linked list).",
+      "Use Floyd's cycle detection (tortoise and hare) to find the duplicate."
+    ],
+    "solutionExplanation": "Use Floyd's cycle detection: slow moves one step, fast moves two steps. When they meet, reset one to start and advance both by one until they meet again. Time: O(n), Space: O(1).",
+    "optimalCode": "def findDuplicate(nums: list[int]) -> int:\n    slow = fast = nums[0]\n    while True:\n        slow = nums[slow]\n        fast = nums[nums[fast]]\n        if slow == fast:\n            break\n    slow = nums[0]\n    while slow != fast:\n        slow = nums[slow]\n        fast = nums[fast]\n    return slow"
+  },
+  {
+    "id": "binary-tree-level-order",
+    "title": "Binary Tree Level Order Traversal",
+    "difficulty": "Medium",
+    "description": "Given a binary tree as a level-order array (None for missing nodes), return the level order traversal of its node values as a list of lists (each list contains the values at that level).",
+    "examples": [
+      {
+        "input": "root = [3,9,20,None,None,15,7]",
+        "output": "[[3],[9,20],[15,7]]",
+        "explanation": null
+      },
+      {
+        "input": "root = [1]",
+        "output": "[[1]]",
+        "explanation": null
+      },
+      {
+        "input": "root = []",
+        "output": "[]",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def levelOrder(root: list) -> list[list[int]]:",
+    "starterCode": "def levelOrder(root: list) -> list[list[int]]:\n    # Write your solution here\n    pass",
+    "tags": [
+      "Tree",
+      "BFS"
+    ],
+    "hints": [
+      "Use BFS with a queue.",
+      "Process all nodes at the current level before moving to the next."
+    ],
+    "solutionExplanation": "Use BFS. Process nodes level by level, collecting values at each level into a sublist. Time: O(n), Space: O(n).",
+    "optimalCode": "def levelOrder(root: list) -> list[list[int]]:\n    if not root or root[0] is None:\n        return []\n    from collections import deque\n    result = []\n    queue = deque([0])\n    while queue:\n        level = []\n        for _ in range(len(queue)):\n            i = queue.popleft()\n            level.append(root[i])\n            left = 2 * i + 1\n            right = 2 * i + 2\n            if left < len(root) and root[left] is not None:\n                queue.append(left)\n            if right < len(root) and root[right] is not None:\n                queue.append(right)\n        result.append(level)\n    return result"
+  },
+  {
+    "id": "validate-bst",
+    "title": "Validate Binary Search Tree",
+    "difficulty": "Medium",
+    "description": "Given a binary tree as a level-order array, determine if it is a valid binary search tree (BST). A valid BST has: left subtree values less than node, right subtree values greater than node.",
+    "examples": [
+      {
+        "input": "root = [2,1,3]",
+        "output": "true",
+        "explanation": null
+      },
+      {
+        "input": "root = [5,1,4,None,None,3,6]",
+        "output": "false",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def isValidBST(root: list) -> bool:",
+    "starterCode": "def isValidBST(root: list) -> bool:\n    # Write your solution here\n    pass",
+    "tags": [
+      "Tree",
+      "DFS"
+    ],
+    "hints": [
+      "Use DFS with min/max bounds for each node.",
+      "The in-order traversal of a valid BST produces sorted values."
+    ],
+    "solutionExplanation": "DFS with bounds: each node must be within (min, max). Left child narrows max, right child narrows min. Time: O(n), Space: O(n).",
+    "optimalCode": "def isValidBST(root: list) -> bool:\n    if not root:\n        return True\n    def validate(i, low, high):\n        if i >= len(root) or root[i] is None:\n            return True\n        if root[i] <= low or root[i] >= high:\n            return False\n        return validate(2*i+1, low, root[i]) and validate(2*i+2, root[i], high)\n    return validate(0, float('-inf'), float('inf'))"
+  },
+  {
+    "id": "course-schedule",
+    "title": "Course Schedule",
+    "difficulty": "Medium",
+    "description": "There are numCourses courses labeled from 0 to numCourses-1. You are given an array of prerequisites where prerequisites[i] = [ai, bi] indicates you must take course bi first to take course ai. Return true if you can finish all courses.",
+    "examples": [
+      {
+        "input": "numCourses = 2, prerequisites = [[1,0]]",
+        "output": "true",
+        "explanation": null
+      },
+      {
+        "input": "numCourses = 2, prerequisites = [[1,0],[0,1]]",
+        "output": "false",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def canFinish(numCourses: int, prerequisites: list[list[int]]) -> bool:",
+    "starterCode": "def canFinish(numCourses: int, prerequisites: list[list[int]]) -> bool:\n    # Write your solution here\n    pass",
+    "tags": [
+      "Graph",
+      "BFS",
+      "DFS"
+    ],
+    "hints": [
+      "Model this as a directed graph. If there's a cycle, you can't finish all courses.",
+      "Use topological sort (BFS with in-degree counting) or DFS cycle detection."
+    ],
+    "solutionExplanation": "Use topological sort with BFS: count in-degrees, start from nodes with 0 in-degree. If all nodes are processed, no cycle exists. Time: O(V+E), Space: O(V+E).",
+    "optimalCode": "def canFinish(numCourses: int, prerequisites: list[list[int]]) -> bool:\n    from collections import deque, defaultdict\n    graph = defaultdict(list)\n    in_degree = [0] * numCourses\n    for a, b in prerequisites:\n        graph[b].append(a)\n        in_degree[a] += 1\n    queue = deque(i for i in range(numCourses) if in_degree[i] == 0)\n    count = 0\n    while queue:\n        node = queue.popleft()\n        count += 1\n        for neighbor in graph[node]:\n            in_degree[neighbor] -= 1\n            if in_degree[neighbor] == 0:\n                queue.append(neighbor)\n    return count == numCourses"
+  },
+  {
+    "id": "number-of-islands",
+    "title": "Number of Islands",
+    "difficulty": "Medium",
+    "description": "Given an m x n 2D grid of '1's (land) and '0's (water), count the number of islands. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically.",
+    "examples": [
+      {
+        "input": "grid = [[\"1\",\"1\",\"1\",\"1\",\"0\"],[\"1\",\"1\",\"0\",\"1\",\"0\"],[\"1\",\"1\",\"0\",\"0\",\"0\"],[\"0\",\"0\",\"0\",\"0\",\"0\"]]",
+        "output": "1",
+        "explanation": null
+      },
+      {
+        "input": "grid = [[\"1\",\"1\",\"0\",\"0\",\"0\"],[\"1\",\"1\",\"0\",\"0\",\"0\"],[\"0\",\"0\",\"1\",\"0\",\"0\"],[\"0\",\"0\",\"0\",\"1\",\"1\"]]",
+        "output": "3",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def numIslands(grid: list[list[str]]) -> int:",
+    "starterCode": "def numIslands(grid: list[list[str]]) -> int:\n    # Write your solution here\n    pass",
+    "tags": [
+      "Graph",
+      "DFS",
+      "Matrix"
+    ],
+    "hints": [
+      "Use DFS or BFS. When you find a '1', mark all connected '1's as visited.",
+      "Count how many times you initiate a new DFS/BFS."
+    ],
+    "solutionExplanation": "Iterate through grid. When finding '1', DFS to mark all connected land as visited, increment count. Time: O(m*n), Space: O(m*n).",
+    "optimalCode": "def numIslands(grid: list[list[str]]) -> int:\n    if not grid:\n        return 0\n    rows, cols = len(grid), len(grid[0])\n    count = 0\n    def dfs(r, c):\n        if r < 0 or r >= rows or c < 0 or c >= cols or grid[r][c] != '1':\n            return\n        grid[r][c] = '0'\n        dfs(r+1, c)\n        dfs(r-1, c)\n        dfs(r, c+1)\n        dfs(r, c-1)\n    for r in range(rows):\n        for c in range(cols):\n            if grid[r][c] == '1':\n                count += 1\n                dfs(r, c)\n    return count"
+  },
+  {
+    "id": "kth-smallest-bst",
+    "title": "Kth Smallest Element in a BST",
+    "difficulty": "Medium",
+    "description": "Given the root of a binary search tree as a level-order array and an integer k, return the kth smallest value (1-indexed) in the tree.",
+    "examples": [
+      {
+        "input": "root = [3,1,4,None,2], k = 1",
+        "output": "1",
+        "explanation": null
+      },
+      {
+        "input": "root = [5,3,6,2,4,None,None,1], k = 3",
+        "output": "3",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def kthSmallest(root: list, k: int) -> int:",
+    "starterCode": "def kthSmallest(root: list, k: int) -> int:\n    # Write your solution here\n    pass",
+    "tags": [
+      "Tree",
+      "DFS"
+    ],
+    "hints": [
+      "In-order traversal of a BST gives sorted values.",
+      "You don't need to complete the full traversal — stop at the kth element."
+    ],
+    "solutionExplanation": "Perform in-order traversal (left, root, right) and return the kth element. Time: O(n), Space: O(n).",
+    "optimalCode": "def kthSmallest(root: list, k: int) -> int:\n    def inorder(i):\n        if i >= len(root) or root[i] is None:\n            return []\n        return inorder(2*i+1) + [root[i]] + inorder(2*i+2)\n    return inorder(0)[k-1]"
+  },
+  {
+    "id": "lru-cache",
+    "title": "LRU Cache",
+    "difficulty": "Medium",
+    "description": "Design and implement a Least Recently Used (LRU) cache. Given a capacity, list of operations ('put' or 'get'), and their arguments, return the results. 'get' returns the value or -1 if not found. 'put' adds or updates the key-value pair, evicting the least recently used item if at capacity.",
+    "examples": [
+      {
+        "input": "capacity = 2, operations = [\"put\",\"put\",\"get\",\"put\",\"get\",\"put\",\"get\",\"get\",\"get\"], arguments = [[1,1],[2,2],[1],[3,3],[2],[4,4],[1],[3],[4]]",
+        "output": "[None,None,1,None,-1,None,-1,3,4]",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def lruCache(capacity: int, operations: list[str], arguments: list[list[int]]) -> list:",
+    "starterCode": "def lruCache(capacity: int, operations: list[str], arguments: list[list[int]]) -> list:\n    # Write your solution here\n    pass",
+    "tags": [
+      "Design",
+      "Hash Map"
+    ],
+    "hints": [
+      "Use an OrderedDict to maintain insertion/access order.",
+      "Move items to the end on access, pop from the front on eviction."
+    ],
+    "solutionExplanation": "Use collections.OrderedDict. On get, move to end. On put, if key exists update and move to end; if full, pop first item. Time: O(1) per operation.",
+    "optimalCode": "def lruCache(capacity: int, operations: list[str], arguments: list[list[int]]) -> list:\n    from collections import OrderedDict\n    cache = OrderedDict()\n    results = []\n    for op, args in zip(operations, arguments):\n        if op == \"get\":\n            key = args[0]\n            if key in cache:\n                cache.move_to_end(key)\n                results.append(cache[key])\n            else:\n                results.append(-1)\n        elif op == \"put\":\n            key, value = args[0], args[1]\n            if key in cache:\n                cache.move_to_end(key)\n            cache[key] = value\n            if len(cache) > capacity:\n                cache.popitem(last=False)\n            results.append(None)\n    return results"
+  },
+  {
+    "id": "task-scheduler",
+    "title": "Task Scheduler",
+    "difficulty": "Medium",
+    "description": "Given a list of CPU tasks represented by characters and a cooling interval n, return the minimum number of intervals the CPU will take to finish all tasks. The same task must wait at least n intervals before executing again.",
+    "examples": [
+      {
+        "input": "tasks = [\"A\",\"A\",\"A\",\"B\",\"B\",\"B\"], n = 2",
+        "output": "8",
+        "explanation": null
+      },
+      {
+        "input": "tasks = [\"A\",\"A\",\"A\",\"B\",\"B\",\"B\"], n = 0",
+        "output": "6",
+        "explanation": null
+      },
+      {
+        "input": "tasks = [\"A\",\"A\",\"A\",\"A\",\"A\",\"A\",\"B\",\"C\",\"D\",\"E\",\"F\",\"G\"], n = 2",
+        "output": "16",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def leastInterval(tasks: list[str], n: int) -> int:",
+    "starterCode": "def leastInterval(tasks: list[str], n: int) -> int:\n    # Write your solution here\n    pass",
+    "tags": [
+      "Greedy",
+      "Heap"
+    ],
+    "hints": [
+      "The most frequent task determines the minimum length.",
+      "Calculate: (max_count - 1) * (n + 1) + number_of_tasks_with_max_count."
+    ],
+    "solutionExplanation": "Count task frequencies. The most frequent task creates (max_freq - 1) groups of size (n+1), plus the tasks tied for max frequency. Answer is max of this formula and total tasks. Time: O(n), Space: O(1).",
+    "optimalCode": "def leastInterval(tasks: list[str], n: int) -> int:\n    from collections import Counter\n    counts = Counter(tasks)\n    max_count = max(counts.values())\n    max_count_tasks = sum(1 for v in counts.values() if v == max_count)\n    return max(len(tasks), (max_count - 1) * (n + 1) + max_count_tasks)"
+  },
+  {
+    "id": "word-ladder",
+    "title": "Word Ladder",
+    "difficulty": "Hard",
+    "description": "Given two words beginWord and endWord, and a word list, return the number of words in the shortest transformation sequence from beginWord to endWord. Each transformation changes exactly one letter. Every transformed word must exist in the word list. Return 0 if no transformation sequence exists.",
+    "examples": [
+      {
+        "input": "beginWord = \"hit\", endWord = \"cog\", wordList = [\"hot\",\"dot\",\"dog\",\"lot\",\"log\",\"cog\"]",
+        "output": "5",
+        "explanation": null
+      },
+      {
+        "input": "beginWord = \"hit\", endWord = \"cog\", wordList = [\"hot\",\"dot\",\"dog\",\"lot\",\"log\"]",
+        "output": "0",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def ladderLength(beginWord: str, endWord: str, wordList: list[str]) -> int:",
+    "starterCode": "def ladderLength(beginWord: str, endWord: str, wordList: list[str]) -> int:\n    # Write your solution here\n    pass",
+    "tags": [
+      "Graph",
+      "BFS"
+    ],
+    "hints": [
+      "Use BFS. Each word is a node, edges connect words that differ by one letter.",
+      "Use wildcard patterns (e.g., h*t) to find neighbors efficiently."
+    ],
+    "solutionExplanation": "BFS from beginWord. For each word, try changing each character to find neighbors in wordList. Track visited words. Time: O(M^2 * N) where M is word length, N is wordList size.",
+    "optimalCode": "def ladderLength(beginWord: str, endWord: str, wordList: list[str]) -> int:\n    from collections import deque\n    word_set = set(wordList)\n    if endWord not in word_set:\n        return 0\n    queue = deque([(beginWord, 1)])\n    visited = {beginWord}\n    while queue:\n        word, length = queue.popleft()\n        for i in range(len(word)):\n            for c in 'abcdefghijklmnopqrstuvwxyz':\n                next_word = word[:i] + c + word[i+1:]\n                if next_word == endWord:\n                    return length + 1\n                if next_word in word_set and next_word not in visited:\n                    visited.add(next_word)\n                    queue.append((next_word, length + 1))\n    return 0"
+  },
+  {
+    "id": "merge-k-sorted-lists",
+    "title": "Merge k Sorted Lists",
+    "difficulty": "Hard",
+    "description": "You are given an array of k sorted arrays. Merge all arrays into one sorted array and return it.",
+    "examples": [
+      {
+        "input": "lists = [[1,4,5],[1,3,4],[2,6]]",
+        "output": "[1,1,2,3,4,4,5,6]",
+        "explanation": null
+      },
+      {
+        "input": "lists = []",
+        "output": "[]",
+        "explanation": null
+      },
+      {
+        "input": "lists = [[]]",
+        "output": "[]",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def mergeKLists(lists: list[list[int]]) -> list[int]:",
+    "starterCode": "def mergeKLists(lists: list[list[int]]) -> list[int]:\n    # Write your solution here\n    pass",
+    "tags": [
+      "Arrays",
+      "Heap",
+      "Sorting"
+    ],
+    "hints": [
+      "Use a min-heap (priority queue) to always get the smallest element.",
+      "Push the first element of each list, then pop the smallest and push the next from that list."
+    ],
+    "solutionExplanation": "Use a min-heap. Push (value, list_index, element_index) for each list's first element. Pop smallest, push next element from that list. Time: O(N log k), Space: O(k).",
+    "optimalCode": "def mergeKLists(lists: list[list[int]]) -> list[int]:\n    import heapq\n    heap = []\n    for i, lst in enumerate(lists):\n        if lst:\n            heapq.heappush(heap, (lst[0], i, 0))\n    result = []\n    while heap:\n        val, i, j = heapq.heappop(heap)\n        result.append(val)\n        if j + 1 < len(lists[i]):\n            heapq.heappush(heap, (lists[i][j+1], i, j+1))\n    return result"
+  },
+  {
+    "id": "serialize-deserialize-tree",
+    "title": "Serialize and Deserialize Binary Tree",
+    "difficulty": "Hard",
+    "description": "Design an algorithm to serialize a binary tree to a string and deserialize it back. Given a level-order array representing a tree, serialize it to a string and then deserialize it back to the same level-order array. Return the deserialized result.",
+    "examples": [
+      {
+        "input": "root = [1,2,3,None,None,4,5]",
+        "output": "[1,2,3,None,None,4,5]",
+        "explanation": null
+      },
+      {
+        "input": "root = []",
+        "output": "[]",
+        "explanation": null
+      },
+      {
+        "input": "root = [1]",
+        "output": "[1]",
+        "explanation": null
+      }
+    ],
+    "functionSignature": "def codec(root: list) -> list:",
+    "starterCode": "def codec(root: list) -> list:\n    # Write your solution here\n    pass",
+    "tags": [
+      "Tree",
+      "DFS",
+      "Design"
+    ],
+    "hints": [
+      "You can serialize as comma-separated values with 'null' for None.",
+      "For deserialization, parse the string and rebuild the level-order array."
+    ],
+    "solutionExplanation": "Serialize level-order array to string with comma separator, using 'null' for None. Deserialize by splitting and converting back. Time: O(n), Space: O(n).",
+    "optimalCode": "def codec(root: list) -> list:\n    # Serialize\n    serialized = ','.join('null' if v is None else str(v) for v in root) if root else ''\n    # Deserialize\n    if not serialized:\n        return []\n    return [None if v == 'null' else int(v) for v in serialized.split(',')]"
+  },
+  {
+    "id": "alien-dictionary",
+    "title": "Alien Dictionary",
+    "difficulty": "Hard",
+    "description": "There is a new alien language that uses the English alphabet, but the order of letters is unknown. You are given a list of words from the alien dictionary, sorted lexicographically by the alien language's rules. Derive the order of letters. Return a string of the unique letters sorted in the alien language's order. If no valid order exists, return an empty string.",
+    "examples": [
+      {
+        "input": "words = [\"wrt\",\"wrf\",\"er\",\"ett\",\"rftt\"]",
+        "output": "\"wertf\"",
+        "explanation": null
+      },
+      {
+        "input": "words = [\"z\",\"x\"]",
+        "output": "\"zx\"",
+        "explanation": null
+      },
+      {
+        "input": "words = [\"z\",\"x\",\"z\"]",
+        "output": "\"\"",
+        "explanation": "Invalid ordering."
+      }
+    ],
+    "functionSignature": "def alienOrder(words: list[str]) -> str:",
+    "starterCode": "def alienOrder(words: list[str]) -> str:\n    # Write your solution here\n    pass",
+    "tags": [
+      "Graph",
+      "Topological Sort"
+    ],
+    "hints": [
+      "Compare adjacent words to find character ordering relationships.",
+      "Build a directed graph and perform topological sort."
+    ],
+    "solutionExplanation": "Compare adjacent words to find edges (character orderings). Build graph and do topological sort with BFS. Detect cycles = invalid. Time: O(C) where C is total characters.",
+    "optimalCode": "def alienOrder(words: list[str]) -> str:\n    from collections import defaultdict, deque\n    graph = defaultdict(set)\n    in_degree = {c: 0 for word in words for c in word}\n    for i in range(len(words) - 1):\n        w1, w2 = words[i], words[i+1]\n        min_len = min(len(w1), len(w2))\n        if len(w1) > len(w2) and w1[:min_len] == w2[:min_len]:\n            return ''\n        for j in range(min_len):\n            if w1[j] != w2[j]:\n                if w2[j] not in graph[w1[j]]:\n                    graph[w1[j]].add(w2[j])\n                    in_degree[w2[j]] += 1\n                break\n    queue = deque(c for c in in_degree if in_degree[c] == 0)\n    result = []\n    while queue:\n        c = queue.popleft()\n        result.append(c)\n        for neighbor in graph[c]:\n            in_degree[neighbor] -= 1\n            if in_degree[neighbor] == 0:\n                queue.append(neighbor)\n    return ''.join(result) if len(result) == len(in_degree) else ''"
   }
 ]

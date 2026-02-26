@@ -7,6 +7,7 @@ class ProblemDetailViewModel {
     var executionResult: ExecutionResult?
     var isExecuting: Bool = false
     var errorMessage: String?
+    var errorIcon: String?
     var xpGains: [SkillXPGain]?
     var newAchievements: [Achievement] = []
     var showXPReward: Bool = false
@@ -25,6 +26,7 @@ class ProblemDetailViewModel {
     func executeCode() async {
         isExecuting = true
         errorMessage = nil
+        errorIcon = nil
         executionResult = nil
         xpGains = nil
         newAchievements = []
@@ -57,18 +59,11 @@ class ProblemDetailViewModel {
                 showXPReward = true
             }
         } catch let error as ExecutionService.ExecutionError {
-            switch error {
-            case .networkError(let message):
-                errorMessage = "Network error: \(message)"
-            case .serverError(let message):
-                errorMessage = "Server error: \(message)"
-            case .timeout:
-                errorMessage = "Execution timed out. Check for infinite loops."
-            case .decodingError:
-                errorMessage = "Failed to parse server response."
-            }
+            errorMessage = error.userMessage
+            errorIcon = error.systemImage
         } catch {
-            errorMessage = "Unexpected error: \(error.localizedDescription)"
+            errorMessage = "Something went wrong. Please try again."
+            errorIcon = "exclamationmark.triangle"
         }
 
         isExecuting = false

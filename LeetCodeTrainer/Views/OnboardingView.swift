@@ -363,8 +363,10 @@ private struct OnboardingTutorialView: View {
             } else {
                 Haptics.notification(.error)
             }
+        } catch let error as ExecutionService.ExecutionError {
+            errorMessage = error.userMessage
         } catch {
-            errorMessage = "Could not connect. Check your internet and try again."
+            errorMessage = "Something went wrong. Please try again."
         }
 
         isExecuting = false

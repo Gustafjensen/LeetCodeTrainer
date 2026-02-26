@@ -5,6 +5,7 @@ struct DifficultyProblemsView: View {
     let problems: [Problem]
     @State private var selectedProblem: Problem?
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.horizontalSizeClass) private var sizeClass
 
     private var difficultyColor: Color {
         switch difficulty {
@@ -16,10 +17,7 @@ struct DifficultyProblemsView: View {
 
     var body: some View {
         ScrollView {
-            LazyVGrid(columns: [
-                GridItem(.flexible(), spacing: 12),
-                GridItem(.flexible(), spacing: 12)
-            ], spacing: 12) {
+            LazyVGrid(columns: AdaptiveLayout.gridColumns(for: sizeClass, compactCount: 2, regularCount: 4), spacing: 12) {
                 ForEach(problems) { problem in
                     ProblemCard(
                         problem: problem,

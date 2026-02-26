@@ -10,6 +10,7 @@ struct ProblemDetailView: View {
     @State private var showHistory = false
     @State private var linterWarnings: [LintWarning] = []
     @AppStorage("linterEnabled") private var linterEnabled = true
+    @Environment(\.horizontalSizeClass) private var sizeClass
 
     var body: some View {
         ScrollView {
@@ -147,7 +148,7 @@ struct ProblemDetailView: View {
                             editorFontSize = Double(newSize)
                         }
                     )
-                    .frame(height: min(max(editorContentHeight, 150), 500))
+                    .frame(height: min(max(editorContentHeight, AdaptiveLayout.editorMinHeight(for: sizeClass)), AdaptiveLayout.editorMaxHeight(for: sizeClass)))
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
                 .padding(16)
@@ -157,6 +158,21 @@ struct ProblemDetailView: View {
                 // Linter warnings
                 if linterEnabled && !linterWarnings.isEmpty {
                     LinterWarningsView(warnings: linterWarnings)
+                }
+
+                // Offline banner
+                if !NetworkMonitor.shared.isConnected {
+                    HStack(spacing: 8) {
+                        Image(systemName: "wifi.slash")
+                            .font(.caption)
+                        Text("You're offline — code execution requires internet.")
+                            .font(.caption)
+                    }
+                    .foregroundStyle(.orange)
+                    .padding(10)
+                    .frame(maxWidth: .infinity)
+                    .background(Color.orange.opacity(0.1))
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
 
                 // Run button
@@ -191,13 +207,18 @@ struct ProblemDetailView: View {
 
                 // Error
                 if let errorMessage = viewModel.errorMessage {
-                    Text(errorMessage)
-                        .font(.callout)
-                        .foregroundStyle(.red)
-                        .padding(12)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color.red.opacity(0.15))
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                    HStack(spacing: 10) {
+                        Image(systemName: viewModel.errorIcon ?? "exclamationmark.triangle")
+                            .font(.title3)
+                            .foregroundStyle(.red)
+                        Text(errorMessage)
+                            .font(.callout)
+                            .foregroundStyle(Theme.textSecondary)
+                    }
+                    .padding(12)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color.red.opacity(0.1))
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
 
                 // Results

@@ -5,15 +5,15 @@ struct ProblemListView: View {
     @State private var path = NavigationPath()
     @State private var showSearch = false
     @FocusState private var isSearchFocused: Bool
+    @Environment(\.horizontalSizeClass) private var sizeClass
 
     private var easyCount: Int { viewModel.problems.filter { $0.difficulty == .easy }.count }
     private var mediumCount: Int { viewModel.problems.filter { $0.difficulty == .medium }.count }
     private var hardCount: Int { viewModel.problems.filter { $0.difficulty == .hard }.count }
 
-    private let columns = [
-        GridItem(.flexible(), spacing: 12),
-        GridItem(.flexible(), spacing: 12)
-    ]
+    private var columns: [GridItem] {
+        AdaptiveLayout.gridColumns(for: sizeClass, compactCount: 2, regularCount: 3)
+    }
 
     var body: some View {
         NavigationStack(path: $path) {

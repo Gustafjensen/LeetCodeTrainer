@@ -5,6 +5,7 @@ struct ProfileView: View {
     var problems: [Problem] = []
     private var xpManager: SkillXPManager { .shared }
     @State private var selectedPhoto: PhotosPickerItem?
+    @Environment(\.horizontalSizeClass) private var sizeClass
 
     private var sortedSkills: [(skill: String, xp: Int)] {
         xpManager.skillXP
@@ -89,7 +90,7 @@ struct ProfileView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 16))
 
                     // Stats cards
-                    LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)], spacing: 12) {
+                    LazyVGrid(columns: AdaptiveLayout.gridColumns(for: sizeClass, compactCount: 2, regularCount: 4), spacing: 12) {
                         StatCard(
                             icon: "checkmark.circle.fill",
                             iconColor: .green,
@@ -310,7 +311,11 @@ struct SkillRow: View {
 struct AchievementsSection: View {
     let problems: [Problem]
     private var xpManager: SkillXPManager { .shared }
-    private let columns = [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)]
+    @Environment(\.horizontalSizeClass) private var sizeClass
+
+    private var columns: [GridItem] {
+        AdaptiveLayout.gridColumns(for: sizeClass, compactCount: 2, regularCount: 4)
+    }
 
     private var unlocked: [Achievement] {
         Achievement.all.filter { xpManager.unlockedAchievements.contains($0.id) }

@@ -737,6 +737,188 @@ const problems = {
             { args: [[1]], expected: 1, inputDisplay: 'heights = [1]' }
         ],
         compareFunction: 'exact'
+    },
+    'reverse-linked-list': {
+        title: 'Reverse Linked List',
+        functionName: 'reverseList',
+        testCases: [
+            { args: [[1, 2, 3, 4, 5]], expected: [5, 4, 3, 2, 1], inputDisplay: 'head = [1,2,3,4,5]' },
+            { args: [[1, 2]], expected: [2, 1], inputDisplay: 'head = [1,2]' },
+            { args: [[]], expected: [], inputDisplay: 'head = []' }
+        ],
+        compareFunction: 'exact'
+    },
+    'max-depth-binary-tree': {
+        title: 'Maximum Depth of Binary Tree',
+        functionName: 'maxDepth',
+        testCases: [
+            { args: [[3, 9, 20, null, null, 15, 7]], expected: 3, inputDisplay: 'root = [3,9,20,null,null,15,7]' },
+            { args: [[1, null, 2]], expected: 2, inputDisplay: 'root = [1,null,2]' },
+            { args: [[]], expected: 0, inputDisplay: 'root = []' }
+        ],
+        compareFunction: 'exact'
+    },
+    'invert-binary-tree': {
+        title: 'Invert Binary Tree',
+        functionName: 'invertTree',
+        testCases: [
+            { args: [[4, 2, 7, 1, 3, 6, 9]], expected: [4, 7, 2, 9, 6, 3, 1], inputDisplay: 'root = [4,2,7,1,3,6,9]' },
+            { args: [[2, 1, 3]], expected: [2, 3, 1], inputDisplay: 'root = [2,1,3]' },
+            { args: [[]], expected: [], inputDisplay: 'root = []' }
+        ],
+        compareFunction: 'exact'
+    },
+    'symmetric-tree': {
+        title: 'Symmetric Tree',
+        functionName: 'isSymmetric',
+        testCases: [
+            { args: [[1, 2, 2, 3, 4, 4, 3]], expected: true, inputDisplay: 'root = [1,2,2,3,4,4,3]' },
+            { args: [[1, 2, 2, null, 3, null, 3]], expected: false, inputDisplay: 'root = [1,2,2,null,3,null,3]' }
+        ],
+        compareFunction: 'exact'
+    },
+    'number-of-1-bits': {
+        title: 'Number of 1 Bits',
+        functionName: 'hammingWeight',
+        testCases: [
+            { args: [11], expected: 3, inputDisplay: 'n = 11' },
+            { args: [128], expected: 1, inputDisplay: 'n = 128' },
+            { args: [255], expected: 8, inputDisplay: 'n = 255' }
+        ],
+        compareFunction: 'exact'
+    },
+    'implement-queue-stacks': {
+        title: 'Implement Queue using Stacks',
+        functionName: 'queueUsingStacks',
+        testCases: [
+            { args: [["push", "push", "peek", "pop", "empty"], [[1], [2], [], [], []]], expected: [null, null, 1, 1, false],
+              inputDisplay: 'ops = ["push","push","peek","pop","empty"], args = [[1],[2],[],[],[]]' },
+            { args: [["push", "push", "push", "pop", "pop"], [[1], [2], [3], [], []]], expected: [null, null, null, 1, 2],
+              inputDisplay: 'ops = ["push","push","push","pop","pop"], args = [[1],[2],[3],[],[]]' }
+        ],
+        compareFunction: 'exact'
+    },
+    'find-duplicate-number': {
+        title: 'Find the Duplicate Number',
+        functionName: 'findDuplicate',
+        testCases: [
+            { args: [[1, 3, 4, 2, 2]], expected: 2, inputDisplay: 'nums = [1,3,4,2,2]' },
+            { args: [[3, 1, 3, 4, 2]], expected: 3, inputDisplay: 'nums = [3,1,3,4,2]' },
+            { args: [[1, 1]], expected: 1, inputDisplay: 'nums = [1,1]' }
+        ],
+        compareFunction: 'exact'
+    },
+    'binary-tree-level-order': {
+        title: 'Binary Tree Level Order Traversal',
+        functionName: 'levelOrder',
+        testCases: [
+            { args: [[3, 9, 20, null, null, 15, 7]], expected: [[3], [9, 20], [15, 7]], inputDisplay: 'root = [3,9,20,null,null,15,7]' },
+            { args: [[1]], expected: [[1]], inputDisplay: 'root = [1]' },
+            { args: [[]], expected: [], inputDisplay: 'root = []' }
+        ],
+        compareFunction: 'exact'
+    },
+    'validate-bst': {
+        title: 'Validate Binary Search Tree',
+        functionName: 'isValidBST',
+        testCases: [
+            { args: [[2, 1, 3]], expected: true, inputDisplay: 'root = [2,1,3]' },
+            { args: [[5, 1, 4, null, null, 3, 6]], expected: false, inputDisplay: 'root = [5,1,4,null,null,3,6]' }
+        ],
+        compareFunction: 'exact'
+    },
+    'course-schedule': {
+        title: 'Course Schedule',
+        functionName: 'canFinish',
+        testCases: [
+            { args: [2, [[1, 0]]], expected: true, inputDisplay: 'numCourses = 2, prerequisites = [[1,0]]' },
+            { args: [2, [[1, 0], [0, 1]]], expected: false, inputDisplay: 'numCourses = 2, prerequisites = [[1,0],[0,1]]' },
+            { args: [3, [[0, 1], [0, 2], [1, 2]]], expected: true, inputDisplay: 'numCourses = 3, prerequisites = [[0,1],[0,2],[1,2]]' }
+        ],
+        compareFunction: 'exact'
+    },
+    'number-of-islands': {
+        title: 'Number of Islands',
+        functionName: 'numIslands',
+        testCases: [
+            { args: [[["1", "1", "1", "1", "0"], ["1", "1", "0", "1", "0"], ["1", "1", "0", "0", "0"], ["0", "0", "0", "0", "0"]]], expected: 1,
+              inputDisplay: 'grid = [["1","1","1","1","0"],["1","1","0","1","0"],["1","1","0","0","0"],["0","0","0","0","0"]]' },
+            { args: [[["1", "1", "0", "0", "0"], ["1", "1", "0", "0", "0"], ["0", "0", "1", "0", "0"], ["0", "0", "0", "1", "1"]]], expected: 3,
+              inputDisplay: 'grid = [["1","1","0","0","0"],["1","1","0","0","0"],["0","0","1","0","0"],["0","0","0","1","1"]]' }
+        ],
+        compareFunction: 'exact'
+    },
+    'kth-smallest-bst': {
+        title: 'Kth Smallest Element in a BST',
+        functionName: 'kthSmallest',
+        testCases: [
+            { args: [[3, 1, 4, null, 2], 1], expected: 1, inputDisplay: 'root = [3,1,4,null,2], k = 1' },
+            { args: [[5, 3, 6, 2, 4, null, null, 1], 3], expected: 3, inputDisplay: 'root = [5,3,6,2,4,null,null,1], k = 3' }
+        ],
+        compareFunction: 'exact'
+    },
+    'lru-cache': {
+        title: 'LRU Cache',
+        functionName: 'lruCache',
+        testCases: [
+            { args: [2, ["put", "put", "get", "put", "get", "put", "get", "get", "get"], [[1, 1], [2, 2], [1], [3, 3], [2], [4, 4], [1], [3], [4]]],
+              expected: [null, null, 1, null, -1, null, -1, 3, 4],
+              inputDisplay: 'capacity = 2, ops = ["put","put","get","put","get","put","get","get","get"], args = [[1,1],[2,2],[1],[3,3],[2],[4,4],[1],[3],[4]]' }
+        ],
+        compareFunction: 'exact'
+    },
+    'task-scheduler': {
+        title: 'Task Scheduler',
+        functionName: 'leastInterval',
+        testCases: [
+            { args: [["A", "A", "A", "B", "B", "B"], 2], expected: 8, inputDisplay: 'tasks = ["A","A","A","B","B","B"], n = 2' },
+            { args: [["A", "A", "A", "B", "B", "B"], 0], expected: 6, inputDisplay: 'tasks = ["A","A","A","B","B","B"], n = 0' },
+            { args: [["A", "A", "A", "A", "A", "A", "B", "C", "D", "E", "F", "G"], 2], expected: 16,
+              inputDisplay: 'tasks = ["A","A","A","A","A","A","B","C","D","E","F","G"], n = 2' }
+        ],
+        compareFunction: 'exact'
+    },
+    'word-ladder': {
+        title: 'Word Ladder',
+        functionName: 'ladderLength',
+        testCases: [
+            { args: ["hit", "cog", ["hot", "dot", "dog", "lot", "log", "cog"]], expected: 5,
+              inputDisplay: 'beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log","cog"]' },
+            { args: ["hit", "cog", ["hot", "dot", "dog", "lot", "log"]], expected: 0,
+              inputDisplay: 'beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log"]' }
+        ],
+        compareFunction: 'exact'
+    },
+    'merge-k-sorted-lists': {
+        title: 'Merge k Sorted Lists',
+        functionName: 'mergeKLists',
+        testCases: [
+            { args: [[[1, 4, 5], [1, 3, 4], [2, 6]]], expected: [1, 1, 2, 3, 4, 4, 5, 6],
+              inputDisplay: 'lists = [[1,4,5],[1,3,4],[2,6]]' },
+            { args: [[]], expected: [], inputDisplay: 'lists = []' },
+            { args: [[[],[]]], expected: [], inputDisplay: 'lists = [[],[]]' }
+        ],
+        compareFunction: 'exact'
+    },
+    'serialize-deserialize-tree': {
+        title: 'Serialize and Deserialize Binary Tree',
+        functionName: 'codec',
+        testCases: [
+            { args: [[1, 2, 3, null, null, 4, 5]], expected: [1, 2, 3, null, null, 4, 5], inputDisplay: 'root = [1,2,3,null,null,4,5]' },
+            { args: [[]], expected: [], inputDisplay: 'root = []' },
+            { args: [[1]], expected: [1], inputDisplay: 'root = [1]' }
+        ],
+        compareFunction: 'exact'
+    },
+    'alien-dictionary': {
+        title: 'Alien Dictionary',
+        functionName: 'alienOrder',
+        testCases: [
+            { args: [["wrt", "wrf", "er", "ett", "rftt"]], expected: "wertf", inputDisplay: 'words = ["wrt","wrf","er","ett","rftt"]' },
+            { args: [["z", "x"]], expected: "zx", inputDisplay: 'words = ["z","x"]' },
+            { args: [["z", "x", "z"]], expected: "", inputDisplay: 'words = ["z","x","z"]' }
+        ],
+        compareFunction: 'exact'
     }
 };
 
