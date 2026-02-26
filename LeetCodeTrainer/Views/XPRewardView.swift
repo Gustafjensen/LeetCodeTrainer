@@ -1,4 +1,5 @@
 import SwiftUI
+import StoreKit
 
 struct XPRewardView: View {
     let gains: [SkillXPGain]
@@ -9,6 +10,7 @@ struct XPRewardView: View {
     var popToRoot: () -> Void = {}
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.requestReview) private var requestReview
     @State private var showContent = false
     @State private var animateProgress = false
     @State private var showAchievements = false
@@ -182,6 +184,12 @@ struct XPRewardView: View {
                         // Continue button
                         if showButton {
                             Button {
+                                let solvedCount = SkillXPManager.shared.solvedProblems.count
+                                if solvedCount == 5 || solvedCount == 15 {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                        requestReview()
+                                    }
+                                }
                                 dismiss()
                                 popToRoot()
                             } label: {
