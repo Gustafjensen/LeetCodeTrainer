@@ -13,6 +13,7 @@ struct ProblemDetailView: View {
     @Environment(\.horizontalSizeClass) private var sizeClass
 
     var body: some View {
+        ScrollViewReader { scrollProxy in
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
                 // Header
@@ -130,14 +131,31 @@ struct ProblemDetailView: View {
 
                 // Code editor
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("Solution")
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(Theme.textPrimary)
+                    HStack {
+                        Text("Solution")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(Theme.textPrimary)
+                        Spacer()
+                        Button {
+                            viewModel.sourceCode = viewModel.problem.starterCode
+                        } label: {
+                            Image(systemName: "arrow.uturn.backward")
+                                .font(.subheadline)
+                                .foregroundStyle(Theme.accent)
+                        }
+                    }
 
                     CodeEditorView(
                         text: $viewModel.sourceCode,
                         fontSize: CGFloat(editorFontSize),
+                        onFocusChange: { focused in
+                            if focused {
+                                withAnimation {
+                                    scrollProxy.scrollTo("editor", anchor: .top)
+                                }
+                            }
+                        },
                         onContentHeightChange: { height in
                             editorContentHeight = height
                         },
@@ -151,6 +169,7 @@ struct ProblemDetailView: View {
                     .frame(height: min(max(editorContentHeight, AdaptiveLayout.editorMinHeight(for: sizeClass)), AdaptiveLayout.editorMaxHeight(for: sizeClass)))
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
+                .id("editor")
                 .padding(16)
                 .background(Theme.card)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
@@ -292,6 +311,7 @@ struct ProblemDetailView: View {
             }
             .padding()
         }
+        } // ScrollViewReader
         .background(Theme.surface)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)

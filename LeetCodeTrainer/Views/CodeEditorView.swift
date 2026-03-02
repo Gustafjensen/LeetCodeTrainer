@@ -1,6 +1,14 @@
 import SwiftUI
 import UIKit
 
+/// UIScrollView that blocks iOS auto-scrolling to first responder.
+/// We handle cursor visibility manually via scrollToCursorIfNeeded().
+private class StableScrollView: UIScrollView {
+    override func scrollRectToVisible(_ rect: CGRect, animated: Bool) {
+        // Intentionally empty — prevents UIKit from jumping the view
+    }
+}
+
 struct CodeEditorView: UIViewRepresentable {
     @Binding var text: String
     var fontSize: CGFloat = 14
@@ -13,11 +21,20 @@ struct CodeEditorView: UIViewRepresentable {
         Coordinator(self)
     }
 
-    func makeUIView(context: Context) -> UITextView {
+    func makeUIView(context: Context) -> UIScrollView {
+        // Outer scroll view handles both horizontal and vertical scrolling
+        let scrollView = StableScrollView()
+        scrollView.showsHorizontalScrollIndicator = true
+        scrollView.showsVerticalScrollIndicator = true
+        scrollView.alwaysBounceVertical = true
+        scrollView.backgroundColor = UIColor(red: 0.06, green: 0.09, blue: 0.25, alpha: 1)
+        scrollView.layer.cornerRadius = 8
+
+        // Inner text view — does NOT scroll, just renders at full content size
         let textView = UITextView()
         textView.delegate = context.coordinator
         textView.font = UIFont.monospacedSystemFont(ofSize: fontSize, weight: .regular)
-        textView.backgroundColor = UIColor(red: 0.06, green: 0.09, blue: 0.25, alpha: 1)
+        textView.backgroundColor = .clear
         textView.textColor = UIColor.white
         textView.tintColor = UIColor.white
         textView.keyboardAppearance = .dark
@@ -27,52 +44,55 @@ struct CodeEditorView: UIViewRepresentable {
         textView.smartQuotesType = .no
         textView.smartInsertDeleteType = .no
         textView.keyboardType = .asciiCapable
-        textView.layer.cornerRadius = 8
+        textView.isScrollEnabled = false
         textView.textContainerInset = UIEdgeInsets(top: 12, left: 8, bottom: 12, right: 8)
-        textView.isScrollEnabled = true
-        textView.alwaysBounceVertical = true
-        textView.showsHorizontalScrollIndicator = true
-
-        // Enable horizontal scrolling (disable line wrapping)
         textView.textContainer.lineBreakMode = .byClipping
         textView.textContainer.widthTracksTextView = false
-        textView.textContainer.size.width = CGFloat.greatestFiniteMagnitude
+        textView.textContainer.heightTracksTextView = false
+        textView.textContainer.size = CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
 
-        // Pinch-to-zoom gesture
+        scrollView.addSubview(textView)
+
+        // Pinch-to-zoom on the scroll view so it doesn't conflict with text editing
         let pinch = UIPinchGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.handlePinch(_:)))
-        textView.addGestureRecognizer(pinch)
+        scrollView.addGestureRecognizer(pinch)
 
         let accessory = CodeKeyboardAccessory(coordinator: context.coordinator)
         accessory.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44)
         textView.inputAccessoryView = accessory
 
         context.coordinator.textView = textView
+        context.coordinator.scrollView = scrollView
         textView.text = text
         context.coordinator.applySyntaxHighlighting()
-        context.coordinator.reportContentHeight()
-        return textView
+        context.coordinator.updateTextViewSize()
+
+        return scrollView
     }
 
-    func updateUIView(_ textView: UITextView, context: Context) {
-        // Keep coordinator's reference to parent in sync with latest SwiftUI state
+    func updateUIView(_ scrollView: UIScrollView, context: Context) {
         context.coordinator.parent = self
+        guard let textView = context.coordinator.textView else { return }
 
         let needsHighlight = textView.text != text || context.coordinator.lastAppliedFontSize != fontSize
+        let savedOffset = scrollView.contentOffset
         if textView.text != text {
             let selectedRange = textView.selectedRange
             textView.text = text
             context.coordinator.applySyntaxHighlighting()
             textView.selectedRange = selectedRange
-            context.coordinator.reportContentHeight()
+            context.coordinator.updateTextViewSize()
         } else if needsHighlight {
             context.coordinator.applySyntaxHighlighting()
-            context.coordinator.reportContentHeight()
+            context.coordinator.updateTextViewSize()
         }
+        scrollView.contentOffset = savedOffset
     }
 
     class Coordinator: NSObject, UITextViewDelegate {
         var parent: CodeEditorView
         weak var textView: UITextView?
+        weak var scrollView: UIScrollView?
         var lastAppliedFontSize: CGFloat = 0
         private var pinchBaseFontSize: CGFloat = 14
         private var currentWarnings: [LintWarning] = []
@@ -106,16 +126,66 @@ struct CodeEditorView: UIViewRepresentable {
         private var lintTimer: Timer?
 
         func textViewDidChange(_ textView: UITextView) {
+            let savedOffset = scrollView?.contentOffset
             parent.text = textView.text
             applySyntaxHighlighting()
-            reportContentHeight()
+            updateTextViewSize()
+            if let offset = savedOffset { scrollView?.contentOffset = offset }
+            scrollToCursorIfNeeded()
             scheduleLinting()
         }
 
-        func reportContentHeight() {
-            guard let textView = textView else { return }
-            let height = textView.contentSize.height
-            parent.onContentHeightChange?(height)
+        /// Sizes the UITextView to fit its content and updates the scroll view's contentSize.
+        func updateTextViewSize() {
+            guard let textView = textView, let scrollView = scrollView else { return }
+
+            // Preserve current scroll position
+            let savedOffset = scrollView.contentOffset
+
+            let fitSize = textView.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
+            let newSize = CGSize(
+                width: max(fitSize.width, scrollView.bounds.width),
+                height: max(fitSize.height, scrollView.bounds.height)
+            )
+            textView.frame = CGRect(origin: .zero, size: newSize)
+            scrollView.contentSize = newSize
+
+            // Clamp saved offset to valid range and restore
+            let maxX = max(newSize.width - scrollView.bounds.width, 0)
+            let maxY = max(newSize.height - scrollView.bounds.height, 0)
+            scrollView.contentOffset = CGPoint(
+                x: min(savedOffset.x, maxX),
+                y: min(savedOffset.y, maxY)
+            )
+
+            parent.onContentHeightChange?(fitSize.height)
+        }
+
+        /// Scrolls to make the cursor visible without jumping the view unnecessarily.
+        func scrollToCursorIfNeeded() {
+            guard let textView = textView, let scrollView = scrollView else { return }
+            guard let cursorPos = textView.selectedTextRange?.end else { return }
+            let caretRect = textView.caretRect(for: cursorPos)
+            let visible = scrollView.bounds
+            let offset = scrollView.contentOffset
+
+            var newOffset = offset
+            // Horizontal: only scroll if cursor is outside visible area
+            if caretRect.maxX > offset.x + visible.width - 20 {
+                newOffset.x = caretRect.maxX - visible.width + 20
+            } else if caretRect.minX < offset.x + 20 {
+                newOffset.x = max(caretRect.minX - 20, 0)
+            }
+            // Vertical: only scroll if cursor is outside visible area
+            if caretRect.maxY > offset.y + visible.height - 20 {
+                newOffset.y = caretRect.maxY - visible.height + 20
+            } else if caretRect.minY < offset.y + 20 {
+                newOffset.y = max(caretRect.minY - 20, 0)
+            }
+
+            if newOffset != offset {
+                scrollView.setContentOffset(newOffset, animated: false)
+            }
         }
 
         func scheduleLinting() {
@@ -156,8 +226,12 @@ struct CodeEditorView: UIViewRepresentable {
                 }
 
                 textView.insertText("\n" + indent)
+                let savedOffset = scrollView?.contentOffset
                 parent.text = textView.text
                 applySyntaxHighlighting()
+                updateTextViewSize()
+                if let offset = savedOffset { scrollView?.contentOffset = offset }
+                scrollToCursorIfNeeded()
                 scheduleLinting()
                 return false
             }
@@ -221,7 +295,6 @@ struct CodeEditorView: UIViewRepresentable {
             // Inline warning highlights — yellow tint on lines with issues
             if !currentWarnings.isEmpty {
                 let lines = text.components(separatedBy: "\n")
-                // Collect worst severity per line
                 var warningLines: [Int: LintWarning.Severity] = [:]
                 for warning in currentWarnings {
                     let line = warning.line
@@ -231,7 +304,6 @@ struct CodeEditorView: UIViewRepresentable {
                         warningLines[line] = warning.severity
                     }
                 }
-                // Apply background tint to each warning line
                 var offset = 0
                 for (index, line) in lines.enumerated() {
                     let lineNumber = index + 1
@@ -241,27 +313,13 @@ struct CodeEditorView: UIViewRepresentable {
                             value: UIColor.systemYellow.withAlphaComponent(0.15),
                             range: lineRange)
                     }
-                    offset += line.utf16.count + 1 // +1 for newline
+                    offset += line.utf16.count + 1
                 }
             }
 
             let selectedRange = textView.selectedRange
             textView.attributedText = attributed
             textView.selectedRange = selectedRange
-
-            // Re-apply text container settings (attributedText resets them)
-            textView.textContainer.lineBreakMode = .byClipping
-            textView.textContainer.widthTracksTextView = false
-            textView.textContainer.size.width = CGFloat.greatestFiniteMagnitude
-
-            // Force layout recalculation so content size reflects actual text width
-            textView.layoutManager.ensureLayout(for: textView.textContainer)
-            let usedRect = textView.layoutManager.usedRect(for: textView.textContainer)
-            let insets = textView.textContainerInset
-            textView.contentSize = CGSize(
-                width: usedRect.width + insets.left + insets.right + textView.textContainer.lineFragmentPadding * 2,
-                height: usedRect.height + insets.top + insets.bottom
-            )
 
             lastAppliedFontSize = parent.fontSize
 
@@ -289,28 +347,28 @@ struct CodeEditorView: UIViewRepresentable {
         func insertSnippet(_ snippet: String) {
             guard let tv = textView else { return }
 
-            // Check if this is a bracket pair snippet
             if let closing = Self.bracketPairs[snippet] {
                 let cursorPos = tv.selectedRange.location
                 let text = tv.text as NSString
 
-                // If the character right after the cursor is the closing bracket, jump past it
                 if cursorPos < text.length,
                    text.substring(with: NSRange(location: cursorPos, length: closing.count)) == closing {
                     tv.selectedRange = NSRange(location: cursorPos + closing.count, length: 0)
                     return
                 }
 
-                // Otherwise insert the pair and place cursor inside
                 tv.insertText(snippet)
                 tv.selectedRange = NSRange(location: tv.selectedRange.location - closing.count, length: 0)
             } else {
                 tv.insertText(snippet)
             }
 
+            let savedOffset = scrollView?.contentOffset
             parent.text = tv.text
             applySyntaxHighlighting()
-            reportContentHeight()
+            updateTextViewSize()
+            if let offset = savedOffset { scrollView?.contentOffset = offset }
+            scrollToCursorIfNeeded()
             scheduleLinting()
         }
 
@@ -319,7 +377,7 @@ struct CodeEditorView: UIViewRepresentable {
             undoManager.undo()
             parent.text = tv.text
             applySyntaxHighlighting()
-            reportContentHeight()
+            updateTextViewSize()
             scheduleLinting()
         }
 
@@ -411,7 +469,6 @@ private class CodeKeyboardAccessory: UIView {
             stack.addArrangedSubview(button)
         }
 
-        // Undo button
         let undoButton = UIButton(type: .system)
         undoButton.setImage(UIImage(systemName: "arrow.uturn.backward"), for: .normal)
         undoButton.tintColor = .white
@@ -421,7 +478,6 @@ private class CodeKeyboardAccessory: UIView {
         undoButton.addTarget(self, action: #selector(undoTapped), for: .touchUpInside)
         stack.addArrangedSubview(undoButton)
 
-        // Done button at the end
         let doneButton = UIButton(type: .system)
         doneButton.setTitle("Done", for: .normal)
         doneButton.titleLabel?.font = UIFont.systemFont(ofSize: 15, weight: .semibold)

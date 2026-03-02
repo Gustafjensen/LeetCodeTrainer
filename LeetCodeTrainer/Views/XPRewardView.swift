@@ -328,12 +328,11 @@ struct SolveShareCard: View {
                     .foregroundStyle(.white)
             }
 
-            // Code snippet (first 8 lines)
-            let codeLines = sourceCode.components(separatedBy: "\n").prefix(8)
-            Text(codeLines.joined(separator: "\n"))
+            // Full solution code
+            Text(sourceCode)
                 .font(.system(size: 11, design: .monospaced))
                 .foregroundStyle(.white.opacity(0.7))
-                .lineLimit(8)
+                .fixedSize(horizontal: false, vertical: true)
                 .padding(10)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(Color.black.opacity(0.3))
