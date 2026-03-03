@@ -16,6 +16,8 @@ struct CodeEditorView: UIViewRepresentable {
     var onContentHeightChange: ((CGFloat) -> Void)?
     var onLinterWarnings: (([LintWarning]) -> Void)?
     var onFontSizeChange: ((CGFloat) -> Void)?
+    /// Set this binding to provide external access to the undo action.
+    var undoAction: Binding<(() -> Void)?>?
 
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
@@ -66,6 +68,13 @@ struct CodeEditorView: UIViewRepresentable {
         textView.text = text
         context.coordinator.applySyntaxHighlighting()
         context.coordinator.updateTextViewSize()
+
+        // Expose undo action to parent
+        DispatchQueue.main.async {
+            self.undoAction?.wrappedValue = { [weak textView] in
+                context.coordinator.undo()
+            }
+        }
 
         return scrollView
     }

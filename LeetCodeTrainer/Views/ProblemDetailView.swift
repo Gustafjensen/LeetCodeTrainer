@@ -11,6 +11,7 @@ struct ProblemDetailView: View {
     @State private var linterWarnings: [LintWarning] = []
     @AppStorage("linterEnabled") private var linterEnabled = true
     @Environment(\.horizontalSizeClass) private var sizeClass
+    @State private var editorUndo: (() -> Void)?
 
     var body: some View {
         ScrollViewReader { scrollProxy in
@@ -138,7 +139,7 @@ struct ProblemDetailView: View {
                             .foregroundStyle(Theme.textPrimary)
                         Spacer()
                         Button {
-                            viewModel.sourceCode = viewModel.problem.starterCode
+                            editorUndo?()
                         } label: {
                             Image(systemName: "arrow.uturn.backward")
                                 .font(.subheadline)
@@ -164,7 +165,8 @@ struct ProblemDetailView: View {
                         } : nil,
                         onFontSizeChange: { newSize in
                             editorFontSize = Double(newSize)
-                        }
+                        },
+                        undoAction: $editorUndo
                     )
                     .frame(height: min(max(editorContentHeight, AdaptiveLayout.editorMinHeight(for: sizeClass)), AdaptiveLayout.editorMaxHeight(for: sizeClass)))
                     .clipShape(RoundedRectangle(cornerRadius: 8))
