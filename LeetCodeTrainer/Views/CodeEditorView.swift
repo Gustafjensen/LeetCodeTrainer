@@ -249,19 +249,25 @@ struct CodeEditorView: UIViewRepresentable {
 
         func applySyntaxHighlighting() {
             guard let textView = textView else { return }
-            let text = textView.text ?? ""
-            let attributed = NSMutableAttributedString(string: text)
+            let storage = textView.textStorage
+            let text = storage.string
             let fullRange = NSRange(location: 0, length: text.utf16.count)
+            guard fullRange.length > 0 else { return }
 
-            attributed.addAttribute(.font,
-                value: UIFont.monospacedSystemFont(ofSize: parent.fontSize, weight: .regular), range: fullRange)
-            attributed.addAttribute(.foregroundColor,
-                value: UIColor.white, range: fullRange)
+            let font = UIFont.monospacedSystemFont(ofSize: parent.fontSize, weight: .regular)
+
+            // Apply attributes directly to textStorage (preserves undo stack)
+            storage.beginEditing()
+
+            // Reset base attributes
+            storage.addAttribute(.font, value: font, range: fullRange)
+            storage.addAttribute(.foregroundColor, value: UIColor.white, range: fullRange)
+            storage.removeAttribute(.backgroundColor, range: fullRange)
 
             for keyword in keywords {
                 if let regex = try? NSRegularExpression(pattern: "\\b\(keyword)\\b") {
                     for match in regex.matches(in: text, range: fullRange) {
-                        attributed.addAttribute(.foregroundColor,
+                        storage.addAttribute(.foregroundColor,
                             value: UIColor.systemPurple, range: match.range)
                     }
                 }
@@ -270,7 +276,7 @@ struct CodeEditorView: UIViewRepresentable {
             for builtin in builtins {
                 if let regex = try? NSRegularExpression(pattern: "\\b\(builtin)\\b") {
                     for match in regex.matches(in: text, range: fullRange) {
-                        attributed.addAttribute(.foregroundColor,
+                        storage.addAttribute(.foregroundColor,
                             value: UIColor.systemTeal, range: match.range)
                     }
                 }
@@ -281,7 +287,7 @@ struct CodeEditorView: UIViewRepresentable {
             for pattern in stringPatterns {
                 if let regex = try? NSRegularExpression(pattern: pattern) {
                     for match in regex.matches(in: text, range: fullRange) {
-                        attributed.addAttribute(.foregroundColor,
+                        storage.addAttribute(.foregroundColor,
                             value: UIColor.systemRed, range: match.range)
                     }
                 }
@@ -289,19 +295,19 @@ struct CodeEditorView: UIViewRepresentable {
 
             if let regex = try? NSRegularExpression(pattern: "#.*$", options: .anchorsMatchLines) {
                 for match in regex.matches(in: text, range: fullRange) {
-                    attributed.addAttribute(.foregroundColor,
+                    storage.addAttribute(.foregroundColor,
                         value: UIColor.systemGray, range: match.range)
                 }
             }
 
             if let regex = try? NSRegularExpression(pattern: "\\b\\d+\\.?\\d*\\b") {
                 for match in regex.matches(in: text, range: fullRange) {
-                    attributed.addAttribute(.foregroundColor,
+                    storage.addAttribute(.foregroundColor,
                         value: UIColor.systemBlue, range: match.range)
                 }
             }
 
-            // Inline warning highlights — yellow tint on lines with issues
+            // Inline warning highlights
             if !currentWarnings.isEmpty {
                 let lines = text.components(separatedBy: "\n")
                 var warningLines: [Int: LintWarning.Severity] = [:]
@@ -318,7 +324,7 @@ struct CodeEditorView: UIViewRepresentable {
                     let lineNumber = index + 1
                     if warningLines[lineNumber] != nil {
                         let lineRange = NSRange(location: offset, length: line.utf16.count)
-                        attributed.addAttribute(.backgroundColor,
+                        storage.addAttribute(.backgroundColor,
                             value: UIColor.systemYellow.withAlphaComponent(0.15),
                             range: lineRange)
                     }
@@ -326,14 +332,12 @@ struct CodeEditorView: UIViewRepresentable {
                 }
             }
 
-            let selectedRange = textView.selectedRange
-            textView.attributedText = attributed
-            textView.selectedRange = selectedRange
+            storage.endEditing()
 
             lastAppliedFontSize = parent.fontSize
 
             textView.typingAttributes = [
-                .font: UIFont.monospacedSystemFont(ofSize: parent.fontSize, weight: .regular),
+                .font: font,
                 .foregroundColor: UIColor.white
             ]
         }
