@@ -49,6 +49,10 @@ struct ProblemListView: View {
                                     } else {
                                         viewModel.selectedTags.insert(tag)
                                     }
+                                    AnalyticsService.shared.track("problems_tag_filter", properties: [
+                                        "tag": tag,
+                                        "selected": "\(!viewModel.selectedTags.contains(tag))"
+                                    ])
                                 }
                             }
                         }
@@ -127,6 +131,11 @@ struct ProblemListView: View {
                             if showSearch {
                                 isSearchFocused = true
                             } else {
+                                if !viewModel.searchText.isEmpty {
+                                    AnalyticsService.shared.track("problems_search", properties: [
+                                        "query_length": "\(viewModel.searchText.count)"
+                                    ])
+                                }
                                 viewModel.searchText = ""
                                 isSearchFocused = false
                             }
@@ -142,6 +151,9 @@ struct ProblemListView: View {
                     difficulty: difficulty,
                     problems: viewModel.problems.filter { $0.difficulty == difficulty }
                 )
+                .onAppear {
+                    AnalyticsService.shared.track("problems_difficulty_tap", properties: ["difficulty": difficulty.rawValue])
+                }
             }
             .navigationDestination(for: String.self) { problemId in
                 if let problem = viewModel.problems.first(where: { $0.id == problemId }) {
@@ -151,6 +163,13 @@ struct ProblemListView: View {
                         viewModel: vm,
                         popToRoot: { path = NavigationPath() }
                     )
+                    .onAppear {
+                        AnalyticsService.shared.track("problem_select", properties: [
+                            "problem_id": problem.id,
+                            "difficulty": problem.difficulty.rawValue,
+                            "source": "list"
+                        ])
+                    }
                 }
             }
         }

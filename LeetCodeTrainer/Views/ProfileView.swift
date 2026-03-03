@@ -66,6 +66,7 @@ struct ProfileView: View {
                             Task {
                                 if let data = try? await item.loadTransferable(type: Data.self) {
                                     xpManager.saveProfileImage(data)
+                                    AnalyticsService.shared.track("profile_photo_upload")
                                 }
                             }
                         }
@@ -210,6 +211,9 @@ struct ProfileView: View {
                         .font(.title3.bold())
                         .foregroundStyle(.white)
                 }
+            }
+            .onAppear {
+                AnalyticsService.shared.track("profile_view")
             }
         }
     }

@@ -52,18 +52,39 @@ class ProblemDetailViewModel {
             )
             xpManager.recordSubmission(submission)
 
+            AnalyticsService.shared.track("code_run_result", properties: [
+                "problem_id": problem.id,
+                "passed": "\(result.overallStatus == .pass)",
+                "tests_passed": "\(testsPassed)",
+                "tests_total": "\(result.testResults.count)"
+            ])
+
             if result.overallStatus == .pass {
                 let gains = xpManager.awardXP(for: problem)
                 xpGains = gains
                 newAchievements = xpManager.checkAchievements(problems: allProblems)
+                let totalXP = gains.reduce(0) { $0 + $1.gained }
+                AnalyticsService.shared.track("problem_solved", properties: [
+                    "problem_id": problem.id,
+                    "difficulty": problem.difficulty.rawValue,
+                    "xp_gained": "\(totalXP)"
+                ])
                 showXPReward = true
             }
         } catch let error as ExecutionService.ExecutionError {
             errorMessage = error.userMessage
             errorIcon = error.systemImage
+            AnalyticsService.shared.track("code_run_error", properties: [
+                "problem_id": problem.id,
+                "error_type": "\(error)"
+            ])
         } catch {
             errorMessage = "Something went wrong. Please try again."
             errorIcon = "exclamationmark.triangle"
+            AnalyticsService.shared.track("code_run_error", properties: [
+                "problem_id": problem.id,
+                "error_type": "unknown"
+            ])
         }
 
         isExecuting = false

@@ -25,6 +25,7 @@ struct DailyProblemView: View {
             ScrollView {
                 VStack(spacing: 16) {
                     StreakBannerView(
+
                         currentStreak: xpManager.currentStreak(),
                         longestStreak: xpManager.longestStreak()
                     )
@@ -36,6 +37,7 @@ struct DailyProblemView: View {
                                 withAnimation(.easeInOut(duration: 0.2)) {
                                     dailyDifficulty = option
                                 }
+                                AnalyticsService.shared.track("daily_difficulty_filter", properties: ["difficulty": option])
                             } label: {
                                 Text(option)
                                     .font(.caption)
@@ -93,7 +95,16 @@ struct DailyProblemView: View {
                         viewModel: vm,
                         popToRoot: { path = NavigationPath() }
                     )
+                    .onAppear {
+                        AnalyticsService.shared.track("daily_problem_start", properties: [
+                            "problem_id": problem.id,
+                            "difficulty": problem.difficulty.rawValue
+                        ])
+                    }
                 }
+            }
+            .onAppear {
+                AnalyticsService.shared.track("daily_view")
             }
             .onChange(of: xpManager.solvedProblems) {
                 if let problem = dailyProblem,
@@ -213,6 +224,7 @@ struct CalendarMonthView: View {
             withAnimation(.easeInOut(duration: 0.2)) {
                 displayedMonth = newMonth
             }
+            AnalyticsService.shared.track("daily_calendar_navigate", properties: ["direction": offset < 0 ? "prev" : "next"])
         }
     }
 
@@ -393,6 +405,10 @@ struct StreakBannerView: View {
 
             if currentStreak > 0 {
                 Button {
+                    AnalyticsService.shared.track("streak_share", properties: [
+                        "streak": "\(currentStreak)",
+                        "best_streak": "\(longestStreak)"
+                    ])
                     generateShareImage()
                 } label: {
                     Image(systemName: "square.and.arrow.up")

@@ -86,6 +86,9 @@ struct OnboardingView: View {
                     .tag(pages.count)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
+                .onChange(of: currentPage) { _, newPage in
+                    AnalyticsService.shared.track("onboarding_page_view", properties: ["page": "\(newPage)"])
+                }
 
                 // Page dots
                 HStack(spacing: 8) {
@@ -101,6 +104,10 @@ struct OnboardingView: View {
                 Button {
                     if isLastPage {
                         saveUserName()
+                        if !userName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                            AnalyticsService.shared.track("onboarding_name_entered")
+                        }
+                        AnalyticsService.shared.track("onboarding_tutorial_start")
                         showTutorial = true
                     } else {
                         withAnimation { currentPage += 1 }
@@ -123,6 +130,7 @@ struct OnboardingView: View {
 
                 if !isLastPage {
                     Button("Skip") {
+                        AnalyticsService.shared.track("onboarding_skip", properties: ["from_page": "\(currentPage)"])
                         saveUserName()
                         onComplete()
                     }
@@ -348,6 +356,7 @@ private struct OnboardingTutorialView: View {
             executionResult = result
 
             if result.overallStatus == .pass {
+                AnalyticsService.shared.track("onboarding_tutorial_complete", properties: ["passed": "true"])
                 Haptics.notification(.success)
 
                 // Award a small 5 XP on "Math"

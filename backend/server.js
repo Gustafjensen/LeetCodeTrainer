@@ -38,6 +38,15 @@ const executeLimiter = rateLimit({
     }
 });
 
+// Rate limit on /analytics: 60 requests per minute per IP
+const analyticsLimiter = rateLimit({
+    windowMs: 60 * 1000,
+    max: 60,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: 'Too many requests' }
+});
+
 app.get('/health', (req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
@@ -102,6 +111,28 @@ app.post('/execute', requireApiKey, executeLimiter, async (req, res) => {
             memory: '0MB'
         });
     }
+});
+
+// Analytics endpoint — logs events to Cloud Logging (no DB)
+app.post('/analytics', requireApiKey, analyticsLimiter, (req, res) => {
+    const { events, deviceInfo } = req.body;
+
+    if (!Array.isArray(events) || events.length === 0) {
+        return res.status(400).json({ error: 'Missing or empty events array' });
+    }
+
+    for (const event of events) {
+        console.log(JSON.stringify({
+            type: 'analytics',
+            event: event.name,
+            timestamp: event.timestamp,
+            properties: event.properties || {},
+            device: deviceInfo || {},
+            serverTime: new Date().toISOString()
+        }));
+    }
+
+    res.json({ status: 'ok', received: events.length });
 });
 
 app.listen(PORT, () => {

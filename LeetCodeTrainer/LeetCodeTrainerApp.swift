@@ -22,6 +22,7 @@ struct LeetCodeTrainerApp: App {
                         withAnimation {
                             hasSeenOnboarding = true
                         }
+                        AnalyticsService.shared.track("onboarding_complete")
                     }
                 }
 
@@ -34,6 +35,9 @@ struct LeetCodeTrainerApp: App {
                     .transition(.opacity)
                     .zIndex(1)
                 }
+            }
+            .onAppear {
+                AnalyticsService.shared.track("app_launch")
             }
         }
     }

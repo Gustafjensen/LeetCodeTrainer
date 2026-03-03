@@ -241,6 +241,17 @@ struct XPRewardView: View {
             }
         }
         .onAppear {
+            let totalXP = gains.reduce(0) { $0 + $1.gained }
+            AnalyticsService.shared.track("xp_reward_view", properties: [
+                "problem_title": problemTitle,
+                "total_xp_gained": "\(totalXP)"
+            ])
+            for achievement in newAchievements {
+                AnalyticsService.shared.track("achievement_unlocked", properties: [
+                    "achievement_id": achievement.id,
+                    "achievement_title": achievement.title
+                ])
+            }
             withAnimation(.spring(duration: 0.6)) {
                 showContent = true
             }
@@ -280,6 +291,7 @@ struct XPRewardView: View {
     }
 
     private func generateSolveShareImage() {
+        AnalyticsService.shared.track("solution_share", properties: ["problem_title": problemTitle])
         let totalXP = gains.reduce(0) { $0 + $1.gained }
         let card = SolveShareCard(
             problemTitle: problemTitle,

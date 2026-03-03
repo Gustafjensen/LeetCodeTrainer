@@ -109,6 +109,11 @@ struct ProblemDetailView: View {
                                     withAnimation(.easeOut(duration: 0.25)) {
                                         revealedHints += 1
                                     }
+                                    AnalyticsService.shared.track("hint_reveal", properties: [
+                                        "problem_id": viewModel.problem.id,
+                                        "hint_index": "\(index)",
+                                        "total_hints": "\(viewModel.problem.hints.count)"
+                                    ])
                                 } label: {
                                     HStack {
                                         Image(systemName: "eye.slash")
@@ -140,6 +145,7 @@ struct ProblemDetailView: View {
                         Spacer()
                         Button {
                             editorUndo?()
+                            AnalyticsService.shared.track("editor_undo", properties: ["problem_id": viewModel.problem.id])
                         } label: {
                             Image(systemName: "arrow.uturn.backward")
                                 .font(.subheadline)
@@ -199,6 +205,10 @@ struct ProblemDetailView: View {
                 // Run button
                 Button {
                     Haptics.impact(.medium)
+                    AnalyticsService.shared.track("code_run", properties: [
+                        "problem_id": viewModel.problem.id,
+                        "code_length": "\(viewModel.sourceCode.count)"
+                    ])
                     Task { await viewModel.executeCode() }
                 } label: {
                     HStack {
@@ -255,6 +265,9 @@ struct ProblemDetailView: View {
                             withAnimation(.easeInOut(duration: 0.2)) {
                                 showHistory.toggle()
                             }
+                            if showHistory {
+                                AnalyticsService.shared.track("previous_attempt_view", properties: ["problem_id": viewModel.problem.id])
+                            }
                         } label: {
                             HStack {
                                 Image(systemName: "clock.arrow.circlepath")
@@ -282,6 +295,7 @@ struct ProblemDetailView: View {
                             ForEach(attempts) { attempt in
                                 Button {
                                     viewModel.sourceCode = attempt.sourceCode
+                                    AnalyticsService.shared.track("previous_attempt_restore", properties: ["problem_id": viewModel.problem.id])
                                 } label: {
                                     HStack {
                                         Image(systemName: attempt.passed ? "checkmark.circle.fill" : "xmark.circle.fill")
@@ -329,6 +343,12 @@ struct ProblemDetailView: View {
                     .foregroundStyle(.white)
                     .lineLimit(1)
             }
+        }
+        .onAppear {
+            AnalyticsService.shared.track("problem_view", properties: [
+                "problem_id": viewModel.problem.id,
+                "difficulty": viewModel.problem.difficulty.rawValue
+            ])
         }
         .onChange(of: viewModel.executionResult?.overallStatus) {
             guard let status = viewModel.executionResult?.overallStatus else { return }

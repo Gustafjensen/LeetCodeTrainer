@@ -105,6 +105,7 @@ struct SettingsView: View {
                         SettingsRow(icon: "info.circle", label: "Version", value: "1.0.0")
 
                         Button {
+                            AnalyticsService.shared.track("settings_privacy_policy")
                             if let url = URL(string: "https://axellangenskiold.github.io/") {
                                 UIApplication.shared.open(url)
                             }
@@ -159,6 +160,15 @@ struct SettingsView: View {
                         .foregroundStyle(.white)
                 }
             }
+            .onAppear {
+                AnalyticsService.shared.track("settings_view")
+            }
+            .onChange(of: editorFontSize) { _, newSize in
+                AnalyticsService.shared.track("settings_font_size", properties: ["size": "\(Int(newSize))"])
+            }
+            .onChange(of: linterEnabled) { _, enabled in
+                AnalyticsService.shared.track("settings_linter_toggle", properties: ["enabled": "\(enabled)"])
+            }
             .alert("Reset Progress", isPresented: $showResetAlert) {
                 Button("Cancel", role: .cancel) {}
                 Button("Reset", role: .destructive) {
@@ -174,11 +184,13 @@ struct SettingsView: View {
         let trimmed = nameText.trimmingCharacters(in: .whitespacesAndNewlines)
         if !trimmed.isEmpty {
             xpManager.saveUserName(trimmed)
+            AnalyticsService.shared.track("settings_name_change")
         }
         editingName = false
     }
 
     private func resetProgress() {
+        AnalyticsService.shared.track("settings_reset_progress")
         SkillXPManager.shared.resetProgress()
     }
 }

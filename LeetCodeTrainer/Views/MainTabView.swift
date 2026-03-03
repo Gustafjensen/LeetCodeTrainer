@@ -73,5 +73,10 @@ struct MainTabView: View {
                 .tag(3)
         }
         .tint(Theme.accent)
+        .onChange(of: selectedTab) { _, newTab in
+            let tabNames = ["daily", "problems", "settings", "profile"]
+            let name = newTab < tabNames.count ? tabNames[newTab] : "\(newTab)"
+            AnalyticsService.shared.track("tab_switch", properties: ["tab": name])
+        }
     }
 }
