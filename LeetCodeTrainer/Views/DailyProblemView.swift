@@ -132,6 +132,8 @@ struct CalendarMonthView: View {
     @Binding var displayedMonth: Date
     let completedDates: Set<String>
 
+    private let isIPad = UIDevice.current.userInterfaceIdiom == .pad
+
     private let calendar = Calendar.current
     private let weekdaySymbols = ["S", "M", "T", "W", "T", "F", "S"]
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 0), count: 7)
@@ -199,20 +201,11 @@ struct CalendarMonthView: View {
             }
 
             // Day cells
-            LazyVGrid(columns: columns, spacing: 4) {
-                ForEach(daysInMonth(), id: \.self) { item in
-                    if item.day == 0 {
-                        Color.clear.frame(height: 40)
-                    } else {
-                        DayCellView(
-                            day: item.day,
-                            isToday: item.isToday,
-                            isCompleted: item.isCompleted,
-                            isFuture: item.isFuture
-                        )
-                    }
-                }
-            }
+            DayGridView(
+                days: daysInMonth(),
+                columns: columns,
+                isIPad: isIPad
+            )
         }
         .padding(16)
         .background(Theme.card)
@@ -265,15 +258,58 @@ struct DayItem: Hashable {
     let isFuture: Bool
 }
 
+struct DayGridView: View {
+    let days: [DayItem]
+    let columns: [GridItem]
+    let isIPad: Bool
+
+    var body: some View {
+        GeometryReader { geo in
+            let cellHeight = isIPad ? geo.size.width / 7 : 40
+            LazyVGrid(columns: columns, spacing: isIPad ? 6 : 4) {
+                ForEach(days, id: \.self) { item in
+                    if item.day == 0 {
+                        Color.clear.frame(height: cellHeight)
+                    } else {
+                        DayCellView(
+                            day: item.day,
+                            isToday: item.isToday,
+                            isCompleted: item.isCompleted,
+                            isFuture: item.isFuture,
+                            cellHeight: cellHeight
+                        )
+                    }
+                }
+            }
+        }
+        .frame(height: gridHeight)
+    }
+
+    private var gridHeight: CGFloat {
+        let totalCells = days.count
+        let rows = ceil(Double(totalCells) / 7.0)
+        if isIPad {
+            // Will be computed dynamically, estimate based on screen width
+            let estimatedCellSize = (UIScreen.main.bounds.width - 64) / 7
+            return CGFloat(rows) * estimatedCellSize + CGFloat(rows - 1) * 6
+        } else {
+            return CGFloat(rows) * 40 + CGFloat(rows - 1) * 4
+        }
+    }
+}
+
 struct DayCellView: View {
     let day: Int
     let isToday: Bool
     let isCompleted: Bool
     let isFuture: Bool
+    var cellHeight: CGFloat = 40
+
+    private var circleSize: CGFloat { min(cellHeight * 0.85, 44) }
 
     var body: some View {
         Text("\(day)")
-            .font(.subheadline)
+            .font(cellHeight > 50 ? .body : .subheadline)
             .fontWeight(isToday || isCompleted ? .bold : .regular)
             .foregroundStyle(
                 isFuture ? Theme.textSecondary.opacity(0.3) :
@@ -281,7 +317,7 @@ struct DayCellView: View {
                 isToday ? Theme.accent :
                 Theme.textPrimary
             )
-            .frame(width: 36, height: 36)
+            .frame(width: circleSize, height: circleSize)
             .background(
                 Group {
                     if isCompleted {
@@ -292,7 +328,7 @@ struct DayCellView: View {
                 }
             )
             .frame(maxWidth: .infinity)
-            .frame(height: 40)
+            .frame(height: cellHeight)
     }
 }
 
