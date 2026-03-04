@@ -128,6 +128,7 @@ class SkillXPManager {
         let key = Self.dailyDateFormatter.string(from: date)
         completedDailyDates.insert(key)
         save()
+        NotificationManager.shared.cancelStreakReminder()
     }
 
     func isDailyCompleted(for date: Date) -> Bool {
@@ -212,7 +213,65 @@ class SkillXPManager {
         completedDailyDates = []
         unlockedAchievements = []
         save()
+        NotificationManager.shared.cancelStreakReminder()
     }
+
+    #if DEBUG
+    func seedScreenshotData() {
+        // Name
+        userName = "Alex"
+
+        // February 2026 — most days filled, skip Thu 5, Sat 7, Thu 12, Sat 14
+        completedDailyDates = []
+        let skipDays: Set = [5, 7, 12, 14]
+        for day in 1...20 {
+            if skipDays.contains(day) { continue }
+            completedDailyDates.insert(String(format: "2026-02-%02d", day))
+        }
+
+        // Solved 23 problems (mix of easy/medium/hard)
+        solvedProblems = Set([
+            "two-sum", "reverse-string", "fizz-buzz", "valid-palindrome",
+            "climbing-stairs", "contains-duplicate", "valid-anagram",
+            "palindrome-number", "single-number", "missing-number",
+            "best-time-to-buy-sell-stock", "move-zeroes", "reverse-linked-list",
+            "max-subarray", "valid-parentheses", "group-anagrams",
+            "product-except-self", "container-with-most-water", "house-robber",
+            "coin-change", "merge-intervals",
+            "trapping-rain-water", "word-search"
+        ])
+
+        // Skill XP spread
+        skillXP = [
+            "Arrays": 185,
+            "Strings": 140,
+            "Hash Map": 120,
+            "Dynamic Programming": 95,
+            "Two Pointers": 80,
+            "Math": 65,
+            "Sorting": 55,
+            "Stack": 45,
+            "Binary Search": 40,
+            "Sliding Window": 30,
+            "Greedy": 25,
+            "Matrix": 20,
+            "Recursion": 15,
+            "Tree": 10
+        ]
+
+        // Achievements
+        unlockedAchievements = Set([
+            "first-solve", "five-solved", "ten-solved", "twenty-solved",
+            "streak-3", "streak-7", "streak-14",
+            "first-medium", "first-hard",
+            "five-medium",
+            "xp-100", "xp-500",
+            "skill-lvl3"
+        ])
+
+        save()
+    }
+    #endif
 
     func saveUserName(_ name: String) {
         userName = name

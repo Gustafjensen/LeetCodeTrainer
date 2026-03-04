@@ -6,6 +6,7 @@ struct SettingsView: View {
     @State private var nameText = ""
     @AppStorage("editorFontSize") private var editorFontSize: Double = 14
     @AppStorage("linterEnabled") private var linterEnabled = true
+    @AppStorage("streakRemindersEnabled") private var streakRemindersEnabled = false
     @State private var showResetAlert = false
 
     var body: some View {
@@ -101,8 +102,39 @@ struct SettingsView: View {
                         .padding(.vertical, 8)
                     }
 
+                    SettingsSection(title: "Notifications") {
+                        HStack {
+                            Image(systemName: "bell.badge")
+                                .font(.subheadline)
+                                .foregroundStyle(Theme.accent)
+                                .frame(width: 24)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Streak Reminders")
+                                    .font(.subheadline)
+                                    .foregroundStyle(Theme.textPrimary)
+                                Text("Daily at 6:00 PM")
+                                    .font(.caption2)
+                                    .foregroundStyle(Theme.textSecondary)
+                            }
+                            Spacer()
+                            Toggle("", isOn: $streakRemindersEnabled)
+                                .labelsHidden()
+                                .tint(Theme.accent)
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                    }
+
                     SettingsSection(title: "About") {
+                        #if DEBUG
                         SettingsRow(icon: "info.circle", label: "Version", value: "1.0.0")
+                            .onTapGesture(count: 3) {
+                                xpManager.seedScreenshotData()
+                                Haptics.notification(.success)
+                            }
+                        #else
+                        SettingsRow(icon: "info.circle", label: "Version", value: "1.0.0")
+                        #endif
 
                         Button {
                             AnalyticsService.shared.track("settings_privacy_policy")
@@ -168,6 +200,14 @@ struct SettingsView: View {
             }
             .onChange(of: linterEnabled) { _, enabled in
                 AnalyticsService.shared.track("settings_linter_toggle", properties: ["enabled": "\(enabled)"])
+            }
+            .onChange(of: streakRemindersEnabled) { _, enabled in
+                AnalyticsService.shared.track("settings_streak_reminders_toggle", properties: ["enabled": "\(enabled)"])
+                if enabled {
+                    NotificationManager.shared.scheduleStreakReminder()
+                } else {
+                    NotificationManager.shared.cancelStreakReminder()
+                }
             }
             .alert("Reset Progress", isPresented: $showResetAlert) {
                 Button("Cancel", role: .cancel) {}
