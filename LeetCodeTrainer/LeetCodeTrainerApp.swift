@@ -38,8 +38,11 @@ struct LeetCodeTrainerApp: App {
             }
             .onAppear {
                 AnalyticsService.shared.track("app_launch")
-                NotificationManager.shared.requestPermission { _ in }
-                NotificationManager.shared.refreshNotificationState()
+                NotificationManager.shared.requestPermission { granted in
+                    if granted {
+                        NotificationManager.shared.scheduleStreakReminder()
+                    }
+                }
             }
         }
     }

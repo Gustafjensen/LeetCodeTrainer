@@ -33,9 +33,6 @@ final class NotificationManager {
             return
         }
 
-        let enabled = UserDefaults.standard.bool(forKey: "streakRemindersEnabled")
-        guard enabled else { return }
-
         let content = UNMutableNotificationContent()
         content.title = "Don't break your streak!"
         content.body = "You have a \(xpManager.currentStreak())-day streak. Complete today's challenge to keep it going!"
@@ -65,11 +62,6 @@ final class NotificationManager {
     }
 
     func refreshNotificationState() {
-        let enabled = UserDefaults.standard.bool(forKey: "streakRemindersEnabled")
-        if enabled {
-            scheduleStreakReminder()
-        } else {
-            cancelStreakReminder()
-        }
+        scheduleStreakReminder()
     }
 }
