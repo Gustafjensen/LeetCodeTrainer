@@ -1,16 +1,51 @@
 import SwiftUI
 
 struct SettingsView: View {
+    var isEmbedded = false
     private var xpManager: SkillXPManager { .shared }
     @State private var editingName = false
     @State private var nameText = ""
     @AppStorage("editorFontSize") private var editorFontSize: Double = 14
     @AppStorage("linterEnabled") private var linterEnabled = true
     @State private var showResetAlert = false
+    @State private var showWidgetHint = false
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
-        NavigationStack {
-            ScrollView {
+        settingsContent
+    }
+
+    @ViewBuilder
+    private var settingsContent: some View {
+        if isEmbedded {
+            settingsBody
+                .navigationBarBackButtonHidden(true)
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        BackButton { dismiss() }
+                    }
+                    ToolbarItem(placement: .principal) {
+                        Text("Settings")
+                            .font(.title3.bold())
+                            .foregroundStyle(.white)
+                    }
+                }
+        } else {
+            NavigationStack {
+                settingsBody
+                    .toolbar {
+                        ToolbarItem(placement: .principal) {
+                            Text("Settings")
+                                .font(.title3.bold())
+                                .foregroundStyle(.white)
+                        }
+                    }
+            }
+        }
+    }
+
+    private var settingsBody: some View {
+        ScrollView {
                 VStack(spacing: 12) {
                     SettingsSection(title: "Profile") {
                         if editingName {
@@ -19,9 +54,10 @@ struct SettingsView: View {
                                     .font(.subheadline)
                                     .foregroundStyle(Theme.accent)
                                     .frame(width: 24)
-                                TextField("Your name", text: $nameText)
+                                TextField("", text: $nameText, prompt: Text("Your name").foregroundStyle(Theme.textSecondary))
                                     .font(.subheadline)
-                                    .foregroundStyle(Theme.textPrimary)
+                                    .foregroundStyle(.white)
+                                    .tint(.white)
                                     .onSubmit {
                                         saveName()
                                     }
@@ -102,7 +138,29 @@ struct SettingsView: View {
                     }
 
                     SettingsSection(title: "About") {
-                        SettingsRow(icon: "info.circle", label: "Version", value: "1.0.0")
+                        SettingsRow(icon: "info.circle", label: "Version", value: "1.2.0")
+                    }
+
+                    SettingsSection(title: "Widgets") {
+                        Button {
+                            showWidgetHint = true
+                        } label: {
+                            HStack {
+                                Image(systemName: "square.grid.2x2")
+                                    .font(.subheadline)
+                                    .foregroundStyle(Theme.accent)
+                                    .frame(width: 24)
+                                Text("Add Home Screen Widget")
+                                    .font(.subheadline)
+                                    .foregroundStyle(Theme.textPrimary)
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(.caption)
+                                    .foregroundStyle(Theme.textSecondary)
+                            }
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 12)
+                        }
                     }
 
                     SettingsSection(title: "Data") {
@@ -126,17 +184,11 @@ struct SettingsView: View {
                 }
                 .padding()
             }
+            .scrollDismissesKeyboard(.interactively)
             .background(Theme.surface)
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(Theme.primary, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text("Settings")
-                        .font(.title3.bold())
-                        .foregroundStyle(.white)
-                }
-            }
             .onAppear {
                 AnalyticsService.shared.track("settings_view")
             }
@@ -154,7 +206,11 @@ struct SettingsView: View {
             } message: {
                 Text("This will delete all your XP, solved problems, achievements, and streaks. This cannot be undone.")
             }
-        }
+            .alert("Home Screen Widget", isPresented: $showWidgetHint) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text("Long-press your home screen, tap the + button in the top corner, then search for CodeCrush to add the widget.")
+            }
     }
 
     private func saveName() {

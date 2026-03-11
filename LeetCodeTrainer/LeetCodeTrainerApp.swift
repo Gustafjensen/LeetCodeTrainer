@@ -6,9 +6,24 @@
 //
 
 import SwiftUI
+import UIKit
+
+class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+        application.registerForRemoteNotifications()
+        return true
+    }
+
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) async -> UIBackgroundFetchResult {
+        // Refresh pokes when a push arrives
+        await CloudKitManager.shared.loadPendingPokes()
+        return .newData
+    }
+}
 
 @main
 struct LeetCodeTrainerApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
     @State private var showSplash = true
 
@@ -41,6 +56,17 @@ struct LeetCodeTrainerApp: App {
                 NotificationManager.shared.requestPermission { granted in
                     if granted {
                         NotificationManager.shared.scheduleStreakReminder()
+                        UIApplication.shared.registerForRemoteNotifications()
+                    }
+                }
+                Task {
+                    let ck = CloudKitManager.shared
+                    await ck.checkiCloudStatus()
+                    if ck.iCloudAvailable {
+                        await ck.ensureUserProfile()
+                        await ck.syncUserProfile()
+                        await ck.loadPendingPokes()
+                        await ck.subscribeToPokeNotifications()
                     }
                 }
             }

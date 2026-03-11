@@ -15,12 +15,29 @@ class ProblemDetailViewModel {
     private let executionService: ExecutionService
     private let xpManager: SkillXPManager
     var allProblems: [Problem] = []
+    var timerStartDate: Date = .now
+
+    private static func draftKey(for problemId: String) -> String { "draft-\(problemId)" }
 
     init(problem: Problem, executionService: ExecutionService = ExecutionService(), xpManager: SkillXPManager = .shared) {
         self.problem = problem
-        self.sourceCode = problem.starterCode
         self.executionService = executionService
         self.xpManager = xpManager
+
+        let key = Self.draftKey(for: problem.id)
+        if let draft = UserDefaults.standard.string(forKey: key), !draft.isEmpty {
+            self.sourceCode = draft
+        } else {
+            self.sourceCode = problem.starterCode
+        }
+    }
+
+    func saveDraft() {
+        UserDefaults.standard.set(sourceCode, forKey: Self.draftKey(for: problem.id))
+    }
+
+    func clearDraft() {
+        UserDefaults.standard.removeObject(forKey: Self.draftKey(for: problem.id))
     }
 
     func executeCode() async {
@@ -41,6 +58,7 @@ class ProblemDetailViewModel {
             executionResult = result
 
             let testsPassed = result.testResults.filter { $0.passed }.count
+            let elapsed = Date().timeIntervalSince(timerStartDate)
             let submission = CodeSubmission(
                 id: UUID().uuidString,
                 problemId: problem.id,
@@ -48,7 +66,8 @@ class ProblemDetailViewModel {
                 sourceCode: sourceCode,
                 passed: result.overallStatus == .pass,
                 testsPassed: testsPassed,
-                testsTotal: result.testResults.count
+                testsTotal: result.testResults.count,
+                duration: elapsed
             )
             xpManager.recordSubmission(submission)
 
@@ -60,6 +79,7 @@ class ProblemDetailViewModel {
             ])
 
             if result.overallStatus == .pass {
+                clearDraft()
                 let gains = xpManager.awardXP(for: problem)
                 xpGains = gains
                 newAchievements = xpManager.checkAchievements(problems: allProblems)

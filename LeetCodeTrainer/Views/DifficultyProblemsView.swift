@@ -9,6 +9,7 @@ struct DifficultyProblemsView: View {
 
     private var difficultyColor: Color {
         switch difficulty {
+        case .getStarted: return .blue
         case .easy: return .green
         case .medium: return .orange
         case .hard: return .red

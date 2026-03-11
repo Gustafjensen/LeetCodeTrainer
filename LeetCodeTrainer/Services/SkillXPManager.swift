@@ -38,6 +38,7 @@ class SkillXPManager {
     static func xpPerProblem(difficulty: Problem.Difficulty, isSolved: Bool) -> Int {
         if isSolved { return 10 }
         switch difficulty {
+        case .getStarted: return 15
         case .easy: return 25
         case .medium: return 40
         case .hard: return 60
@@ -117,6 +118,7 @@ class SkillXPManager {
 
         solvedProblems.insert(problem.id)
         save()
+        Task { await CloudKitManager.shared.syncUserProfile() }
         return gains
     }
 
@@ -129,6 +131,7 @@ class SkillXPManager {
         completedDailyDates.insert(key)
         save()
         NotificationManager.shared.cancelStreakReminder()
+        Task { await CloudKitManager.shared.syncUserProfile() }
     }
 
     func isDailyCompleted(for date: Date) -> Bool {
@@ -220,6 +223,7 @@ class SkillXPManager {
     func saveUserName(_ name: String) {
         userName = name
         sharedDefaults.set(name, forKey: userNameKey)
+        Task { await CloudKitManager.shared.syncUserProfile() }
     }
 
     func saveProfileImage(_ data: Data) {
@@ -352,6 +356,9 @@ struct Achievement: Identifiable {
             return problems.contains { $0.difficulty == .medium && manager.isSolved($0.id) }
         case "first-hard":
             return problems.contains { $0.difficulty == .hard && manager.isSolved($0.id) }
+        case "all-get-started":
+            let gs = problems.filter { $0.difficulty == .getStarted }
+            return !gs.isEmpty && gs.allSatisfy { manager.isSolved($0.id) }
         case "all-easy":
             let easy = problems.filter { $0.difficulty == .easy }
             return !easy.isEmpty && easy.allSatisfy { manager.isSolved($0.id) }
@@ -369,6 +376,7 @@ struct Achievement: Identifiable {
     }
 
     static let all: [Achievement] = [
+        Achievement(id: "all-get-started", title: "Baby Steps", description: "Complete all Get Started problems", icon: "sparkles", color: .blue),
         Achievement(id: "first-solve", title: "First Steps", description: "Solve your first problem", icon: "star.fill", color: .yellow),
         Achievement(id: "five-solved", title: "Getting Going", description: "Solve 5 problems", icon: "checkmark.circle.fill", color: .green),
         Achievement(id: "ten-solved", title: "Problem Solver", description: "Solve 10 problems", icon: "checkmark.seal.fill", color: .green),

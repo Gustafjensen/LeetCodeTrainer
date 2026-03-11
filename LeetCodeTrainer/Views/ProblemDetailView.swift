@@ -12,6 +12,8 @@ struct ProblemDetailView: View {
     @AppStorage("linterEnabled") private var linterEnabled = true
     @Environment(\.horizontalSizeClass) private var sizeClass
     @State private var editorUndo: (() -> Void)?
+    @State private var showResetAlert = false
+    @State private var draftSaveTask: Task<Void, Never>?
 
     var body: some View {
         ScrollViewReader { scrollProxy in
@@ -24,6 +26,14 @@ struct ProblemDetailView: View {
                         .fontWeight(.bold)
                         .foregroundStyle(Theme.textPrimary)
                     Spacer()
+                    TimelineView(.periodic(from: viewModel.timerStartDate, by: 1)) { context in
+                        let elapsed = context.date.timeIntervalSince(viewModel.timerStartDate)
+                        let minutes = Int(elapsed) / 60
+                        let seconds = Int(elapsed) % 60
+                        Text(String(format: "%d:%02d", minutes, seconds))
+                            .font(.system(.subheadline, design: .monospaced))
+                            .foregroundStyle(Theme.textSecondary)
+                    }
                     DifficultyBadge(difficulty: viewModel.problem.difficulty)
                 }
                 .padding(16)
@@ -151,6 +161,13 @@ struct ProblemDetailView: View {
                                 .font(.subheadline)
                                 .foregroundStyle(Theme.accent)
                         }
+                        Button {
+                            showResetAlert = true
+                        } label: {
+                            Image(systemName: "arrow.clockwise")
+                                .font(.subheadline)
+                                .foregroundStyle(Theme.accent)
+                        }
                     }
 
                     CodeEditorView(
@@ -158,8 +175,10 @@ struct ProblemDetailView: View {
                         fontSize: CGFloat(editorFontSize),
                         onFocusChange: { focused in
                             if focused {
-                                withAnimation {
-                                    scrollProxy.scrollTo("editor", anchor: .top)
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                                    withAnimation(.easeOut(duration: 0.3)) {
+                                        scrollProxy.scrollTo("editor", anchor: .top)
+                                    }
                                 }
                             }
                         },
@@ -255,6 +274,7 @@ struct ProblemDetailView: View {
                 // Results
                 if let result = viewModel.executionResult {
                     ResultsView(result: result)
+                        .id("results")
                 }
 
                 // Previous Attempts
@@ -304,9 +324,16 @@ struct ProblemDetailView: View {
                                             Text(attempt.timestamp, style: .relative)
                                                 .font(.caption)
                                                 .foregroundStyle(Theme.textPrimary)
-                                            Text("\(attempt.testsPassed)/\(attempt.testsTotal) tests passed")
-                                                .font(.caption2)
-                                                .foregroundStyle(Theme.textSecondary)
+                                            HStack(spacing: 8) {
+                                                Text("\(attempt.testsPassed)/\(attempt.testsTotal) tests passed")
+                                                    .font(.caption2)
+                                                    .foregroundStyle(Theme.textSecondary)
+                                                if let duration = attempt.duration {
+                                                    Text(String(format: "%d:%02d", Int(duration) / 60, Int(duration) % 60))
+                                                        .font(.caption2)
+                                                        .foregroundStyle(Theme.textSecondary)
+                                                }
+                                            }
                                         }
                                         Spacer()
                                         Image(systemName: "arrow.up.doc")
@@ -327,7 +354,22 @@ struct ProblemDetailView: View {
             }
             .padding()
         }
+        .onChange(of: viewModel.executionResult?.overallStatus) {
+            guard let status = viewModel.executionResult?.overallStatus else { return }
+            if status == .pass {
+                Haptics.notification(.success)
+            } else {
+                Haptics.notification(.error)
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                withAnimation(.easeOut(duration: 0.3)) {
+                    scrollProxy.scrollTo("results", anchor: .top)
+                }
+            }
+        }
         } // ScrollViewReader
+        .scrollDismissesKeyboard(.interactively)
+        .background(DisableSwipeBack().frame(width: 0, height: 0))
         .background(Theme.surface)
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
@@ -350,12 +392,15 @@ struct ProblemDetailView: View {
                 "difficulty": viewModel.problem.difficulty.rawValue
             ])
         }
-        .onChange(of: viewModel.executionResult?.overallStatus) {
-            guard let status = viewModel.executionResult?.overallStatus else { return }
-            if status == .pass {
-                Haptics.notification(.success)
-            } else {
-                Haptics.notification(.error)
+        .onDisappear {
+            viewModel.saveDraft()
+        }
+        .onChange(of: viewModel.sourceCode) {
+            draftSaveTask?.cancel()
+            draftSaveTask = Task {
+                try? await Task.sleep(for: .seconds(2))
+                guard !Task.isCancelled else { return }
+                viewModel.saveDraft()
             }
         }
         .fullScreenCover(isPresented: $viewModel.showXPReward) {
@@ -370,6 +415,16 @@ struct ProblemDetailView: View {
                     popToRoot: popToRoot
                 )
             }
+        }
+        .alert("Reset to Template?", isPresented: $showResetAlert) {
+            Button("Cancel", role: .cancel) {}
+            Button("Reset", role: .destructive) {
+                viewModel.sourceCode = viewModel.problem.starterCode
+                viewModel.clearDraft()
+                AnalyticsService.shared.track("editor_reset", properties: ["problem_id": viewModel.problem.id])
+            }
+        } message: {
+            Text("This will replace your current code with the original template.")
         }
     }
 }

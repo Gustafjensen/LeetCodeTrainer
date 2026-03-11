@@ -1,4 +1,17 @@
 import SwiftUI
+import UIKit
+
+// Re-enable swipe-back gesture even when the back button is hidden
+extension UINavigationController: @retroactive UIGestureRecognizerDelegate {
+    override open func viewDidLoad() {
+        super.viewDidLoad()
+        interactivePopGestureRecognizer?.delegate = self
+    }
+
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        viewControllers.count > 1
+    }
+}
 
 enum Theme {
     static let primary = Color(red: 0.1, green: 0.15, blue: 0.35)
@@ -50,6 +63,24 @@ struct FlowLayout: Layout {
             subview.place(at: CGPoint(x: x, y: y), proposal: .unspecified)
             x += size.width + spacing
             rowHeight = max(rowHeight, size.height)
+        }
+    }
+}
+
+struct DisableSwipeBack: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> UIViewController {
+        DisableSwipeBackVC()
+    }
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
+
+    class DisableSwipeBackVC: UIViewController {
+        override func viewDidAppear(_ animated: Bool) {
+            super.viewDidAppear(animated)
+            navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+        }
+        override func viewWillDisappear(_ animated: Bool) {
+            super.viewWillDisappear(animated)
+            navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         }
     }
 }

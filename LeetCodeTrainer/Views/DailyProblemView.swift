@@ -5,12 +5,23 @@ struct DailyProblemView: View {
     @State private var displayedMonth: Date = .now
     @State private var path = NavigationPath()
     @AppStorage("dailyDifficulty") private var dailyDifficulty: String = "All"
+    @State private var showWidgetHint = false
     private var xpManager: SkillXPManager { .shared }
 
     private var filteredProblems: [Problem] {
-        if dailyDifficulty == "All" { return viewModel.problems }
-        let filtered = viewModel.problems.filter { $0.difficulty.rawValue == dailyDifficulty }
-        return filtered.isEmpty ? viewModel.problems : filtered
+        let eligible = viewModel.problems.filter { $0.difficulty != .getStarted }
+        if dailyDifficulty != "All" {
+            let filtered = eligible.filter { $0.difficulty.rawValue == dailyDifficulty }
+            return filtered.isEmpty ? eligible : filtered
+        }
+        // Progressive difficulty based on completed dailies
+        let completed = xpManager.completedDailyDates.count
+        if completed < 3 {
+            return eligible.filter { $0.difficulty == .easy }
+        } else if completed < 14 {
+            return eligible.filter { $0.difficulty == .easy || $0.difficulty == .medium }
+        }
+        return eligible
     }
 
     private var dailyProblem: Problem? {
@@ -64,15 +75,19 @@ struct DailyProblemView: View {
                         )
                     }
 
-                    // Subtle widget hint
-                    HStack(spacing: 6) {
-                        Image(systemName: "square.grid.2x2")
-                            .font(.caption2)
-                        Text("Add home screen widget")
-                            .font(.caption)
+                    // Widget hint
+                    Button {
+                        showWidgetHint = true
+                    } label: {
+                        HStack(spacing: 6) {
+                            Image(systemName: "plus.square.on.square")
+                                .font(.caption2)
+                            Text("Add widget to Home Screen")
+                                .font(.caption)
+                        }
+                        .foregroundStyle(Theme.textSecondary)
                     }
-                    .foregroundStyle(Theme.textSecondary.opacity(0.5))
-                    .padding(.top, 4)
+
                 }
                 .padding()
             }
@@ -113,11 +128,17 @@ struct DailyProblemView: View {
                     xpManager.markDailyCompleted()
                 }
             }
+            .alert("Home Screen Widget", isPresented: $showWidgetHint) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text("Long-press your home screen, tap the + button in the top corner, then search for CodeCrush to add the widget.")
+            }
         }
     }
 
     private func difficultyColor(_ difficulty: String) -> Color {
         switch difficulty {
+        case "Get Started": return .blue
         case "Easy": return .green
         case "Medium": return .orange
         case "Hard": return .red

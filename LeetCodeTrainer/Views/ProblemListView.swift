@@ -6,7 +6,25 @@ struct ProblemListView: View {
     @State private var showSearch = false
     @FocusState private var isSearchFocused: Bool
     @Environment(\.horizontalSizeClass) private var sizeClass
+    private var xpManager: SkillXPManager { .shared }
 
+    private var dailyProblem: Problem? {
+        let eligible = viewModel.problems.filter { $0.difficulty != .getStarted }
+        let pool: [Problem]
+        let completed = xpManager.completedDailyDates.count
+        if completed < 3 {
+            pool = eligible.filter { $0.difficulty == .easy }
+        } else if completed < 14 {
+            pool = eligible.filter { $0.difficulty == .easy || $0.difficulty == .medium }
+        } else {
+            pool = eligible
+        }
+        guard !pool.isEmpty else { return nil }
+        let dayOfYear = Calendar.current.ordinality(of: .day, in: .year, for: .now) ?? 0
+        return pool[dayOfYear % pool.count]
+    }
+
+    private var getStartedCount: Int { viewModel.problems.filter { $0.difficulty == .getStarted }.count }
     private var easyCount: Int { viewModel.problems.filter { $0.difficulty == .easy }.count }
     private var mediumCount: Int { viewModel.problems.filter { $0.difficulty == .medium }.count }
     private var hardCount: Int { viewModel.problems.filter { $0.difficulty == .hard }.count }
@@ -24,9 +42,9 @@ struct ProblemListView: View {
                         HStack(spacing: 8) {
                             Image(systemName: "magnifyingglass")
                                 .foregroundStyle(Theme.textSecondary)
-                            TextField("Search problems", text: $viewModel.searchText)
+                            TextField("", text: $viewModel.searchText, prompt: Text("Search problems").foregroundStyle(Theme.textSecondary))
                                 .focused($isSearchFocused)
-                                .foregroundStyle(Theme.textPrimary)
+                                .foregroundStyle(.white)
                                 .autocorrectionDisabled()
                                 .textInputAutocapitalization(.never)
                         }
@@ -85,8 +103,27 @@ struct ProblemListView: View {
                             .padding(.horizontal)
                         }
                     } else {
+                        // Daily challenge card
+                        if let problem = dailyProblem {
+                            NavigationLink(value: problem.id) {
+                                DailyChallengeCard(
+                                    problem: problem,
+                                    isCompleted: xpManager.isDailyCompleted(for: .now)
+                                )
+                            }
+                            .buttonStyle(.plain)
+                            .padding(.horizontal)
+                        }
+
                         // Default difficulty cards
                         VStack(spacing: 14) {
+                            DifficultyCategoryCard(
+                                title: "Get Started",
+                                subtitle: "\(getStartedCount) problems",
+                                icon: "sparkles",
+                                color: .blue,
+                                difficulty: .getStarted
+                            )
                             DifficultyCategoryCard(
                                 title: "Easy",
                                 subtitle: "\(easyCount) problems",
@@ -114,6 +151,7 @@ struct ProblemListView: View {
                 }
                 .padding(.vertical)
             }
+            .scrollDismissesKeyboard(.interactively)
             .background(Theme.surface)
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(Theme.primary, for: .navigationBar)
@@ -275,6 +313,7 @@ struct FilteredProblemCard: View {
 
     private var difficultyColor: Color {
         switch problem.difficulty {
+        case .getStarted: return .blue.opacity(0.4)
         case .easy: return .green.opacity(0.4)
         case .medium: return .orange.opacity(0.4)
         case .hard: return .red.opacity(0.4)
@@ -287,6 +326,7 @@ struct DifficultyBadge: View {
 
     private var color: Color {
         switch difficulty {
+        case .getStarted: return .blue
         case .easy: return .green
         case .medium: return .orange
         case .hard: return .red

@@ -9,6 +9,50 @@ const problems = {
         ],
         compareFunction: 'exact'
     },
+    'sum-of-list': {
+        title: 'Sum of List',
+        functionName: 'sumList',
+        testCases: [
+            { args: [[1, 2, 3]], expected: 6, inputDisplay: 'nums = [1, 2, 3]' },
+            { args: [[-1, 0, 5]], expected: 4, inputDisplay: 'nums = [-1, 0, 5]' },
+            { args: [[]], expected: 0, inputDisplay: 'nums = []' },
+            { args: [[42]], expected: 42, inputDisplay: 'nums = [42]' }
+        ],
+        compareFunction: 'exact'
+    },
+    'count-evens': {
+        title: 'Count Even Numbers',
+        functionName: 'countEvens',
+        testCases: [
+            { args: [[1, 2, 3, 4, 5, 6]], expected: 3, inputDisplay: 'nums = [1, 2, 3, 4, 5, 6]' },
+            { args: [[1, 3, 5]], expected: 0, inputDisplay: 'nums = [1, 3, 5]' },
+            { args: [[2, 4]], expected: 2, inputDisplay: 'nums = [2, 4]' },
+            { args: [[0, -2, 7]], expected: 2, inputDisplay: 'nums = [0, -2, 7]' }
+        ],
+        compareFunction: 'exact'
+    },
+    'find-maximum': {
+        title: 'Find Maximum',
+        functionName: 'findMax',
+        testCases: [
+            { args: [[3, 1, 4, 1, 5, 9]], expected: 9, inputDisplay: 'nums = [3, 1, 4, 1, 5, 9]' },
+            { args: [[-5, -2, -8]], expected: -2, inputDisplay: 'nums = [-5, -2, -8]' },
+            { args: [[42]], expected: 42, inputDisplay: 'nums = [42]' },
+            { args: [[1, 1, 1]], expected: 1, inputDisplay: 'nums = [1, 1, 1]' }
+        ],
+        compareFunction: 'exact'
+    },
+    'reverse-list': {
+        title: 'Reverse List',
+        functionName: 'reverseList',
+        testCases: [
+            { args: [[1, 2, 3, 4, 5]], expected: [5, 4, 3, 2, 1], inputDisplay: 'nums = [1, 2, 3, 4, 5]' },
+            { args: [[1]], expected: [1], inputDisplay: 'nums = [1]' },
+            { args: [[]], expected: [], inputDisplay: 'nums = []' },
+            { args: [[10, 20]], expected: [20, 10], inputDisplay: 'nums = [10, 20]' }
+        ],
+        compareFunction: 'exact'
+    },
     'two-sum': {
         title: 'Two Sum',
         functionName: 'twoSum',

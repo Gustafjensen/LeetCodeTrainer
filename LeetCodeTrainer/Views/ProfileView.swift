@@ -16,6 +16,12 @@ struct ProfileView: View {
     private var solvedCount: Int { xpManager.solvedProblems.count }
     private var totalCount: Int { problems.count }
 
+    private var getStartedSolved: Int {
+        problems.filter { $0.difficulty == .getStarted && xpManager.isSolved($0.id) }.count
+    }
+    private var getStartedTotal: Int {
+        problems.filter { $0.difficulty == .getStarted }.count
+    }
     private var easySolved: Int {
         problems.filter { $0.difficulty == .easy && xpManager.isSolved($0.id) }.count
     }
@@ -127,11 +133,17 @@ struct ProfileView: View {
                         // Stacked bar
                         GeometryReader { geo in
                             let total = max(totalCount, 1)
+                            let getStartedWidth = geo.size.width * Double(getStartedSolved) / Double(total)
                             let easyWidth = geo.size.width * Double(easySolved) / Double(total)
                             let mediumWidth = geo.size.width * Double(mediumSolved) / Double(total)
                             let hardWidth = geo.size.width * Double(hardSolved) / Double(total)
 
                             HStack(spacing: 2) {
+                                if getStartedSolved > 0 {
+                                    RoundedRectangle(cornerRadius: 4)
+                                        .fill(Color.blue)
+                                        .frame(width: getStartedWidth, height: 12)
+                                }
                                 if easySolved > 0 {
                                     RoundedRectangle(cornerRadius: 4)
                                         .fill(Color.green)
@@ -158,9 +170,10 @@ struct ProfileView: View {
                         }
                         .frame(height: 12)
 
-                        HStack(spacing: 16) {
+                        HStack(spacing: 12) {
+                            DifficultyStatLabel(color: .blue, label: "Start", count: getStartedSolved, total: getStartedTotal)
                             DifficultyStatLabel(color: .green, label: "Easy", count: easySolved, total: easyTotal)
-                            DifficultyStatLabel(color: .orange, label: "Medium", count: mediumSolved, total: mediumTotal)
+                            DifficultyStatLabel(color: .orange, label: "Med", count: mediumSolved, total: mediumTotal)
                             DifficultyStatLabel(color: .red, label: "Hard", count: hardSolved, total: hardTotal)
                             Spacer()
                         }
@@ -210,6 +223,14 @@ struct ProfileView: View {
                     Text("Profile")
                         .font(.title3.bold())
                         .foregroundStyle(.white)
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink {
+                        SettingsView(isEmbedded: true)
+                    } label: {
+                        Image(systemName: "gearshape.fill")
+                            .foregroundStyle(.white)
+                    }
                 }
             }
             .onAppear {

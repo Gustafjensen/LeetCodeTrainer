@@ -61,9 +61,9 @@ struct MainTabView: View {
                     Label("Problems", systemImage: "list.bullet.rectangle.fill")
                 }
                 .tag(1)
-            SettingsView()
+            FriendsView()
                 .tabItem {
-                    Label("Settings", systemImage: "gearshape.fill")
+                    Label("Friends", systemImage: "person.2.fill")
                 }
                 .tag(2)
             ProfileView(problems: viewModel.problems)
@@ -74,7 +74,7 @@ struct MainTabView: View {
         }
         .tint(Theme.accent)
         .onChange(of: selectedTab) { _, newTab in
-            let tabNames = ["daily", "problems", "settings", "profile"]
+            let tabNames = ["daily", "problems", "friends", "profile"]
             let name = newTab < tabNames.count ? tabNames[newTab] : "\(newTab)"
             AnalyticsService.shared.track("tab_switch", properties: ["tab": name])
         }

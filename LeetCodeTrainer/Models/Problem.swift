@@ -29,6 +29,7 @@ struct Problem: Codable, Identifiable {
     }
 
     enum Difficulty: String, Codable {
+        case getStarted = "Get Started"
         case easy = "Easy"
         case medium = "Medium"
         case hard = "Hard"
