@@ -138,7 +138,7 @@ struct SettingsView: View {
                     }
 
                     SettingsSection(title: "About") {
-                        SettingsRow(icon: "info.circle", label: "Version", value: "1.2.0")
+                        SettingsRow(icon: "info.circle", label: "Version", value: "1.2.1")
                     }
 
                     SettingsSection(title: "Widgets") {
